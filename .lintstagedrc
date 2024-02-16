@@ -1,0 +1,11 @@
+{
+  "*.{js,ts,jsx,tsx}": [
+    "prettier --write --cache"
+  ],
+  "*.{less,sass,scss,styl,json}": [
+    "prettier --write --cache"
+  ],
+  "*.{json}": [
+    "prettier --write --cache"
+  ]
+}

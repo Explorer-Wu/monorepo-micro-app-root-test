@@ -1,0 +1,82 @@
+{
+  extends: [
+    '@commitlint/config-conventional'
+  ],
+  rules: {
+    'type-enum': [
+      2,
+      'always',
+      [
+        'bug',
+        'feat',
+        'fix',
+        'docs',
+        'style',
+        'refactor',
+        'test',
+        'chore',
+        'revert',
+        'merge',
+        'build',
+        'ci',
+        'perf'
+      ]
+    ],
+    'type-case': [2, 'always', ['lower-case', 'upper-case']],
+    'type-empty': [0],
+    'scope-empty': [0],
+    'scope-case': [0],
+    'subject-full-stop': [0],
+    'subject-case': [0, 'never'],
+    'header-max-length': [0, 'always', 72],
+  },
+  prompt: {
+    'questions': {
+      type: {
+        description: '选择你要提交的类型:',
+        enum: {
+          'feat': {
+            description: '新增/修改功能 (Feature)',
+            title: 'Features'
+          },
+          'fix': {
+            description: '修复相关bug',
+            title: 'Bug Fixes',
+          },
+          'docs': {
+            description: '文档更改',
+            title: 'Documentation',
+          },
+          'style': {
+            description: '样式更改',
+            title: 'stylesheet',
+          },
+          'refactor': {
+            description: '重构or优化',
+            title: 'refactor'
+          },
+          'chore': {
+            description: '其他修改, 比如改变构建流程、或者增加依赖库、工具等',
+            title: 'chore'
+          },
+          'ci': {
+              description: '持续集成修改',
+              title: 'ci'
+          },
+          'perf': {
+            description: '优化相关，比如提升性能、体验',
+            title: 'perf'
+          },
+          'revert': {
+            description: '回滚到上一个版本',
+            title: 'revert'
+          },
+          'test': {
+            description: '测试用例修改',
+            title: 'test'
+          },
+        }
+      }
+    }
+  }
+}

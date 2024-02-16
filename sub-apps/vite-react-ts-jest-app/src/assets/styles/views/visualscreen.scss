@@ -1,0 +1,44 @@
+// @media all and (min-width: 1366px) {
+// 	html {
+// 		font-size: 14.23px;
+// 	}
+// }
+// @media all and (min-width: 1920px) {
+// 	html {
+// 		font-size: 20px;
+// 	}
+// }
+
+/* 最小宽高比 */
+// @media all and (min-width: 9999px) and (min-aspect-ratio: 2/1) {
+// 	html {
+// 		font-size: 20px * (200vh / 1920px);
+// 	}
+// }
+
+.visual-screen {
+	position: relative;
+	margin: 0 auto;
+	overflow: hidden;
+
+	@media all and (max-width: 1024px) {
+		width: 1024px;
+		overflow-x: auto;
+	}
+	@media all and (max-height: 600px) {
+		height: 600px;
+		overflow-y: auto;
+	}
+
+	/* 最大宽高比 */
+	@media all and (min-width: 1025px) and (min-height: 601px) and (max-aspect-ratio: 16/9) {
+		width: 100vw;
+		height: 56.25vw; // 900/16
+	}
+
+	/* 最小宽高比 */
+	@media all and (min-width: 1025px) and (min-height: 601px) and (min-aspect-ratio: 16/9) {
+		width: 177.778vh; // 1600/9
+		height: 100vh;
+	}
+}

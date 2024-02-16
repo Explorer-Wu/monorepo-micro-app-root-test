@@ -1,0 +1,70 @@
+{
+	"name": "monorepo-micro-app-root-test",
+	"version": "1.0.0",
+	"description": "micro-app实现微前端应用，并使用pnpm和Monorepo管理项目代码",
+	"private": true,
+	"main": "index.js",
+	"scripts": {
+		"start:all": "npm-run-all --parallel start:base start:vue3 start:react",
+		"start:base": "pnpm -C ./main-apps/ dev",
+		"start:vue3": "pnpm -C ./sub-apps/vitest-vue3-ts-el-app serve",
+		"start:react": "pnpm -C ./sub-apps/vite-react-ts-jest-app start",
+		"format": "prettier --write --ignore-unknown .",
+		"ghooks": "simple-git-hooks",
+		"commit-msg": "pnpm commitlint -e $1",
+		"commit:vilid": "git cz",
+		"changeset": "changeset && changeset version",
+		"release": "run-s build changeset publish",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"dependencies": {
+		"@micro-zoe/micro-app": "1.0.0-rc.3"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^18.6.1",
+		"@commitlint/config-conventional": "^18.6.2",
+		"@commitlint/cz-commitlint": "^18.6.1",
+		"@eslint-types/typescript-eslint": "^6.21.0",
+		"@typescript-eslint/eslint-plugin": "^6.14.0",
+		"@typescript-eslint/parser": "^6.14.0",
+		"commitizen": "^4.3.0",
+		"cross-env": "^7.0.3",
+		"eslint": "^8.56.0",
+		"eslint-plugin-i": "^2.29.1",
+		"eslint-plugin-n": "^16.6.2",
+		"eslint-plugin-regexp": "^2.2.0",
+		"koa": "^2.15.0",
+		"lint-staged": "^15.2.0",
+		"npm-run-all": "^4.1.5",
+		"prettier": "^3.1.1",
+		"simple-git-hooks": "^2.9.0",
+		"typescript": "^5.2.2",
+		"validate-commit-msg": "^2.14.0"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "pnpm exec lint-staged --concurrent false",
+		"pre-push": "pnpm format",
+		"preserveUnused": ["commit-msg"]
+	},
+	"config": {
+		"commitizen": {
+			"path": "@commitlint/cz-commitlint"
+		}
+	},
+	"workspaces": ["main-apps/**", "sub-apps/**", "axios-ajax-ts/**"],
+	"engines": {
+		"node": ">=16",
+		"pnpm": ">=7"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Explorer-Wu/monorepo-micro-app-root-test.git"
+	},
+	"keywords": ["micro-app", "monorepo", "pnpm", "workspace"],
+	"bugs": {
+		"url": "https://github.com/Explorer-Wu/monorepo-micro-app-root-test/issues"
+	},
+	"homepage": "https://github.com/Explorer-Wu/monorepo-micro-app-root-test#readme",
+	"author": "Explorer-Wu",
+	"license": "MIT"
+}
