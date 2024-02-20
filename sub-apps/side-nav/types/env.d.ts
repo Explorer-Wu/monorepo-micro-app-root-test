@@ -13,7 +13,8 @@ interface ImportMetaEnv extends Readonly<Record<string, unknown>> {
   readonly VITE_OUTPUT_DIR: boolean
 
   // 公共基础路径
-  BASE_URL: string
+  readonly BASE_URL: string
+  readonly APP_BASE_ROUTER: string
   // 前端服务端口号
   readonly VITE_PORT: number
   // 正式api请求地址
@@ -32,10 +33,9 @@ interface ImportMetaEnv extends Readonly<Record<string, unknown>> {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv // Record<string, unknown>;
-  // glob<T = unknown>(globPath: string): Record<string, T>;
+  glob<T = unknown>(globPath: string): Record<string, T>;
   /**
-   * @deprecated Use `import.meta.glob('*', { eager: true })` instead
+   * @deprecated Use `import.meta.glob('*', { eager: true })` instead globEager
    */
   // globEager<T = unknown>(globPath: string): Record<string, T>
-  // globEager: import('./importGlob').ImportGlobEagerFunction
 }

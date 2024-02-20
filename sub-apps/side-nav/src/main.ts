@@ -1,12 +1,15 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { ElLink, ElMain, ElMenu, ElMenuItem, ElMenuItemGroup } from 'element-plus';
-import router from '@/router';
 import App from './App.vue';
 
-import './assets/main.css';
+import 'dayjs/locale/zh-cn';
+// import '@/assets/styles/theme/element.scss';
+// import 'element-plus/dist/index.css'; // 全局引入样式
+import '@/assets/styles/main/base.scss';
+import '@/assets/styles/components/app.scss';
+// import 'uno.css';
 
 const vapp = createApp(App);
 const store = createPinia();
 
-vapp.use(store).use(router).mount('#sidenav-menu');
+vapp.use(store).mount('#sidemenu-app');

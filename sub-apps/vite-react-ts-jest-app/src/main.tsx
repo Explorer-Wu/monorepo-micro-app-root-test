@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+
 import App from './App.tsx';
 import { handleMicroData } from '@/utils/index';
-import './index.css';
+
+import '@/assets/styles/main/base.scss';
+import '@/assets/styles/components/general.scss';
+import '@/assets/styles/components/app.scss';
 
 // ----------分割线---umd模式------两种模式任选其一-------------- //
 // 将渲染操作放入 mount 函数

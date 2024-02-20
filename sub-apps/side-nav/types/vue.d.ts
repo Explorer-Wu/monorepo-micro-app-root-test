@@ -1,5 +1,3 @@
-/// <reference types="vite/client" />
-
 import Vue, { VNode, ComponentCustomProperties } from 'vue'
 
 declare module 'vue/types/vue' {

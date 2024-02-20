@@ -6,6 +6,7 @@
   "useTabs": true,
   "trailingComma": "all",
   "semi": true,
+  "singleAttributePerLine": true,
   "arrowParens": "avoid",
   "bracketSpacing": true,
   "htmlWhitespaceSensitivity": "strict",

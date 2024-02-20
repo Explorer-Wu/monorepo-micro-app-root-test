@@ -161,8 +161,8 @@
 		"lib": ["DOM", "DOM.Iterable", "ESNext", "ScriptHost"],
 		"typeRoots": ["node_modules/@types", "./types"],
 		// types设置typeRoots目录下需要包括在编译之中的类型模块。默认情况下，该目录下的所有类型模块，都会自动包括在编译之中
-		// 如不设置此项，默认会加载全部能找到的 node_modules/@types/xxx 包
-		"types": ["vite/client", "node", "vue", "element-plus/global", "lodash-es"],
+		// 如不设置此项，默认会加载全部能找到的 node_modules/@types/xxx 包， 全局引入"element-plus/global"
+		"types": ["vite/client", "node", "vue", "lodash-es"],
 		// 根路径, 非绝对地址的模块会基于这个目录去解析，默认值是当前目录
 		"baseUrl": ".",
 		/* 配置具体如何解析 require/import 的导入，

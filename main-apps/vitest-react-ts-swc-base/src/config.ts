@@ -1,7 +1,7 @@
 // 开发环境地址
 const config: Record<string, string> = {
 	mainreact: 'http://localhost:3600',
-	sidebar: 'http://localhost:3006',
+	sidebar: 'http://localhost:3606',
 	subreact: 'https://localhost:3601',
 	subvue3: 'http://localhost:3602',
 	// nextjs: 'http://localhost:3008',

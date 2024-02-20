@@ -25,6 +25,7 @@
 		"analyze": "source-map-explorer 'dist/assets/*.js'"
 	},
 	"dependencies": {
+		"@micro-zoe/micro-app": "1.0.0-rc.3",
 		"antd": "^5.12.5",
 		"axios": "^1.6.3",
 		"dayjs": "^1.11.10",
@@ -98,7 +99,14 @@
 		"vite-plugin-mock": "^3.0.0",
 		"vite-plugin-svgr": "^4.2.0"
 	},
-	"browserslist": ["> 0.5%", "last 2 versions", "Firefox ESR", "not dead", "IE 11", "not IE 10"],
+	"browserslist": [
+		"> 0.5%",
+		"last 2 versions",
+		"Firefox ESR",
+		"not dead",
+		"IE 11",
+		"not IE 10"
+	],
 	"engines": {
 		"node": ">= v16.20.0",
 		"npm": ">= 8.19.4"

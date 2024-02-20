@@ -192,6 +192,7 @@ import 'dayjs/locale/zh-cn';
 
 // If you want to use ElMessage, import it.
 import 'element-plus/theme-chalk/src/message.scss';
+// import '@/assets/styles/theme/element.scss';
 import '@/assets/styles/main/base.scss';
 import '@/assets/styles/components/general.scss';
 import '@/assets/styles/components/app.scss';

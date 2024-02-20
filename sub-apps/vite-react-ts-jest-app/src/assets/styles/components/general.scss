@@ -3,24 +3,25 @@
 @import '../main/function.scss';
 
 .head-logo {
-	// height: 56px;
+	height: 50px;
 	overflow: hidden;
 	// text-align: left;
-	// padding: 9px;
+	padding: 6px;
 	// margin-bottom: 8px;
 	svg,
 	img {
-		display: inline-block;
+		float: left;
+		// display: inline-block;
 		width: auto;
-		height: 30px;
-		// margin: 0 0 0 -3px;
-		margin-right: 8px;
-		padding: 0;
+		height: 38px;
+		padding: 10px 5px;
 	}
 	.title {
-		display: inline-block;
+		// display: inline-block;
+		float: left;
 		height: 38px;
 		color: #fff;
+		margin-left: 3px;
 		font: normal 16px/38px 'Microsoft YaHei';
 	}
 }

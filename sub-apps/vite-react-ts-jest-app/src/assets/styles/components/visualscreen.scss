@@ -1,24 +1,58 @@
 @charset "UTF-8";
-
 @import '../main/function.scss';
 
-.overview {
-	display: flex;
+html,
+body {
+	overflow: auto;
+	// @media all and (max-width: 1024px) and (max-height: 600px) {
+	// }
+	@media all and (min-width: 1024px) and (min-height: 600px) {
+		overflow: hidden;
+	}
+}
+body {
+	color: #cecece;
+	// font-size: 14px;
+	// line-height: 2.1666666;
+	background: radial-gradient(70% 70% at 50% 50%, #10293f 0%, #050f17 100%);
+	-webkit-font-smoothing: antialiased; /*chrome、safari 抗锯齿*/
+	-moz-osx-font-smoothing: grayscale;
+	zoom: auto;
+}
+
+.visual-screen {
+	position: relative;
+	margin: 0 auto;
 	overflow: hidden;
-	font-size: 1rem;
+
+	display: flex;
+	// font-size: 1rem;
 	z-index: -1000;
 	// background-color: rgb(3, 12, 38);
 	background-image: url('../../images/stars-bg.jpg');
 	background-size: cover;
+
 	@media all and (max-width: 1024px) {
-		width: 1024px;
-		height: 800px;
-		@media (min-height: 800px) {
-			height: 100vh;
-		}
+		// 1rem = 10px
+		width: 102.4rem; // 1024px
+		height: 60rem; // 600px
+		overflow-x: auto;
 	}
-	@media all and (min-width: 1024px) and (min-height: 800px) {
+	@media all and (max-height: 600px) {
+		width: 102.4rem;
+		height: 60rem;
+		overflow-y: auto;
+	}
+
+	/* 最大宽高比 */
+	@media all and (min-width: 1025px) and (min-height: 601px) and (max-aspect-ratio: 16/9) {
 		width: 100vw;
+		height: 56.25vw; // 900/16
+	}
+
+	/* 最小宽高比 */
+	@media all and (min-width: 1025px) and (min-height: 601px) and (min-aspect-ratio: 16/9) {
+		width: 177.778vh; // 1600/9
 		height: 100vh;
 	}
 
@@ -440,3 +474,21 @@
 	height: 1em;
 	background-repeat: no-repeat;
 }
+
+// @media all and (min-width: 1366px) {
+// 	html {
+// 		font-size: 14.23px;
+// 	}
+// }
+// @media all and (min-width: 1920px) {
+// 	html {
+// 		font-size: 20px;
+// 	}
+// }
+
+/* 最小宽高比 */
+// @media all and (min-width: 9999px) and (min-aspect-ratio: 2/1) {
+// 	html {
+// 		font-size: 20px * (200vh / 1920px);
+// 	}
+// }

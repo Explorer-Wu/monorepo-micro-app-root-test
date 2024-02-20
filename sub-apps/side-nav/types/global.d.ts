@@ -4,50 +4,37 @@
  */
 
 declare global {
-  interface ImportMeta {
-    env: Record<string, unknown>
-    globEager<T = unknown>(globPath: string): Record<string, T>
-  }
-
   const process: {
     env: {
       NODE_ENV: string
     }
   }
 
-  namespace JSX {
-    interface IntrinsicAttributes {
-      class?: any
-      style?: any
-    }
-  }
+  // namespace JSX {
+  //   interface IntrinsicAttributes {
+  //     class?: any
+  //     style?: any
+  //   }
+  // }
 
   // 	// 全局变量设置
   // 	const _: typeof lodash;
+
+  // interface Window {
+  // }
 }
 
 declare interface Window {
+  eventCenterForAppNameVite: any
+  __MICRO_APP_NAME__: string
+  __MICRO_APP_ENVIRONMENT__: string
+  __MICRO_APP_BASE_APPLICATION__: string
   ActiveXObject: boolean
   webkitIndexedDB: boolean
   mozIndexedDB: boolean
   scrollHeight: number
   scrollTop: number
   clientHeight: number
-}
-
-declare module 'crypto-js' {
-  export class CryptoJS {
-    constructor()
-    MD5(key: string): Promise<string>
-  }
-}
-
-declare module 'jsencrypt' {
-  export class JSEncrypt {
-    constructor()
-    setPublickey(pk: string): void
-    encrypt(key: string): string
-  }
 }
 
 declare interface Fn<T = any, R = T> {
