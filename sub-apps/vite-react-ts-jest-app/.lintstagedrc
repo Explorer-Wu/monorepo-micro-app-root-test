@@ -3,5 +3,9 @@
     "eslint --cache --fix --max-warnings=0 --no-ignore",
     "prettier --parser=typescript --write --cache --ignore-unknown",
     "git add"
+  ],
+  "*.{less,sass,scss,json}": [
+    "prettier --write --cache --ignore-unknown",
+    "git add"
   ]
 }

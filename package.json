@@ -10,6 +10,7 @@
     "start:vue3": "pnpm -C ./sub-apps/vitest-vue3-ts-el-app serve",
     "start:react": "pnpm -C ./sub-apps/vite-react-ts-jest-app start",
     "format": "prettier --write --ignore-unknown .",
+    "lint-staged": "lint-staged",
     "ghusky": "husky install",
     "commit:valid": "git add . && cz",
     "changeset": "changeset && changeset version",
