@@ -82,7 +82,7 @@ export function useGlobalPlugins(app: ReturnType<typeof createApp>, store: any, 
 	console.log('useGlobalPlugins0:', app);
 	app
 		.use(router)
-		// .use(store)
+		.use(store)
 		.use(GeneralPlugin)
 		.component('svg-icon', SvgIcon)
 		.mount('#subvue3-app');

@@ -80,7 +80,7 @@ const menuList: any[] = [
 	{
 		iconTag: 'Picture',
 		title: '图片展示',
-		path: '/views/pictures',
+		path: '/pictures',
 	},
 ];
 

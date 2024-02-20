@@ -4,6 +4,9 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import Icons from 'unplugin-icons/vite';
+import IconsResolver from 'unplugin-icons/resolver';
+import Inspect from 'vite-plugin-inspect';
 import legacy from '@vitejs/plugin-legacy';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import { fileURLToPath, URL } from 'node:url';
@@ -69,61 +72,85 @@ export default defineConfig(({ mode }) => {
 			//   runtimeOnly: false
 			// })
 			AutoImport({
-				resolvers: [ElementPlusResolver()],
+				resolvers: [
+					ElementPlusResolver(),
+					// 自动导入图标组件
+					// IconsResolver(),
+					IconsResolver({
+						prefix: 'I',
+					}),
+				],
 				include: [
 					/\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
 					/\.vue$/,
 					/\.vue\?vue/, // .vue
+					/\.(s?c|le)ss$/,
 					/\.md$/, // .md
 				],
-				// global imports to register
+				// // global imports to register
 				imports: [
 					// presets
 					'vue',
+					// 'vue/macros',
+					'@vueuse/core',
 					'vue-router',
 					'pinia',
 					'vue-i18n',
 					// custom
-					{
-						'@vueuse/core': [
-							// named imports
-							'useMouse', // import { useMouse } from '@vueuse/core',
-							// alias
-							['useFetch', 'useMyFetch'], // import { useFetch as useMyFetch } from '@vueuse/core',
-						],
-						// axios: [ // 已经封装了库，不使用
-						// 	// default imports
-						// 	['default', 'axios'], // import { default as axios } from 'axios',
-						// ],
-						'[package-name]': [
-							'[import-names]',
-							// alias
-							['[from]', '[alias]'],
-						],
-					},
+					// {
+					// 	'@vueuse/core': [
+					// 		// named imports
+					// 		'useMouse', // import { useMouse } from '@vueuse/core',
+					// 		// alias
+					// 		// ['useFetch', 'useMyFetch'], // import { useFetch as useMyFetch } from '@vueuse/core',
+					// 	],
+					// 	// axios: [ // 已经封装了库，不使用
+					// 	// 	// default imports
+					// 	// 	['default', 'axios'], // import { default as axios } from 'axios',
+					// 	// ],
+					// 	'[package-name]': [
+					// 		'[import-names]',
+					// 		// alias
+					// 		['[from]', '[alias]'],
+					// 	],
+					// },
 					// example type import
-					{
-						from: 'vue-router',
-						imports: ['RouteLocationRaw'],
-						type: true,
-					},
+					// {
+					// 	from: 'vue-router',
+					// 	imports: ['RouteLocationRaw'],
+					// 	type: true,
+					// },
 				],
-				// Array of strings of regexes that contains imports meant to be filtered out.
-				ignore: ['useMouse', 'useFetch'],
+				// // Array of strings of regexes that contains imports meant to be filtered out.
+				ignore: ['useFetch'],
 				dts: './types/auto-imports.d.ts',
 			}),
 			Components({
 				// allow auto load markdown components under `./src/components/`
 				extensions: ['vue', 'md'],
 				// allow auto import and register components used in markdown
-				include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+				include: [/\.vue$/, /\.vue\?vue/, /\.(s?c|le)ss$/, /\.md$/],
 				resolvers: [
-					ElementPlusResolver({
-						importStyle: 'sass',
+					// 自动导入 Element Plus 组件
+					ElementPlusResolver(),
+					// 自动注册图标组件
+					// IconsResolver(),
+					IconsResolver({
+						// prefix: false, 这样设置不行
+						// alias: {
+						// 	ep: 'icon-ep',
+						// },
+						enabledCollections: ['ep'],
 					}),
 				],
+
 				dts: './types/components.d.ts',
 			}),
+			Icons({
+				// compiler: 'vue3',
+				autoInstall: true,
+			}),
+
 			legacy({
 				// 需要兼容的目标列表
 				targets: [
@@ -158,6 +185,7 @@ export default defineConfig(({ mode }) => {
 				],
 				transformers: [transformerDirectives(), transformerVariantGroup()],
 			}),
+			Inspect(),
 		],
 		json: {
 			//是否支持从 .json 文件中进行按名导入
@@ -169,9 +197,8 @@ export default defineConfig(({ mode }) => {
 			// 指定传递给 css 预处理器的选项
 			preprocessorOptions: {
 				scss: {
-					// prependData: `@import "@/assets/styles/main/normalize.scss"; @import "@/assets/styles/main/function.scss";`,
-					//全局引入
-					additionalData: `@forward "@/assets/styles/theme/element.scss"; @use "@/assets/styles/main/normalize.scss" as *; @use "@/assets/styles/main/function.scss" as *;`,
+					// 全局引入
+					additionalData: `@use "@/assets/styles/theme/element.scss" as *;@use "@/assets/styles/main/normalize.scss" as *;@use "@/assets/styles/main/function.scss" as *;`,
 					charset: false,
 					outputStyle: 'expanded',
 					/** 引入var.scss全局预定义变量 */
@@ -234,10 +261,10 @@ export default defineConfig(({ mode }) => {
 			],
 			// 配置别名
 			alias: [
-				{
-					find: /^~/,
-					replacement: fileURLToPath(new URL('./', import.meta.url)),
-				},
+				// {
+				// 	find: /^~/,
+				// 	replacement: fileURLToPath(new URL('./', import.meta.url)),
+				// },
 				{
 					find: '@/',
 					replacement: fileURLToPath(new URL('./src/', import.meta.url)),

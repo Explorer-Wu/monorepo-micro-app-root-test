@@ -1,0 +1,122 @@
+<script lang="ts" setup>
+import {  onMounted, nextTick, watchEffect, getCurrentInstance, provide, inject } from 'vue';
+import { useRouter, useRoute, type RouteLocationNormalizedLoaded, type Router } from "vue-router";
+import { trimEnd } from 'lodash-es';
+import microApp, { getActiveApps } from '@micro-zoe/micro-app';
+
+microApp.start({
+	tagName: 'micro-app-subvue3',
+	iframe: true,
+});
+
+const { proxy } = getCurrentInstance() as any;
+const $router: Router = useRouter();
+const $route: RouteLocationNormalizedLoaded = useRoute();
+// 针对类型的 defineProps 声明的不足之处在于，它没有可以给 props 提供默认值的方式。为了解决这个问题，我们还提供了 withDefaults 编译器宏：
+export interface Props {
+  menuType: string,
+  isFold?: boolean,
+  uniqueOpen?: boolean,
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  menuType: 'main',
+  isFold: false,
+  uniqueOpen: true,
+})
+
+const { menuType, isFold, uniqueOpen } = toRefs(props);
+
+const emit = defineEmits<{
+  update: [params: object]
+}>();
+
+const menuList: any[] = [
+	{
+		iconTag: 'House',
+		title: '概览',
+		path: '/home',
+	},
+	{
+		iconTag: 'PieChart',
+		title: 'Echart图表',
+		children: [
+			{
+				title: '通用图表',
+				path: '/charts/index',
+			},
+			{
+				title: 'D3图表',
+				path: '/charts/d3charts',
+			},
+		],
+	},
+	{
+		iconTag: 'Postcard',
+		title: '表单展示',
+		path: '/forms',
+	},
+	{
+		iconTag: 'Grid',
+		title: '表格展示',
+		path: '/tables',
+	},
+	{
+		iconTag: 'Pointer',
+		title: '拖拽组件',
+		path: '/pagedraggable',
+	},
+	{
+		iconTag: 'Picture',
+		title: '图片展示',
+		path: '/pictures',
+	},
+];
+
+// 👇 主应用向sidebar子应用下发一个名为pushState的方法
+const sidebarData = {
+  menuList,
+  baseRouter: '/sub-vite-vue3',
+  subName: 'app-subvue3',
+  // 子应用sidebar通过pushState控制主应用跳转
+  pushState: async (path: string, hash: string, appName?: string) => {
+    hash && (path += `/${hash}`);
+		// 主应用跳转
+    $router.push(path);
+
+    await nextTick();
+    // 子应用内部跳转时，通知侧边栏改变菜单状态
+    if (window.eventCenterForAppNameVite) {
+      // 发送全局数据，通知侧边栏修改菜单展示
+      window.eventCenterForAppNameVite.setGlobalData({ name: 'app-sidenav' })
+    }
+  },
+}
+
+// const refreshMenu = (route: any) => {
+//   console.log('lo-route:', trimEnd(route.path, '/'));
+//   menuState.activeName = trimEnd(route.path, '/');
+// }
+
+
+onMounted(() => {
+  // const userInfo: any = JSON.parse(<string>localStorage.getItem('user_info'))
+  // console.log("userInfo",  userInfo)
+  // state.userName = userInfo.name
+  // console.log('methods:',refreshMenu);
+  // refreshMenu(proxy.$route);
+  //      this.$router.afterEach((to, from) => {
+  //        this.refreshMenu(to)
+  //      })
+});
+</script>
+
+<template>
+  <!-- data只接受对象类型，采用严格对比(===)，当传入新的data对象时会重新发送  /sub-vite-side/subnav/ -->
+  <micro-app-subvue3
+    name="app-sidenav"
+    url="http://localhost:3606/sub-vite-menu/"
+    baseroute="/sub-vite-menu/"
+    :data="sidebarData"
+  ></micro-app-subvue3>
+</template>
