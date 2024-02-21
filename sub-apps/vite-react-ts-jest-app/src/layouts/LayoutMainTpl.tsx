@@ -5,7 +5,7 @@ import { Outlet, Link } from 'react-router-dom';
 
 import HeadTop from './Header';
 import Footer from './Footer';
-import MenuNav from './SideNav';
+// import MenuNav from './SideNav';
 import Loading from '@/components/Loading';
 
 const { Header, Content, Sider } = Layout;
@@ -28,9 +28,9 @@ export default function MainLayout(props: any, context?: any): React.ReactElemen
 			}}
 		>
 			<Layout>
-				<Sider trigger={null} collapsible collapsed={collapsed}>
+				{/* <Sider trigger={null} collapsible collapsed={collapsed}>
 					<MenuNav />
-				</Sider>
+				</Sider> */}
 				<Layout className="site-layout">
 					<Header style={{ background: '#0099ff', color: '#fff', padding: '0 16px' }}>
 						<HeadTop propCollapsed={collapsed} onToggleMenu={toggleMenu} />

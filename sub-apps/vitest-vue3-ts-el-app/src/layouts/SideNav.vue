@@ -1,13 +1,18 @@
 <script lang="ts" setup>
-import {  onMounted, nextTick, watchEffect, getCurrentInstance, provide, inject } from 'vue';
+import { type Ref, ref, onMounted, nextTick, watchEffect, getCurrentInstance, provide, inject } from 'vue';
 import { useRouter, useRoute, type RouteLocationNormalizedLoaded, type Router } from "vue-router";
 import { trimEnd } from 'lodash-es';
-import microApp, { getActiveApps } from '@micro-zoe/micro-app';
+import subMicroApp, { getActiveApps, EventCenterForMicroApp } from '@micro-zoe/micro-app';
 
-microApp.start({
+subMicroApp.start({
 	tagName: 'micro-app-subvue3',
 	iframe: true,
+	// 'keep-alive': true, // 全局开启保活模式，默认为false
+	// 'keep-router-state': true,
 });
+
+// @ts-ignore 因为vite子应用关闭了沙箱，我们需要为子应用appname-vite创建EventCenterForMicroApp对象来实现数据通信
+window.eventCenterForAppViteSideNav = new EventCenterForMicroApp('app-sidenav-vue3');
 
 const { proxy } = getCurrentInstance() as any;
 const $router: Router = useRouter();
@@ -74,7 +79,7 @@ const menuList: any[] = [
 ];
 
 // 👇 主应用向sidebar子应用下发一个名为pushState的方法
-const sidebarData = {
+const sidebarData: Ref<any> = ref({
   menuList,
   baseRouter: '/sub-vite-vue3',
   subName: 'app-subvue3',
@@ -86,12 +91,12 @@ const sidebarData = {
 
     await nextTick();
     // 子应用内部跳转时，通知侧边栏改变菜单状态
-    if (window.eventCenterForAppNameVite) {
-      // 发送全局数据，通知侧边栏修改菜单展示
-      window.eventCenterForAppNameVite.setGlobalData({ name: 'app-sidenav' })
-    }
+    // if (window.eventCenterForAppViteSideNav) {
+    //   // 发送全局数据，通知侧边栏修改菜单展示
+    //   window.eventCenterForAppViteSideNav.setGlobalData({ name: 'app-sidenav-vue3' })
+    // }
   },
-}
+})
 
 // const refreshMenu = (route: any) => {
 //   console.log('lo-route:', trimEnd(route.path, '/'));
@@ -103,7 +108,7 @@ onMounted(() => {
   // const userInfo: any = JSON.parse(<string>localStorage.getItem('user_info'))
   // console.log("userInfo",  userInfo)
   // state.userName = userInfo.name
-  // console.log('methods:',refreshMenu);
+  console.log('eventCenterForAppViteSideNav:', window.eventCenterForAppViteSideNav);
   // refreshMenu(proxy.$route);
   //      this.$router.afterEach((to, from) => {
   //        this.refreshMenu(to)
@@ -114,9 +119,10 @@ onMounted(() => {
 <template>
   <!-- data只接受对象类型，采用严格对比(===)，当传入新的data对象时会重新发送  /sub-vite-side/subnav/ -->
   <micro-app-subvue3
-    name="app-sidenav"
+    name="app-sidenav-vue3"
     url="http://localhost:3606/sub-vite-menu/"
     baseroute="/sub-vite-menu/"
     :data="sidebarData"
+		iframe
   ></micro-app-subvue3>
 </template>

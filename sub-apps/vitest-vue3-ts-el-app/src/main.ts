@@ -28,11 +28,11 @@ async function mount() {
 }
 
 // 👇 将卸载操作放入 unmount 函数，就是上面步骤2中的卸载函数
-function ummount() {
+function unmount() {
 	app?.unmount();
 	history?.destroy();
 	// 卸载所有数据监听函数
-	window.eventCenterForAppNameVite?.clearDataListener();
+	window.eventCenterForAppViteReact?.clearDataListener();
 	app = null;
 	router = null;
 	history = null;

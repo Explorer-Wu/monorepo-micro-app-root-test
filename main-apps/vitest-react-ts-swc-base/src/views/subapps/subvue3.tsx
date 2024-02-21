@@ -6,7 +6,7 @@ import React, { Suspense, useState } from 'react';
 import config from '@/config';
 
 // @ts-ignore 因为vite子应用关闭了沙箱，我们需要为子应用appname-vite创建EventCenterForMicroApp对象来实现数据通信
-window.eventCenterForAppNameVite = new EventCenterForMicroApp('app-subvue3');
+window.eventCenterForAppViteVue3 = new EventCenterForMicroApp('app-subvue3');
 
 const SubVue3 = () => {
 	const [microAppData, changeMicroAppData] = useState({ msg: '来自基座的数据' });

@@ -8,10 +8,10 @@ import ReactLogo from '@/assets/images/svg/react.svg?react';
 
 import microApp, { getActiveApps } from '@micro-zoe/micro-app';
 
-microApp.start({
-	tagName: 'micro-app-subreact',
-	iframe: true,
-});
+// microApp.start({
+// 	tagName: 'micro-app-subreact',
+// 	iframe: true,
+// });
 
 // type MenuItem = Required<MenuProps>['items'][number]; // GetProp<MenuProps, 'items'>[number];
 
@@ -170,11 +170,11 @@ const NavMenu: React.FC<any> = (props: any, context?: any) => {
 				onClick={linkToNav}
 			/> */}
 			{/* data只接受对象类型，采用严格对比(===)，当传入新的data对象时会重新发送  /sub-vite-side/subnav/ */}
-			<micro-app-subreact
+			{/* <micro-app-subreact
 				name="app-sidenav"
 				url="http://localhost:3606/sub-vite-menu/"
 				baseroute="/sub-vite-menu/"
-			></micro-app-subreact>
+			></micro-app-subreact> */}
 		</>
 	);
 };

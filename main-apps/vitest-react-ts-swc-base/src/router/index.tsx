@@ -15,13 +15,29 @@ const SubVue3 = lazy(() => import('@/views/subapps/subvue3'));
 
 // 实现懒加载的用Suspense包裹 定义函数
 const lazyLoad = (children: ReactNode): ReactNode => {
-	return <Suspense fallback={<Loading isLoad={true} text={'加载...'} />}>{children}</Suspense>;
+	return (
+		<Suspense
+			fallback={
+				<Loading
+					isLoad={true}
+					text={'加载...'}
+				/>
+			}
+		>
+			{children}
+		</Suspense>
+	);
 };
 
 const routes: RouteObject[] = [
 	{
 		path: '/', // || '/views'
-		element: <Navigate to={'/home'} replace />,
+		element: (
+			<Navigate
+				to={'/home'}
+				replace
+			/>
+		),
 	},
 	// {
 	// 	path: '/views',
@@ -60,7 +76,12 @@ const routes: RouteObject[] = [
 	},
 	{
 		path: '/*',
-		element: <Navigate to={'/404'} replace />,
+		element: (
+			<Navigate
+				to={'/404'}
+				replace
+			/>
+		),
 	},
 ];
 

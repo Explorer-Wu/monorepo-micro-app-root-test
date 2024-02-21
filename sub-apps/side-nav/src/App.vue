@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, type Ref, ref, toRefs, computed, onMounted, watchEffect, getCurrentInstance, provide, inject } from 'vue';
+import { reactive, type Ref, ref, toRefs, computed, onMounted, onUnmounted, watchEffect, getCurrentInstance, provide, inject, nextTick } from 'vue';
 import RenderIcon from './components/autoRenderIcon';
 import { getIcon } from './components/enumIcon';
 // import { ElLink, ElMain, ElMenu, ElSubMenu, ElMenuItem, ElMenuItemGroup } from 'element-plus';
@@ -114,7 +114,12 @@ const getActiveIndex = () => {
   return menuState.activeName
 }
 
-onMounted(() => {
+const dataListenerFn = (data: Object): void => {
+  console.log('nav-dataListenerFn:', data);
+  microAppData.value = data;
+}
+
+onMounted(async () => {
   // const userInfo: any = JSON.parse(<string>localStorage.getItem('user_info'))
   // console.log("userInfo",  userInfo)
   // state.userName = userInfo.name
@@ -122,25 +127,30 @@ onMounted(() => {
   getActiveIndex();
 
   // 监听浏览器前进后退按钮，激活对应菜单
-  window.addEventListener('popstate', () => getActiveIndex())
+  window.addEventListener('popstate', () => getActiveIndex());
+
+  await nextTick();
 
   // 判断微前端环境
   if (window.__MICRO_APP_ENVIRONMENT__) {
-    console.log('nav-microApp:', window.microApp.getData());
+    console.log('nav-microApp:', window.eventCenterForAppViteSideNav, window.microApp.getData());
     // 获取基座下发的数据
-    microAppData.value = window.microApp.getData();
+    // microAppData.value = window.microApp.getData();
+    window.microApp.addDataListener(dataListenerFn, true);
     menuState.navItems = microAppData.value.menuList;
     // 全局数据监听，监听来自其它子应用页面跳转，控制侧边栏的菜单展示
     // 因为子应用之间无法直接通信，这里采用全局数据通信
-    window.microApp.addGlobalDataListener((data) => {
-      console.log('菜单数据:', data);
-      getActiveIndex()
-    })
+    // window.microApp.addGlobalDataListener((data) => {
+    //   console.log('菜单数据:', data);
+    //   getActiveIndex()
+    // })
   }
 });
 
-  // onUnmounted(() => {
-  // });
+onUnmounted(() => {
+    /** 移除数据【data属性】监听事件 */
+   window.microApp && window.microApp.removeDataListener(dataListenerFn)
+});
 </script>
 
 <template>
