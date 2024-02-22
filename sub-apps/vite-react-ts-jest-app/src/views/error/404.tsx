@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
+import HistoryRule, { usePrevious } from '@/router/history';
 
-class NoMatch extends Component {
-	render() {
-		const { location }: any = this.props;
-		return (
-			<>
-				<h3>404!</h3>
-				<p>
-					No match for <code>{location.pathname}</code>
-				</p>
-			</>
-		);
-	}
+function NoMatch() {
+	const { Location }: any = HistoryRule();
+	// const prevLocation = usePrevious(history);
+	console.log('No match:', location, Location, history);
+	return (
+		<>
+			<h3>404!</h3>
+			<p>
+				No match for <code>{Location.pathname}</code>
+			</p>
+		</>
+	);
 }
 
 export default NoMatch;

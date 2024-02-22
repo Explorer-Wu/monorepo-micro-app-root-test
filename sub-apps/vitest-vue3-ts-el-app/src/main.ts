@@ -32,18 +32,19 @@ function unmount() {
 	app?.unmount();
 	history?.destroy();
 	// 卸载所有数据监听函数
-	window.eventCenterForAppViteReact?.clearDataListener();
+	window.eventCenterForAppViteVue3?.clearDataListener();
 	app = null;
 	router = null;
 	history = null;
 	console.log('微应用child-vite卸载了');
 }
 
-// 微前端环境下，注册mount和unmount方法
-if (window.__MICRO_APP_BASE_APPLICATION__) {
+// 微前端环境下，注册mount和unmount方法  window.__MICRO_APP_BASE_APPLICATION__是否为主应用
+if (window.__MICRO_APP_ENVIRONMENT__) {
 	// @ts-ignore
 	window[`micro-app-${window.__MICRO_APP_NAME__}`] = { mount, unmount };
 	// window['micro-app-app-subvue3'] = { mount, unmount };
+	mount();
 } else {
 	// 非微前端环境直接渲染
 	mount();

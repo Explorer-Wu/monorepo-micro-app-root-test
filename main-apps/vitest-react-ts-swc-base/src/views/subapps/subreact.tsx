@@ -45,8 +45,8 @@ const SubReact: React.FC<any> = (): JSX.Element => {
 		<Suspense>
 			<micro-app
 				name="app-subreact"
-				url={`${config.subreact}/sub-vite-react/subreact/`}
-				baseroute="/sub-vite-react/subreact"
+				url={`${config.subreact}/sub-vite-react/`}
+				baseroute="/sub-vite-react/"
 				data={microAppData}
 				onCreated={handleCreate}
 				onBeforemount={handleBeforeMount}

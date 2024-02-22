@@ -1,4 +1,4 @@
-import { HTMLAttributeAnchorTarget } from 'react';
+import { useRef, useEffect, type HTMLAttributeAnchorTarget } from 'react';
 import { useNavigate, useLocation, useHref, useLinkClickHandler, To } from 'react-router-dom';
 
 export default function HistoryRule() {
@@ -34,4 +34,14 @@ export default function HistoryRule() {
 		HrefTo,
 		LinkNav,
 	};
+}
+
+export function usePrevious(value) {
+	const ref = useRef();
+
+	useEffect(() => {
+		ref.current = value;
+	}, [value]);
+
+	return ref.current;
 }

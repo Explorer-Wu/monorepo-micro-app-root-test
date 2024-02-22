@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-
-class NoAccess extends Component {
+import React, { PureComponent } from 'react';
+import HistoryRule from '@/router/history';
+class NoAccess extends PureComponent {
 	render() {
-		const { location }: any = this.props;
+		console.log('No Acces:', this.props);
 		return (
 			<>
 				<h3>403!</h3>

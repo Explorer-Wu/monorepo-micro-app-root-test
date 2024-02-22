@@ -12,7 +12,7 @@ subMicroApp.start({
 });
 
 // @ts-ignore 因为vite子应用关闭了沙箱，我们需要为子应用appname-vite创建EventCenterForMicroApp对象来实现数据通信
-window.eventCenterForAppViteSideNav = new EventCenterForMicroApp('app-sidenav-vue3');
+window.eventCenterForAppViteSideNav = new EventCenterForMicroApp('app-sidenav');
 
 const { proxy } = getCurrentInstance() as any;
 const $router: Router = useRouter();
@@ -119,7 +119,7 @@ onMounted(() => {
 <template>
   <!-- data只接受对象类型，采用严格对比(===)，当传入新的data对象时会重新发送  /sub-vite-side/subnav/ -->
   <micro-app-subvue3
-    name="app-sidenav-vue3"
+    name="app-sidenav"
     url="http://localhost:3606/sub-vite-menu/"
     baseroute="/sub-vite-menu/"
     :data="sidebarData"

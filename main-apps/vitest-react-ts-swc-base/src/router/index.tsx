@@ -57,19 +57,19 @@ const routes: RouteObject[] = [
 			//     requiresAuth: false,
 			// },
 			{
-				path: '/sub-react',
+				path: 'sub-react',
 				element: lazyLoad(<SubReact />),
 			},
 			{
-				path: '/sub-vue3',
+				path: 'sub-vue3',
 				element: lazyLoad(<SubVue3 />),
 			},
 			{
-				path: '/404',
+				path: '404',
 				element: lazyLoad(<NotFound />),
 			},
 			{
-				path: '/403',
+				path: '403',
 				element: lazyLoad(<NoAccess />),
 			},
 		],

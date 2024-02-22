@@ -9,13 +9,13 @@ function handleMicroData() {
 		window.eventCenterForAppViteReact.addDataListener((data: Record<string, unknown>) => {
 			console.log('child-react addDataListener:', data);
 
-			if (data.path && typeof data.path === 'string') {
-				// data.path = data.path.replace(/^#/, '');
-				// 当基座下发path时进行跳转
-				// if (data.path && data.path !== router.currentRoute.value.path) {
-				// 	router.push(data.path as string);
-				// }
-			}
+			// if (data.path && typeof data.path === 'string') {
+			// 	data.path = data.path.replace(/^#/, '');
+			// 	当基座下发path时进行跳转
+			// 	if (data.path && data.path !== router.currentRoute.value.path) {
+			// 		router.push(data.path as string);
+			// 	}
+			// }
 		});
 
 		// 向基座发送数据

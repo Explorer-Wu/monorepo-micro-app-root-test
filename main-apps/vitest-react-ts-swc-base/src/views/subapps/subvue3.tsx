@@ -43,8 +43,9 @@ const SubVue3 = () => {
 		<Suspense>
 			<micro-app
 				name="app-subvue3"
-				url={`${config.subvue3}/sub-vite-vue3/subvue3/`}
-				baseroute="/sub-vite-vue3/subvue3"
+				url={`${config.subvue3}/sub-vite-vue3/`}
+				baseroute="/sub-vite-vue3/"
+				inline
 				data={microAppData}
 				onCreated={handleCreate}
 				onBeforemount={handleBeforeMount}

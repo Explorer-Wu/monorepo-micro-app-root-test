@@ -52,11 +52,11 @@ const routes: RouteObject[] = [
 			//     element: <Users/>,
 			// },
 			{
-				path: '/404',
+				path: '404',
 				element: lazyLoad(<NotFound />),
 			},
 			{
-				path: '/403',
+				path: '403',
 				element: lazyLoad(<NoAccess />),
 			},
 		],

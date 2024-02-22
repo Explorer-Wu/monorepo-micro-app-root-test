@@ -6,13 +6,15 @@ import { routes } from '@/router/index';
 // import Logo from '@/assets/images/svg/logo.svg';
 import ReactLogo from '@/assets/images/svg/react.svg?react';
 
-import microApp, { getActiveApps } from '@micro-zoe/micro-app';
+import microApp, { getActiveApps, EventCenterForMicroApp } from '@micro-zoe/micro-app';
 
-// microApp.start({
-// 	tagName: 'micro-app-subreact',
-// 	iframe: true,
-// });
+microApp.start({
+	tagName: 'micro-app-subreact',
+	iframe: true,
+});
 
+// @ts-ignore 因为vite子应用关闭了沙箱，我们需要为子应用appname-vite创建EventCenterForMicroApp对象来实现数据通信
+window.eventCenterForAppViteSideNav = new EventCenterForMicroApp('app-sidenav');
 // type MenuItem = Required<MenuProps>['items'][number]; // GetProp<MenuProps, 'items'>[number];
 
 const menuList: any[] = [
@@ -170,11 +172,11 @@ const NavMenu: React.FC<any> = (props: any, context?: any) => {
 				onClick={linkToNav}
 			/> */}
 			{/* data只接受对象类型，采用严格对比(===)，当传入新的data对象时会重新发送  /sub-vite-side/subnav/ */}
-			{/* <micro-app-subreact
+			<micro-app-subreact
 				name="app-sidenav"
 				url="http://localhost:3606/sub-vite-menu/"
 				baseroute="/sub-vite-menu/"
-			></micro-app-subreact> */}
+			></micro-app-subreact>
 		</>
 	);
 };

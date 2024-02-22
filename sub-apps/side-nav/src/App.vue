@@ -135,8 +135,8 @@ onMounted(async () => {
   if (window.__MICRO_APP_ENVIRONMENT__) {
     console.log('nav-microApp:', window.eventCenterForAppViteSideNav, window.microApp.getData());
     // 获取基座下发的数据
-    // microAppData.value = window.microApp.getData();
-    window.microApp.addDataListener(dataListenerFn, true);
+    microAppData.value = window.microApp.getData();
+    // window.microApp.addDataListener(dataListenerFn, true);
     menuState.navItems = microAppData.value.menuList;
     // 全局数据监听，监听来自其它子应用页面跳转，控制侧边栏的菜单展示
     // 因为子应用之间无法直接通信，这里采用全局数据通信

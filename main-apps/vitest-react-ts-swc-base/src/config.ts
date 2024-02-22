@@ -2,7 +2,7 @@
 const config: Record<string, string> = {
 	mainreact: 'http://localhost:3600',
 	sidebar: 'http://localhost:3606',
-	subreact: 'https://localhost:3601',
+	subreact: 'http://localhost:3601',
 	subvue3: 'http://localhost:3602',
 	// nextjs: 'http://localhost:3008',
 	// nuxtjs: 'http://localhost:3009',
