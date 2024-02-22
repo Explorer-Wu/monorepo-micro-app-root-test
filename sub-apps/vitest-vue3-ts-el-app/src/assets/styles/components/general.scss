@@ -3,6 +3,8 @@
 // @import '../main/function.scss';
 
 .head-logo {
+	float: left;
+	width: 180px;
 	// height: 56px;
 	overflow: hidden;
 	// text-align: left;
@@ -23,6 +25,19 @@
 		color: #fff;
 		font: normal 16px/38px 'Microsoft YaHei';
 	}
+}
+
+.layout-nav {
+	@extend %display_inline-flex;
+	//调用混合宏
+	@include flex-flow(row, nowrap, normal); // -webkit-box-orient: horizontal;
+	@include align-items(flex-end);
+	@include justify-content(flex-end, justify);
+	// overflow: hidden;
+	-webkit-app-region: no-drag; // 可拖拽区域排除
+	float: right;
+	color: #f9f9f9;
+	height: 50px;
 }
 
 .box-top,

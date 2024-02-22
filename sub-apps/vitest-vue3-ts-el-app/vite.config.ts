@@ -73,7 +73,10 @@ export default defineConfig(({ mode }) => {
 			// })
 			AutoImport({
 				resolvers: [
-					ElementPlusResolver(),
+					ElementPlusResolver({
+						// 关键：自动引入修改主题色添加这一行，使用预处理样式，不添加将会导致使用ElMessage，ElNotification等组件时默认的主题色会覆盖自定义的主题色
+						importStyle: 'sass',
+					}),
 					// 自动导入图标组件
 					// IconsResolver(),
 					IconsResolver({
@@ -84,7 +87,7 @@ export default defineConfig(({ mode }) => {
 					/\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
 					/\.vue$/,
 					/\.vue\?vue/, // .vue
-					/\.(s?c|le)ss$/,
+					// /\.(s?c|le)ss$/,
 					/\.md$/, // .md
 				],
 				// // global imports to register
@@ -129,10 +132,13 @@ export default defineConfig(({ mode }) => {
 				// allow auto load markdown components under `./src/components/`
 				extensions: ['vue', 'md'],
 				// allow auto import and register components used in markdown
-				include: [/\.vue$/, /\.vue\?vue/, /\.(s?c|le)ss$/, /\.md$/],
+				include: [/\.vue$/, /\.vue\?vue/, /\.md$/], // /\.(s?c|le)ss$/,
 				resolvers: [
 					// 自动导入 Element Plus 组件
-					ElementPlusResolver(),
+					ElementPlusResolver({
+						// 关键：自动引入修改主题色添加这一行，使用预处理样式
+						importStyle: 'sass',
+					}),
 					// 自动注册图标组件
 					// IconsResolver(),
 					IconsResolver({
@@ -198,9 +204,9 @@ export default defineConfig(({ mode }) => {
 			preprocessorOptions: {
 				scss: {
 					// 全局引入
-					additionalData: `@use "@/assets/styles/theme/element.scss" as *;@use "@/assets/styles/main/normalize.scss" as *;@use "@/assets/styles/main/function.scss" as *;`,
-					charset: false,
-					outputStyle: 'expanded',
+					additionalData: `@use "@/assets/styles/main/normalize.scss" as *;@use "@/assets/styles/main/function.scss" as *;@use "@/assets/styles/theme/index.scss" as *;`,
+					// charset: false,
+					// outputStyle: 'expanded',
 					/** 引入var.scss全局预定义变量 */
 					// modifyVars: {
 					// 	'primary-color': '#1890ff',

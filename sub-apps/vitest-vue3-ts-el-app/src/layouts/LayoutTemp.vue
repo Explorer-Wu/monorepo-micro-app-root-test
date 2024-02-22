@@ -1,3 +1,52 @@
+<script lang="ts" setup>
+import { computed, reactive } from 'vue';
+import { useRoute } from 'vue-router';
+import HeadTop from './Header.vue';
+import MenuNav from './SideNav.vue';
+import RouterViewCache from './routerViewCache.vue';
+
+interface LayoutState {
+  isCollapsed: boolean;
+  collapsedWd: string;
+  // username: string;
+}
+
+const $route = useRoute();
+// ...mapGetters(['getPageKey', 'getCurrentTab', 'getTabsList']),
+// showTabs() {
+//   return this.$store.state.showTabs
+// },
+// viewKey() {
+//   return this.showTabs ? this.getPageKey : this.$route.fullPath
+// },
+const breadcrumbList = computed(() => {
+  let breadArrs: any[] = [];
+  console.log('breadcrumbList:', $route);
+  for (const match of $route.matched) {
+    const { path, meta } = match
+    if (path && meta.title) {
+      breadArrs.push({
+        path: path === $route.path ? undefined : path,
+        query: $route.query,
+        text: meta.title
+      })
+    }
+  }
+  return breadArrs;
+});
+
+const menuState: LayoutState = reactive({
+  isCollapsed: false,
+  collapsedWd: '200px',
+  // username: '',
+});
+
+const collapsedSider = () =>{
+  menuState.isCollapsed = !menuState.isCollapsed;
+  menuState.collapsedWd = menuState.isCollapsed ? '68px' : '200px';
+};
+</script>
+
 <template>
   <div class="main-wrapper">
     <el-container>
@@ -46,55 +95,6 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { computed, reactive } from 'vue';
-import { useRoute } from 'vue-router';
-import HeadTop from './Header.vue';
-import MenuNav from './SideNav.vue';
-import RouterViewCache from './routerViewCache.vue';
-
-interface LayoutState {
-  isCollapsed: boolean;
-  collapsedWd: string;
-  // username: string;
-}
-
-const $route = useRoute();
-// ...mapGetters(['getPageKey', 'getCurrentTab', 'getTabsList']),
-// showTabs() {
-//   return this.$store.state.showTabs
-// },
-// viewKey() {
-//   return this.showTabs ? this.getPageKey : this.$route.fullPath
-// },
-const breadcrumbList = computed(() => {
-  let breadArrs: any[] = [];
-  console.log('breadcrumbList:', $route);
-  for (const match of $route.matched) {
-    const { path, meta } = match
-    if (path && meta.title) {
-      breadArrs.push({
-        path: path === $route.path ? undefined : path,
-        query: $route.query,
-        text: meta.title
-      })
-    }
-  }
-  return breadArrs;
-});
-
-const menuState: LayoutState = reactive({
-  isCollapsed: false,
-  collapsedWd: '230px',
-  // username: '',
-});
-
-const collapsedSider = () =>{
-  menuState.isCollapsed = !menuState.isCollapsed;
-  menuState.collapsedWd = menuState.isCollapsed ? '68px' : '230px';
-};
-</script>
-
 <style lang="scss" scoped>
 // @import '~@/styles/mixin.scss';
 // @import '~@/styles/variables.scss';
@@ -106,6 +106,11 @@ const collapsedSider = () =>{
   height: 100%;
   width: 100%;
   padding: 0;
+
+  .el-header {
+    background: var(--el-color-primary) !important;
+  }
+
   .main-container {
     width: 100%;
     height: 100%;
@@ -116,22 +121,22 @@ const collapsedSider = () =>{
     .main-con {
       width: 100%;
       height: calc(100% - 82px) !important;
-      background: var(--color_bg-primary) !important;
+      // background: var(--color_bg-primary) !important;
     }
 
     .el-page-header {
       padding: 10px;
       // background: transparent !important;
 
-      > &__content {
-        margin-top: 0 !important;
-      }
+      // > &__content {
+      //   margin-top: 0 !important;
+      // }
       // &__main {
       //   background: #fff !important;
       // }
-      > &__breadcrumb {
-        background: var(--color_bg-secondary) !important;
-      }
+      // > &__breadcrumb {
+      //   background: var(--color_bg-secondary) !important;
+      // }
     }
   }
 

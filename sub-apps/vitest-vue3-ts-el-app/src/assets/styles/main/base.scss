@@ -37,16 +37,6 @@
 	--gray-light: #ccc;
 	--gray-dark: #343a40;
 	--inverse: #263238;
-	--primary-light: #606fc7;
-	--primary-dark: #32408f;
-	--success-light: #6ec071;
-	--success-dark: #3d8b40;
-	--info-light: #51adf6;
-	--info-dark: #0c7cd5;
-	--warning-light: #ffad33;
-	--warning-dark: #cc7a00;
-	--danger-light: #f77066;
-	--danger-dark: #a78f8e;
 	--green-light: #00c9b6;
 	--green-dark: #006321;
 	--pink-light: #ee4c83;
@@ -57,14 +47,6 @@
 	--inverse-dark: #11171a;
 	--yellow-light: #fff06e;
 	--yellow-dark: #ffe608;
-	--primary: #3f51b5;
-	--secondary: #fff;
-	--success: #5caf50;
-	--info: #2196f3;
-	--warning: #ff9800;
-	--danger: #f44336;
-	--light: #f8f9fa;
-	--dark: #607d8b;
 	--breakpoint-xs: 0;
 	--breakpoint-sm: 576px;
 	--breakpoint-md: 768px;
@@ -923,15 +905,15 @@ html input[disabled] {
 	text-decoration: underline;
 }
 
-@media (prefers-color-scheme: light) {
-	:root {
-		color: #213547;
-		background-color: #ffffff;
-	}
-	a:hover {
-		color: #747bff;
-	}
-	button {
-		background-color: #f9f9f9;
-	}
-}
+// @media (prefers-color-scheme: light) {
+// 	:root {
+// 		color: #213547;
+// 		background-color: #ffffff;
+// 	}
+// 	a:hover {
+// 		color: #747bff;
+// 	}
+// 	button {
+// 		background-color: #f9f9f9;
+// 	}
+// }

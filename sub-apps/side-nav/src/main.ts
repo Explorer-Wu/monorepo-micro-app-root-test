@@ -4,7 +4,6 @@ import VApp from './App.vue';
 import { handleMicroData } from './utils.ts';
 
 import 'dayjs/locale/zh-cn';
-// import '@/assets/styles/theme/element.scss';
 // import 'element-plus/dist/index.css'; // 全局引入样式
 import '@/assets/styles/main/base.scss';
 import '@/assets/styles/components/app.scss';
