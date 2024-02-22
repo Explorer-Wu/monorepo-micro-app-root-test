@@ -11,6 +11,13 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.main-wrapper {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	padding: 16px 50px;
+}
+
 .App {
 	text-align: center;
 }

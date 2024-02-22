@@ -6,9 +6,21 @@ export default function Foot(props: any, context?: any): React.ReactElement<any,
 	return (
 		<Footer className="foot">
 			Explorer Design ©{new Date().getFullYear()} Created by &nbsp;
-			<a href="https://github.com/Explorer-Wu" target="_blank">
+			<a
+				href="https://github.com/Explorer-Wu"
+				target="_blank"
+			>
 				Explorer Wu
 			</a>
+			<style jsx>{`
+				.foot {
+					with: 100%;
+					line-height: 36px;
+					padding: 10px 50px;
+					text-align: center;
+					font-size: 10px;
+				}
+			`}</style>
 		</Footer>
 	);
 }

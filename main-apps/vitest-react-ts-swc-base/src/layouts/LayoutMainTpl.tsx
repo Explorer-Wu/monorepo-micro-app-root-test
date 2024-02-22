@@ -51,7 +51,7 @@ const contentStyle: CSSProperties = {
 	// borderRadius: borderRadiusLG,
 	height: 'calc(100vh - 50px)',
 	overflow: 'auto',
-	padding: '16px 50px',
+	// padding: '0',
 };
 
 export default function MainLayout(props: any, context?: any): React.ReactElement<any, any> {
@@ -63,9 +63,16 @@ export default function MainLayout(props: any, context?: any): React.ReactElemen
 	console.log('lay-router:', props);
 
 	return (
-		<ConfigProvider locale={zhCN} theme={themeConfig}>
+		<ConfigProvider
+			locale={zhCN}
+			theme={themeConfig}
+		>
 			<Layout>
-				<Header style={headerStyle} propCollapsed={collapsed} onToggleMenu={toggleMenu} />
+				<Header
+					style={headerStyle}
+					propCollapsed={collapsed}
+					onToggleMenu={toggleMenu}
+				/>
 				<Content style={contentStyle}>
 					<Outlet />
 				</Content>
