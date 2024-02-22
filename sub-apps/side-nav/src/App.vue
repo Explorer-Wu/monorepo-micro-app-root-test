@@ -133,7 +133,7 @@ onMounted(async () => {
 
   // 判断微前端环境
   if (window.__MICRO_APP_ENVIRONMENT__) {
-    console.log('nav-microApp:', window.eventCenterForAppViteSideNav, window.microApp.getData());
+    console.log('nav-microApp:', window.microApp.getData());
     // 获取基座下发的数据
     microAppData.value = window.microApp.getData();
     // window.microApp.addDataListener(dataListenerFn, true);

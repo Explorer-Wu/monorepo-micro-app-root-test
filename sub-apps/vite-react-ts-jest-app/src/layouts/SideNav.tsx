@@ -6,15 +6,15 @@ import { routes } from '@/router/index';
 // import Logo from '@/assets/images/svg/logo.svg';
 import ReactLogo from '@/assets/images/svg/react.svg?react';
 
-import microApp, { getActiveApps, EventCenterForMicroApp } from '@micro-zoe/micro-app';
+import subMicroApp, { getActiveApps, EventCenterForMicroApp } from '@micro-zoe/micro-app';
 
-microApp.start({
+subMicroApp.start({
 	tagName: 'micro-app-subreact',
 	iframe: true,
 });
 
 // @ts-ignore 因为vite子应用关闭了沙箱，我们需要为子应用appname-vite创建EventCenterForMicroApp对象来实现数据通信
-window.eventCenterForAppViteSideNav = new EventCenterForMicroApp('app-sidenav');
+// window.eventCenterForAppViteSideNav = new EventCenterForMicroApp('app-sidenav');
 // type MenuItem = Required<MenuProps>['items'][number]; // GetProp<MenuProps, 'items'>[number];
 
 const menuList: any[] = [
@@ -141,7 +141,7 @@ const NavMenu: React.FC<any> = (props: any, context?: any) => {
 
 	useEffect(() => {
 		// 👇 主应用向sidebar子应用下发一个名为pushState的方法
-		microApp.setData('app-sidenav', {
+		subMicroApp.setData('app-sidenav', {
 			pushState,
 			menuList,
 			baseRouter: '/sub-vite-react',
