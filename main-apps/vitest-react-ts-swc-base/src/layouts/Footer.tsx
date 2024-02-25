@@ -12,7 +12,7 @@ export default function Foot(props: any, context?: any): React.ReactElement<any,
 			>
 				Explorer Wu
 			</a>
-			<style jsx>{`
+			<style>{`
 				.foot {
 					with: 100%;
 					line-height: 36px;

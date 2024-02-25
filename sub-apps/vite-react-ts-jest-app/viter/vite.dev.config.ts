@@ -1,5 +1,8 @@
 // @ts-ignore
 import { defineConfig } from 'vite';
+// 本地 Dev Server 上开启 HTTP2
+// import mkcert from 'vite-plugin-mkcert';
+// import basicSsl from '@vitejs/plugin-basic-ssl';
 
 /** @type {import('vite').UserConfig} */
 
@@ -8,6 +11,19 @@ export default env => {
 	// console.log('config.dev:', env.APP_API_BASE_URL);
 
 	return defineConfig({
+		// plugins: [
+		// 	mkcert(),
+		// 	http2 开启
+		// 	basicSsl(),
+		// 	{
+		// 		/** 命名证书 */
+		// 		name: 'test',
+		// 		/** 自定义真实域名 domains */
+		// 		domains: ['*.custom.com'],
+		// 		/** 自定义证书存放目录 */
+		// 		certDir: '/Users/.../.devServer/cert',
+		// 	}
+		// ],
 		server: {
 			// base: './',
 			fs: {
@@ -16,7 +32,7 @@ export default env => {
 			// host: '0.0.0.0',
 			host: true, // 监听所有地址，包括局域网和公网地址 "localhost",
 			port: env.VITE_PORT, // 开发服务器端口
-			https: false, //是否启用 http 2
+			// https: true, // 是否启用 https, 该配置已经废弃
 			cors: true, // 为开发服务器配置 CORS , 默认启用并允许任何源
 			open: true, //服务启动时自动在浏览器中打开应用
 			strictPort: false, //设为true时端口被占用则直接退出，不会尝试下一个可用端口

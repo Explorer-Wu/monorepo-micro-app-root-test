@@ -61,6 +61,11 @@ export default defineConfig(({ mode }) => {
 			// vue(),
 			vue({
 				include: [/\.vue$/, /\.md$/],
+				template: {
+					compilerOptions: {
+						isCustomElement: tag => /^micro-app/.test(tag),
+					},
+				},
 			}),
 			// vueJsx({
 			//   mergeProps: false,

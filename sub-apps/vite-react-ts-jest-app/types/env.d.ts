@@ -13,7 +13,7 @@ interface ImportMetaEnv extends Readonly<Record<string, unknown>> {
   readonly VITE_OUTPUT_DIR: boolean
 
   // 公共基础路径
-  readonly BASE_URL: string
+  // readonly BASE_URL: string
   readonly APP_BASE_ROUTER: string
   // 前端服务端口号
   readonly VITE_PORT: number
@@ -34,7 +34,7 @@ interface ImportMetaEnv extends Readonly<Record<string, unknown>> {
 interface ImportMeta {
   // env: Record<string, unknown>
   readonly env: ImportMetaEnv; // Record<string, unknown>;
-  glob<T = unknown>(globPath: string): Record<string, T>;
+  // glob<T = unknown>(globPath: string): Record<string, T>;
   /**
    * @deprecated Use `import.meta.glob('*', { eager: true })` instead globEager
    */

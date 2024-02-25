@@ -11,6 +11,8 @@ import '@/assets/styles/components/app.scss';
 // ----------分割线---umd模式------两种模式任选其一-------------- //
 // 将渲染操作放入 mount 函数
 function mount() {
+	console.log('微应用child-react 开始渲染:', window.eventCenterForAppViteReact, window.microApp);
+
 	// React严格模式 micro-app下报错
 	// ReactDOM.createRoot(document.getElementById('subreact-app')!).render(
 	// 	<React.StrictMode>

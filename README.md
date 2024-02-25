@@ -85,3 +85,13 @@ pnpm -F 'sub-apps/vitest-vue3-ts-el-app' exec lint-staged
 
 **版本发布**
 `npx changeset publish`
+
+## micro-app爬坑记
+
+**多层嵌套问题**
+
+  1. 数据通讯问题: 不使用属性data传值，改用setData响应式传值到子应用
+  2. 为了防止标签名冲突，name都要保证全局唯一, 子应用中设置tagName：
+    `microApp.start({
+      tagName: 'micro-app-xxx', // 标签名称必须以 `micro-app-` 开头
+    })`

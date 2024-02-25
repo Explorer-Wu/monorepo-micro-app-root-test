@@ -3,8 +3,6 @@ import { defineConfig, loadEnv, type ConfigEnv, type UserConfig } from 'vite';
 import react from '@vitejs/plugin-react'; // 和plugin-react-refresh冲突
 // import reactJsx from 'vite-react-jsx';
 
-// this plugin is used to fix antd style issue
-import vitePluginImp from 'vite-plugin-imp';
 import { fileURLToPath, URL } from 'node:url';
 
 import viteBaseConfig from './vite.base.config';

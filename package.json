@@ -5,10 +5,11 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "start:all": "npm-run-all --parallel start:base start:vue3 start:react",
-    "start:base": "pnpm -C ./main-apps/ dev",
-    "start:vue3": "pnpm -C ./sub-apps/vitest-vue3-ts-el-app serve",
-    "start:react": "pnpm -C ./sub-apps/vite-react-ts-jest-app start",
+    "whole:start": "run-p start:base start:react start:nav start:vue3 ",
+    "start:base": "cd ./main-apps/vitest-react-ts-swc-base && pnpm dev",
+    "start:nav": "cd ./sub-apps/side-nav && pnpm dev",
+    "start:vue3": "cd ./sub-apps/vitest-vue3-ts-el-app && pnpm dev",
+    "start:react": "cd ./sub-apps/vite-react-ts-jest-app && pnpm dev",
     "format": "prettier --write --ignore-unknown .",
     "lint-staged": "lint-staged",
     "ghusky": "husky install",
@@ -37,14 +38,9 @@
     "husky": "^9.0.11",
     "koa": "^2.15.0",
     "lint-staged": "^15.2.0",
-    "npm-run-all": "^4.1.5",
+    "npm-run-all2": "^6.1.1",
     "prettier": "^3.1.1",
     "typescript": "^5.2.2"
-  },
-  "config": {
-    "commitizen": {
-      "path": "@commitlint/cz-commitlint"
-    }
   },
   "workspaces": [
     "main-apps/**",

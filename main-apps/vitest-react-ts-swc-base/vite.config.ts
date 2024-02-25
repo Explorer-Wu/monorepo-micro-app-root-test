@@ -1,11 +1,24 @@
 import { defineConfig, searchForWorkspaceRoot, loadEnv, type ConfigEnv, type UserConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import checker from 'vite-plugin-checker';
+// 本地 Dev Server 上开启 HTTP2
+// import mkcert from 'vite-plugin-mkcert'; 不好用
+import basicSsl from '@vitejs/plugin-basic-ssl';
+// html插入CDN加速
+// import { importToCDN, autoComplete } from 'vite-plugin-cdn-import';
+import { cdn as importToCDN } from 'vite-plugin-cdn2';
+import { cdnjs } from 'vite-plugin-cdn2/resolver/cdnjs';
+// GZIP 压缩插件
+import viteCompression from 'vite-plugin-compression';
+// 打包后生成bundle分析报告文件
+import { visualizer } from 'rollup-plugin-visualizer';
+
 // import VitePluginInjectPreload from 'vite-plugin-inject-preload';
 // import EnvironmentPlugin from 'vite-plugin-environment';
 // import ResizeImage from 'vite-plugin-resize-image/vite'; // 没有下载权限
 import webfontDownload from 'vite-plugin-webfont-dl';
 import path from 'path';
+import { resolve, pathRelative } from './utils';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -36,6 +49,32 @@ export default defineConfig(({ mode }) => {
 			}),
 			// preload(),
 			webfontDownload(),
+			// http2 开启
+			// mkcert(),
+			basicSsl(),
+			// { basicSsl配置项
+			// 	/** 命名证书 */
+			// 	name: 'test',
+			// 	/** 自定义真实域名 domains */
+			// 	domains: ['*.custom.com'],
+			// 	/** 自定义证书存放目录 */
+			// 	certDir: '/Users/.../.devServer/cert',
+			// }
+			importToCDN({
+				modules: [
+					{
+						name: 'lodash-es',
+						// spare: 'https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/lodash.min.js',
+						relativeModule: './lodash.min.js',
+						global: '_',
+					},
+				],
+			}),
+			viteCompression(), // gzip压缩
+			visualizer({
+				// 打包完成后自动打开浏览器，显示产物体积报告
+				open: true,
+			}),
 		],
 		css: {
 			devSourcemap: !isProd,
@@ -44,11 +83,44 @@ export default defineConfig(({ mode }) => {
 			include: ['react'],
 		},
 		build: {
-			outDir: 'dist-main-react',
+			sourcemap: isAnalyze,
+			outDir: pathRelative('../../', viteEnv.VITE_OUTPUT_DIR),
 			commonjsOptions: {
 				include: [/node_modules/],
 			},
-			sourcemap: isAnalyze,
+			minify: 'terser',
+			terserOptions: {
+				compress: {
+					drop_debugger: true,
+					drop_console: true,
+					pure_funcs: ['console.error', 'console.warn'],
+				},
+			},
+			//自定义底层的 Rollup 打包配置
+			rollupOptions: {
+				// 一般用于库模式， 确保外部化处理那些不想打包进库的依赖
+				// external: ['react', 'react-dom', 'react-router-dom'],
+				treeshake: true,
+				output: {
+					// 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量
+					// exports: 'named',
+					// globals: {
+					// 	react: 'React',
+					// },
+					/** 分包策略 **/
+					manualChunks: {
+						// 将 React 相关库打包成单独的 chunk 中
+						'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+						// // 将 Lodash 库的代码单独打包
+						// lodash: ['lodash-es'],
+						// 将组件库的代码打包
+						library: ['antd'], // '@arco-design/web-react'
+					},
+				},
+				// brotliSize: false, // 不统计
+				// target: 'esnext',
+				// minify: 'esbuild', // 混淆器，terser构建后文件体积更小
+			},
 		},
 		resolve: {
 			alias: [
@@ -68,7 +140,7 @@ export default defineConfig(({ mode }) => {
 			host: '0.0.0.0',
 			// host: true, // 监听所有地址，包括局域网和公网地址 "localhost",
 			port: viteEnv.VITE_PORT, // 开发服务器端口
-			// https: false, //是否启用 http 2
+			https: true, //是否启用 http 2
 			// force: true, //是否强制依赖预构建
 			cors: true, // 为开发服务器配置 CORS , 默认启用并允许任何源
 			open: true, //服务启动时自动在浏览器中打开应用
@@ -86,7 +158,7 @@ export default defineConfig(({ mode }) => {
 			},
 		},
 		preview: {
-			port: 8080, // 预览服务器端口
+			port: viteEnv.VITE_PORT, // 预览服务器端口
 			host: true, // 监听所有地址，包括局域网和公网地址
 			strictPort: true, // 端口被占用时，抛出错误
 		},

@@ -92,13 +92,13 @@ export function useGlobalPlugins(app: ReturnType<typeof createApp>, store: any, 
 
 // 与基座进行数据交互
 export function handleMicroData(router: Router) {
-	// eventCenterForAppViteVue3 是基座添加到window的数据通信对象
-	if (window.eventCenterForAppViteVue3) {
+	// eventCenterForAppViteVue3（新版中获取不到） 是基座添加到window的数据通信对象
+	if (window.__MICRO_APP_ENVIRONMENT__) {
 		// 主动获取基座下发的数据
-		console.log('child-vite getData:', window.eventCenterForAppViteVue3.getData());
+		console.log('child-vite getData:', window.microApp.getData());
 
 		// 监听基座下发的数据变化
-		window.eventCenterForAppViteVue3.addDataListener((data: Record<string, unknown>) => {
+		window.microApp.addDataListener((data: Record<string, unknown>) => {
 			console.log('child-vite addDataListener:', data);
 
 			if (data.path && typeof data.path === 'string') {
@@ -112,7 +112,7 @@ export function handleMicroData(router: Router) {
 
 		// 向基座发送数据
 		setTimeout(() => {
-			window.eventCenterForAppViteVue3.dispatch({ myname: 'child-vite' });
+			window.microApp.dispatch({ myname: 'child-vite-vue3' });
 		}, 3000);
 	}
 }

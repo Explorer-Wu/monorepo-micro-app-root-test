@@ -114,7 +114,7 @@ onMounted(() => {
   //        this.refreshMenu(to)
   //      })
 
-	subMicroApp.setData('app-sidenav', {
+	subMicroApp.setData('app-sidenav-vue3', {
 		menuList,
 		baseRouter: '/sub-vite-vue3',
 		subName: 'app-subvue3',
@@ -138,7 +138,7 @@ onMounted(() => {
 <template>
   <!-- data只接受对象类型，采用严格对比(===)，当传入新的data对象时会重新发送  /sub-vite-side/subnav/ -->
   <micro-app-subvue
-    name="app-sidenav"
+    name="app-sidenav-vue3"
     url="http://localhost:3606/sub-vite-menu/"
     baseroute="/sub-vite-menu/"
     :data="sidebarData"

@@ -11,7 +11,6 @@ import svgrPlugin from 'vite-plugin-svgr';
 import Inspect from 'vite-plugin-inspect';
 // 为打包后的文件提供传统浏览器兼容性支持
 import legacy from '@vitejs/plugin-legacy';
-import basicSsl from '@vitejs/plugin-basic-ssl';
 // * No declaration file for less-vars-to-js
 import lessToJS from 'less-vars-to-js';
 import fs from 'fs';
@@ -50,21 +49,23 @@ export default env => {
 			// include: ['axios'],
 			include: [
 				'esm-dep > cjs-dep',
+				'linked-dep',
+				'react',
+				'react-dom',
+				// 'react-router-dom',
 				'axios',
 				'lodash-es',
 				'dayjs',
 				// 'async-validator',
 			],
-			// exclude: ['your-package-name'] //排除在优化之外
+			// exclude: [], //排除在优化之外
 		},
 
 		plugins: [
-			Inspect(),
 			react(), // 避免配置 Babel 选项，这样它就会在构建期间跳过转换（只使用 esbuild）
 			// reactJsx(),
-			basicSsl(),
 			// reactRefresh(), 不要使用 @vitejs/plugin-react-refresh，  建议使用 React Fast Refresh 的原生支持
-			svgrPlugin(),
+			svgrPlugin(), // 使svg作为react component在vite中使用
 			legacy({
 				targets: [
 					'defaults',
@@ -93,6 +94,8 @@ export default env => {
 					},
 				],
 			}),
+			// 检查你项目的模块和栈信息
+			Inspect(),
 		],
 		json: {
 			//是否支持从 .json 文件中进行按名导入
