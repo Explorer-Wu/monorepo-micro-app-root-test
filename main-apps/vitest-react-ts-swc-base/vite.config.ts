@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
 	const viteEnv = loadEnv(mode, path.resolve(__dirname, './env'), ['VITE_', 'APP_']);
 	const isProd = ['production', 'staging', 'testing'].includes(viteEnv.VITE_NODE_ENV);
 	// const isDev = mode !== 'production';
-	const isAnalyze = mode === 'analyze';
+	const isAnalyze = ['testing', 'staging'].includes(mode);
 	console.log('main-react-APP_BASE_ROUTER', viteEnv);
 
 	return {
@@ -50,7 +50,23 @@ export default defineConfig(({ mode }) => {
 			// preload(),
 			webfontDownload(),
 			// http2 开启
-			// mkcert(),
+			// mkcert({
+			// 	// 自定义域名，默认使用 localhost + 本地 ip 列表
+			// 	hosts: ['localhost'], // 'example.xxx.com'
+			// 	// days: 365,
+			// 	force: true, // 是否强制重新生成证书
+			// 	autoUpgrade: true, // 是否自动升级 mkcert
+			// 	// 指定 mkcert 的下载源，国内用户可以设置成 coding 从 coding.net 镜像下载，也可以提供一个自定义的 BaseSource
+			// 	// source: '',
+			// 	// 如果网络受限的话，指定一个本地的 mkcert 文件来代替网络下载
+			// 	mkcertPath: './certs/rootCA.pem',
+			// 	// 保存文件的路径，比如下载的 mkcert 程序以及生成的 CA 文件、私钥跟证书文件等等。默认值是 PLUGIN_DATA_DIR
+			// 	savePath: './certs',
+			// 	// 私钥的文件名
+			// 	keyFileName: 'localhost-key.pem',
+			// 	// 证书的文件名
+			// 	certFileName: 'localhost-cert.pem',
+			// }),
 			basicSsl(),
 			// { basicSsl配置项
 			// 	/** 命名证书 */
@@ -80,21 +96,13 @@ export default defineConfig(({ mode }) => {
 			devSourcemap: !isProd,
 		},
 		optimizeDeps: {
-			include: ['react'],
+			include: ['react', 'react-dom', 'react-router-dom'],
 		},
 		build: {
 			sourcemap: isAnalyze,
 			outDir: pathRelative('../../', viteEnv.VITE_OUTPUT_DIR),
 			commonjsOptions: {
 				include: [/node_modules/],
-			},
-			minify: 'terser',
-			terserOptions: {
-				compress: {
-					drop_debugger: true,
-					drop_console: true,
-					pure_funcs: ['console.error', 'console.warn'],
-				},
 			},
 			//自定义底层的 Rollup 打包配置
 			rollupOptions: {

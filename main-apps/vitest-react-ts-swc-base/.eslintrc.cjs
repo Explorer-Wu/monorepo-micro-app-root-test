@@ -9,13 +9,13 @@ module.exports = {
 	root: true,
 	env: {
 		node: true,
-		// commonjs: true,
+		commonjs: true,
 		esnext: true,
 		browser: true,
 	},
 	// 继承的规则 [扩展]
 	extends: [
-		// 'eslint:recommended',
+		'eslint:recommended',
 		// Uses the recommended rules from the @typescript-eslint/eslint-plugin
 		'plugin:@typescript-eslint/recommended',
 		'plugin:react/recommended',
@@ -148,7 +148,7 @@ module.exports = {
 		'jsx-control-statements/jsx-use-if-tag': 'off',
 		'prettier/prettier': ['error', prettierRc],
 		'no-cond-assign': 2,
-		'no-console': ['error', { allow: ['warn', 'error', 'info'] }], // 'off',
+		'no-console': ['warn', { allow: ['log', 'warn', 'error', 'info'] }], // 'off',
 		// 禁止 function 定义中出现重名参数
 		'no-dupe-args': 2,
 		// 禁止对象字面量中出现重复的 key
@@ -160,8 +160,7 @@ module.exports = {
 		// 禁止对 catch 子句的参数重新赋值
 		'no-ex-assign': 1,
 		// 禁止不必要的布尔转换
-		// 'no-extra-boolean-cast': 1,
-		//强制使用一致的缩进 第二个参数为 "tab" 时，会使用tab，
+		'no-extra-boolean-cast': 2,
 		// 控制逗号前后的空格
 		// 'comma-spacing': [
 		// 	2,

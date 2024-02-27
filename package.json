@@ -10,6 +10,8 @@
     "start:nav": "cd ./sub-apps/side-nav && pnpm dev",
     "start:vue3": "cd ./sub-apps/vitest-vue3-ts-el-app && pnpm dev",
     "start:react": "cd ./sub-apps/vite-react-ts-jest-app && pnpm dev",
+    "build:all": "pnpm -r run build",
+    "watch": "pnpm --parallel -r run watch",
     "format": "prettier --write --ignore-unknown .",
     "lint-staged": "lint-staged",
     "ghusky": "husky install",
