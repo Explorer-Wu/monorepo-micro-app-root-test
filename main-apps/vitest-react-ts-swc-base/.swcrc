@@ -1,4 +1,5 @@
 {
+	"sourceMaps": true,
 	"minify": true,
 	// Optional, configure minification options
 	"jsc": {

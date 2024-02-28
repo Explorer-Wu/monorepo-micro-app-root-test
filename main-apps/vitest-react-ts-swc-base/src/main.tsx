@@ -1,12 +1,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import microApp from '@micro-zoe/micro-app';
+
 import App from './App.tsx';
+import './utils/flexibleRem';
 
 import '@/assets/styles/main/base.scss';
 import '@/assets/styles/components/general.scss';
 import '@/assets/styles/components/app.scss';
-
-import microApp from '@micro-zoe/micro-app';
 
 microApp.start({
 	iframe: true, // 全局开启iframe沙箱，默认为false

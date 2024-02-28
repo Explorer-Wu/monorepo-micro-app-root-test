@@ -13,17 +13,17 @@
 		"build:staging": "pnpm build-only --mode staging && pnpm tsc-only",
 		"build:prod": "pnpm build-only --mode production && pnpm tsc-prod",
 		"build-only": "vite build --config ./viter/vite.config.ts",
+		"analyze": "source-map-explorer 'dist/dist_staging/sub-vite-react/assets/*.js'",
+		"preview": "vite preview --config ./viter/vite.config.ts",
 		"tsc-prod": "tsc -p ./tsconfig.prod.json",
 		"tsc-only": "tsc --noEmit",
 		"type-check": "tsc --noEmit -p tsconfig.test.json --composite false",
-		"preview": "vite preview --config ./viter/vite.config.ts",
 		"test:unit": "jest",
 		"test:watch": "jest --env=testing --watch",
 		"test:nc": "pnpm test:watch --no-cache",
 		"format": "prettier --write --ignore-unknown .",
 		"lint": "eslint --cache . --ext .js,.jsx,ts,tsx --report-unused-disable-directives --max-warnings 0 --fix --ignore-path .gitignore",
-		"lint-staged": "lint-staged",
-		"analyze": "source-map-explorer 'dist/assets/*.js'"
+		"lint-staged": "lint-staged"
 	},
 	"dependencies": {
 		"@micro-zoe/micro-app": "1.0.0-rc.3",

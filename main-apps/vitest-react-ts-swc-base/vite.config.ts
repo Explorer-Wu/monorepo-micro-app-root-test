@@ -1,5 +1,6 @@
 import { defineConfig, searchForWorkspaceRoot, loadEnv, type ConfigEnv, type UserConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
+import legacy from 'vite-plugin-legacy-swc';
 import checker from 'vite-plugin-checker';
 // 本地 Dev Server 上开启 HTTP2
 // import mkcert from 'vite-plugin-mkcert'; 不好用
@@ -17,6 +18,8 @@ import { visualizer } from 'rollup-plugin-visualizer';
 // import EnvironmentPlugin from 'vite-plugin-environment';
 // import ResizeImage from 'vite-plugin-resize-image/vite'; // 没有下载权限
 import webfontDownload from 'vite-plugin-webfont-dl';
+import autoprefixer from 'autoprefixer';
+import postCssPxToRem from 'postcss-pxtorem';
 import path from 'path';
 import { resolve, pathRelative } from './utils';
 
@@ -91,12 +94,95 @@ export default defineConfig(({ mode }) => {
 				// 打包完成后自动打开浏览器，显示产物体积报告
 				open: true,
 			}),
+			legacy({
+				// 需要兼容的目标列表
+				targets: ['defaults', 'not IE 11', 'Chrome >= 52', 'Safari >= 10.1', 'Firefox >= 54', 'Edge >= 15'],
+				// 面向IE11时需要此插件
+				additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+			}),
 		],
 		css: {
 			devSourcemap: !isProd,
+			// 指定传递给 css 预处理器的选项
+			preprocessorOptions: {
+				less: {
+					// 支持内联 JavaScript
+					javascriptEnabled: true, //注意，这一句是在less对象中，写在外边不起作用
+					// modifyVars: {
+					// 	//在这里进行主题的修改，参考官方配置属性
+					// 	modifyVars: themeVariables,
+					//   // '@primary-color': '#1DA57A',
+					// },
+				},
+				sass: { charset: false },
+				scss: {
+					charset: false,
+					/** 引入var.scss全局预定义变量 */
+					additionalData: '@import "@/assets/styles/main/normalize.scss"; @import "@/assets/styles/main/function.scss";',
+				},
+			},
+			// postCss 配置
+			postcss: {
+				plugins: [
+					autoprefixer({
+						overrideBrowserslist: ['> 1%', 'last 10 versions', 'Chrome > 31', 'ff > 31', 'not ie <= 10'],
+						grid: true,
+					}),
+					postCssPxToRem({
+						/** 换算的基数 **/
+						// rootValue({ file }) {
+						// 基准分辨率宽度/100
+						//   return file.indexOf('visualscreen') !== -1 ? 12.8 : 19.2;
+						// },
+						rootValue: 19.2,
+						// 保留rem小数点位数
+						unitPrecision: 6,
+						// 这里设置为['*']全部，需要被转换的属性 ['!border*', 'font', 'font-size', 'line-height', 'letter-spacing', 'word-spacing']
+						propList: ['*'],
+						// 不进行px转换的选择器, 忽略转换正则匹配项, 支持正则和字符串写法
+						selectorBlackList: [/^html$/],
+						// 替换包含rem的规则
+						replace: true,
+						// 允许在媒体查询中转换px（布尔值）
+						mediaQuery: false,
+						minPixelValue: 3, // 设置要替换的最小像素值(3px会被转rem)。 默认 0
+						// 默认false，可以（reg）利用正则表达式排除某些文件夹的方法，例如/node_modules/i,
+						exclude(file) {
+							if (file.indexOf('screen') !== -1) console.log('pxtorem-file:', file);
+							// 排除不需要px转换rem的文件
+							return file.indexOf('screen') === -1;
+						},
+					}),
+					{
+						postcssPlugin: 'internal:charset-removal',
+						AtRule: {
+							charset: atRule => {
+								if (atRule.name === 'charset') {
+									atRule.remove();
+								}
+							},
+						},
+					},
+				],
+			},
+			// // 配置 css modules 的行为
+			// modules: {
+			// 	localsConvention: 'camelCase',
+			// },
+		},
+		resolve: {
+			alias: [
+				// "@micro-zoe/micro-app": path.join(__dirname, '../../../micro-app/lib/index.esm.js'),
+				// { find: /^~/, replacement: path.resolve(__dirname, './') },
+				{ find: '@', replacement: path.resolve(__dirname, './src') },
+				{ find: /^tests/, replacement: path.resolve(__dirname, './tests') },
+			],
 		},
 		optimizeDeps: {
 			include: ['react', 'react-dom', 'react-router-dom'],
+		},
+		esbuild: {
+			sourcemap: !isProd,
 		},
 		build: {
 			sourcemap: isAnalyze,
@@ -129,16 +215,6 @@ export default defineConfig(({ mode }) => {
 				// target: 'esnext',
 				// minify: 'esbuild', // 混淆器，terser构建后文件体积更小
 			},
-		},
-		resolve: {
-			alias: [
-				// "@micro-zoe/micro-app": path.join(__dirname, '../../../micro-app/lib/index.esm.js'),
-				{ find: /^~/, replacement: path.resolve(__dirname, './') },
-				{ find: '@', replacement: path.resolve(__dirname, './src') },
-			],
-		},
-		esbuild: {
-			sourcemap: !isProd,
 		},
 		server: {
 			fs: {
