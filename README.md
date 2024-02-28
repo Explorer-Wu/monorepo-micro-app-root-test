@@ -5,15 +5,14 @@
 本项目使用micro-app实现微前端应用，并使用pnpm和Monorepo管理项目代码。运行环境为 node>=16.8.0, pnpm>=7.32.0。  
 
 ## 项目目录结构
-
   .
-  ├── main-app // 主应用 Vite + react (history路由) <br>  
-  ├── sub-pps // 子应用 <br>   
-  │ ├── vite-react-ts-jest-app <br>  
-  │ ├── vitest-vue3-ts-el-app // Vite + vue3 (history路由) <br>  
-  ├── package.json  <br>
-  ├── pnpm-workspace.yaml  <br>
-  └── pnpm-lock.yaml  <br>
+  ├── main-app // 主应用 Vite + react (history路由)   
+  ├── sub-pps // 子应用   
+  │ ├── vite-react-ts-jest-app  
+  │ ├── vitest-vue3-ts-el-app // Vite + vue3 (history路由)   
+  ├── package.json   
+  ├── pnpm-workspace.yaml  
+  └── pnpm-lock.yaml  
   
 
 ## 工具
