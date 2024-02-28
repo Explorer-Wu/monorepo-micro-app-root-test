@@ -7,12 +7,12 @@
 ## 项目目录结构
   .
   ├── main-app // 主应用 Vite + react (history路由)   
-  ├── sub-pps // 子应用  
-  │  ├── vite-react-ts-jest-app  
-  │  ├── vitest-vue3-ts-el-app // Vite + vue3 (history路由)   
-  ├── package.json   
-  ├── pnpm-workspace.yaml  
-  └── pnpm-lock.yaml  
+    ├── sub-pps // 子应用  
+    │  ├── vite-react-ts-jest-app  
+    │  ├── vitest-vue3-ts-el-app // Vite + vue3 (history路由)   
+    ├── package.json   
+    ├── pnpm-workspace.yaml  
+    └── pnpm-lock.yaml  
   
 
 ## 工具
@@ -49,7 +49,8 @@ push到远程仓库
 "simple-git-hooks": 一个git钩子管理工具，优点是使用简单，缺点是每个钩子只能执行一个命令，如果需要执行多个命令可以选择husky。
 
 package.json中配置simple-git-hooks  
-`"scripts": {  
+```
+"scripts": {  
   "ghooks": "simple-git-hooks",  
   "commit-msg": "pnpm commitlint -e $1",  
 },  
@@ -58,18 +59,19 @@ package.json中配置simple-git-hooks
   "preserveUnused": [  
     "commit-msg"  
   ]  
-}, `  
+},
+```  
 
 "husky": 自动配置 Git hooks 钩子
 
 `pnpm exec commitlint --config .commitlintrc -e $1`
 
-`
+```
 pnpm -F 'main-apps/vitest-react-ts-swc-base' exec lint-staged
 pnpm -F 'sub-apps/side-nav' exec lint-staged
 pnpm -F 'sub-apps/vite-react-ts-jest-app' exec lint-staged
 pnpm -F 'sub-apps/vitest-vue3-ts-el-app' exec lint-staged
-`
+```
 
 **使用changesets管理包版本，生成changelog**
 
@@ -156,16 +158,18 @@ pnpm -F 'sub-apps/vitest-vue3-ts-el-app' exec lint-staged
 
   | 命令  | 说明 |  
   | ---- | ---- |  
-  | &&   | 顺序执行多条命令，当碰到执行出错的命令后将不执行后面的命令  |  
-  | &    | 并行执行多条命令                                      |  
-  | ||   | 顺序执行多条命令，当碰到执行正确后的命令后将不执行后面的命令 | 
-  | |    | 管道符                                              |   
+  | &&   | 顺序执行多条命令，当碰到执行出错的命令后将不执行后面的命令 |  
+  | &    | 并行执行多条命令 |  
+  | \|\| | 顺序执行多条命令，当碰到执行正确后的命令后将不执行后面的命令 | 
+  | \|   | 管道符 |   
 
 
   concurrently 跨平台，同时运行多个命令（并发）。   
-  `"scripts": {  
+  ```
+  "scripts": {  
       "test": "concurrently \"node ./build/1.js\" \"node ./build/2.js\""   
-  }`
+  }
+  ```
 
 #### npm-run-all
 
@@ -189,7 +193,8 @@ pnpm -F 'sub-apps/vitest-vue3-ts-el-app' exec lint-staged
   `npm i pnpm -g`   
 
   在代码仓的根目录下创建pnpm-workspace.yaml文件指定哪些目录作为独立的工作空间（一个子模块或者 npm 包）：   
-  `packages:   
+  ```
+  packages:   
     # all packages in direct subdirs of packages/  
     - 'main-apps/**'   
     # all packages in subdirs of components/   
@@ -200,7 +205,7 @@ pnpm -F 'sub-apps/vitest-vue3-ts-el-app' exec lint-staged
     # exclude packages that are inside test directories   
     - '!**/tests/**'  
     - '!**/cypress/**'  
-  `
+  ```
 
   在main-apps目录中创建主应用，在sub-apps创建子应用，axios-ajax-ts为共享请求封装目录  
   应用创建完成之后，可以将公共使用的依赖拷贝到根目录下的package.json中，进行统一安装。   
@@ -211,13 +216,13 @@ pnpm -F 'sub-apps/vitest-vue3-ts-el-app' exec lint-staged
   `pnpm -F [appPath+appName] add [sharePackageName]@workspace `    
   通过filter 过滤需要关联依赖的package, appPath+appName为应用的路径和名称，sharePackageName共享的包名   
 
-  `  
+  ```  
     "dependencies": {  
       ...  
         "axios-ajax-ts": "workspace:^",  // 通过 workspace协议 为本地引用   
       ...   
     },   
-  `  
+  ```  
 
 ## micro-app实现原理解析
 
@@ -228,7 +233,7 @@ html中有许多标签,div,p,span等等,这些标签渲染出的都是html元素
 webComponent（自定义html元素）, 其实现思路很简单,就是让用户通过js代码自定义一个htmlElement,并注册到document中, 之后便可使用标签。   
 
   创建一个自定义元素  
-  `
+  ```
     class CustomEle extends HTMLElement {  
         constructor() {  
             super();  
@@ -255,7 +260,7 @@ webComponent（自定义html元素）, 其实现思路很简单,就是让用户�
     </body>   
     // createElement时会执行new CustomEle   
     const customEle = document.createElement('custom-ele');  
-  `
+  ```
   通过这种方式,我们可以使用一个类轻松定制出一个即插即用的组件,跨平台,跨框架。CustomEle的构造函数只会在其创建时执行一次, CustomEle类里可以添加生命周期以及钩子函数来帮助我们完成其他的操作。<br>
 
 
