@@ -6,7 +6,6 @@
 
 ## 项目目录结构
 
-`
   .
   ├── main-app // 主应用 Vite + react (history路由) <br>  
   ├── sub-pps // 子应用 <br>   
@@ -15,7 +14,7 @@
   ├── package.json  <br>
   ├── pnpm-workspace.yaml  <br>
   └── pnpm-lock.yaml  <br>
-`
+  
 
 ## 工具
 
