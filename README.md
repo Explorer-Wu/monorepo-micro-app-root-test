@@ -7,9 +7,9 @@
 ## 项目目录结构
   .
   ├── main-app // 主应用 Vite + react (history路由)   
-  ├── sub-pps // 子应用   
-  │ ├── vite-react-ts-jest-app  
-  │ ├── vitest-vue3-ts-el-app // Vite + vue3 (history路由)   
+  ├── sub-pps // 子应用  
+  │  ├── vite-react-ts-jest-app  
+  │  ├── vitest-vue3-ts-el-app // Vite + vue3 (history路由)   
   ├── package.json   
   ├── pnpm-workspace.yaml  
   └── pnpm-lock.yaml  
