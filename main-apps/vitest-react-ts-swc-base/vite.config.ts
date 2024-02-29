@@ -18,8 +18,6 @@ import { visualizer } from 'rollup-plugin-visualizer';
 // import EnvironmentPlugin from 'vite-plugin-environment';
 // import ResizeImage from 'vite-plugin-resize-image/vite'; // 没有下载权限
 import webfontDownload from 'vite-plugin-webfont-dl';
-import autoprefixer from 'autoprefixer';
-import postCssPxToRem from 'postcss-pxtorem';
 import path from 'path';
 import { resolve, pathRelative } from './utils';
 
@@ -91,8 +89,15 @@ export default defineConfig(({ mode }) => {
 			}),
 			viteCompression(), // gzip压缩
 			visualizer({
+				sourcemap: true,
+				// "sunburst" | "treemap" | "network" | "flamegraph";
+				// template: 'flamegraph',
+				// emitFile: true, // 使分析文件出现在打包目录里， 否则在项目目录下
 				// 打包完成后自动打开浏览器，显示产物体积报告
 				open: true,
+				// gzipSize: true,
+				// brotliSize: true,
+				filename: 'analyse.html',
 			}),
 			legacy({
 				// 需要兼容的目标列表
@@ -121,54 +126,25 @@ export default defineConfig(({ mode }) => {
 					additionalData: '@import "@/assets/styles/main/normalize.scss"; @import "@/assets/styles/main/function.scss";',
 				},
 			},
-			// postCss 配置
-			postcss: {
-				plugins: [
-					autoprefixer({
-						overrideBrowserslist: ['> 1%', 'last 10 versions', 'Chrome > 31', 'ff > 31', 'not ie <= 10'],
-						grid: true,
-					}),
-					postCssPxToRem({
-						/** 换算的基数 **/
-						// rootValue({ file }) {
-						// 基准分辨率宽度/100
-						//   return file.indexOf('visualscreen') !== -1 ? 12.8 : 19.2;
-						// },
-						rootValue: 19.2,
-						// 保留rem小数点位数
-						unitPrecision: 6,
-						// 这里设置为['*']全部，需要被转换的属性 ['!border*', 'font', 'font-size', 'line-height', 'letter-spacing', 'word-spacing']
-						propList: ['*'],
-						// 不进行px转换的选择器, 忽略转换正则匹配项, 支持正则和字符串写法
-						selectorBlackList: [/^html$/],
-						// 替换包含rem的规则
-						replace: true,
-						// 允许在媒体查询中转换px（布尔值）
-						mediaQuery: false,
-						minPixelValue: 3, // 设置要替换的最小像素值(3px会被转rem)。 默认 0
-						// 默认false，可以（reg）利用正则表达式排除某些文件夹的方法，例如/node_modules/i,
-						exclude(file) {
-							if (file.indexOf('screen') !== -1) console.log('pxtorem-file:', file);
-							// 排除不需要px转换rem的文件
-							return file.indexOf('screen') === -1;
-						},
-					}),
-					{
-						postcssPlugin: 'internal:charset-removal',
-						AtRule: {
-							charset: atRule => {
-								if (atRule.name === 'charset') {
-									atRule.remove();
-								}
-							},
-						},
-					},
-				],
-			},
-			// // 配置 css modules 的行为
-			// modules: {
-			// 	localsConvention: 'camelCase',
+			// postcss:内联的 PostCSS 配置（格式同 postcss.config.js），或者一个（默认基于项目根目录的）自定义的 PostCSS 配置路径
+			// postcss: {
+			// 	plugins: [
+			// 		{
+			// 			postcssPlugin: 'internal:charset-removal',
+			// 			AtRule: {
+			// 				charset: atRule => {
+			// 					if (atRule.name === 'charset') {
+			// 						atRule.remove();
+			// 					}
+			// 				},
+			// 			},
+			// 		},
+			// 	],
 			// },
+			// modules: 配置 css modules 的行为, 选项将被传递给 postcss-modules
+			modules: {
+				localsConvention: 'camelCase',
+			},
 		},
 		resolve: {
 			alias: [
@@ -179,7 +155,8 @@ export default defineConfig(({ mode }) => {
 			],
 		},
 		optimizeDeps: {
-			include: ['react', 'react-dom', 'react-router-dom'],
+			include: ['react', 'react-dom', 'react-router-dom'], // 加入预编译
+			// exclude: [], // 移出预编译项
 		},
 		esbuild: {
 			sourcemap: !isProd,

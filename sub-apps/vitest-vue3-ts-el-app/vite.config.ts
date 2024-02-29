@@ -235,9 +235,16 @@ export default defineConfig(({ mode }) => {
 			postcss: {
 				plugins: [
 					{
+						/**
+						 * postcss给含有中文的scss 加了个@charset:UTF-8;
+						 * element-plus的index.css文件包含@charset:UTF-8
+						 * 在组合css时@charset的位置并不是在头部(或最前面)，同时本地scss如果有中文也会自动添加@charset:UTF-8
+						 * 因此build时就会warning提示错误了
+						 **/
 						postcssPlugin: 'internal:charset-removal',
 						AtRule: {
 							charset: atRule => {
+								// char set字符集处理
 								if (atRule.name === 'charset') {
 									atRule.remove();
 								}
