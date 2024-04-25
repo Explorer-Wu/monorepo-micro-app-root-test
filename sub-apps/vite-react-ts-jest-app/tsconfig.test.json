@@ -1,9 +1,42 @@
 {
 	"extends": "./tsconfig.app.json",
-	"exclude": [],
+	"include": [
+		"viter/*",
+		"viter/**/*",
+		"types/*.d.ts",
+		"src/*",
+		"src/**/*",
+		"src/**/__tests__/*",
+		"tests/**/*",
+		"mock/**/*.ts",
+		"**/*.{test,spec}-d.{ts}",
+		"jest.config.*",
+		"coverage"
+	],
+	"exclude": [
+		"node_modules",
+		"build",
+		"dist",
+		"scripts",
+		"**/*.js",
+		"**/**/*.js",
+		".{idea,git,cache,output,temp}"
+	],
 	"compilerOptions": {
 		"composite": true,
-		"lib": [],
-		"types": ["node", "jsdom", "jest"]
+		"types": ["node", "jest"],
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"baseUrl": "./",
+		"rootDir": "./",
+		"outDir": "./dist",
+		"paths": {
+			"@/*": ["src/*"],
+			"types/*": ["types/*"],
+			"tests/*": ["tests/*"],
+			"public/*": ["public/*"]
+		}
 	}
 }

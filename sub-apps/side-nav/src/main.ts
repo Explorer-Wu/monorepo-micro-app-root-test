@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp, type App as AppInstance } from 'vue';
 // import { createPinia } from 'pinia';
 import VApp from './App.vue';
 import { handleMicroData } from './utils.ts';
@@ -9,7 +9,7 @@ import '@/assets/styles/main/base.scss';
 import '@/assets/styles/components/app.scss';
 // import 'uno.css';
 
-let app: AppInstance | null = createApp(VApp);
+let app: AppInstance = createApp(VApp);
 // let router: any = null;
 // let history: any = null;
 

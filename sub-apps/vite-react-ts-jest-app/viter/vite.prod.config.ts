@@ -65,11 +65,17 @@ export default env => {
 			// 		// autoComplete('lodash-es'), 报不存在
 			// 	],
 			// }),
-			viteCompression(), // gzip压缩
-			visualizer({
-				// 打包完成后自动打开浏览器，显示产物体积报告
-				open: true,
+			// viteCompression(), // gzip压缩
+			//在plugins配置数组里添加gzip插件
+			viteCompression({
+				verbose: true, // 默认即可
+				disable: false, // 开启压缩(不禁用)，默认即可
+				deleteOriginFile: false, // 删除源文件
+				threshold: 5120, // 压缩前最小文件大小
+				algorithm: 'gzip', // 压缩算法
+				ext: '.gz', // 文件类型
 			}),
+			visualizer() as any,
 		],
 		build: {
 			// 构建后是否生成 source map 文件

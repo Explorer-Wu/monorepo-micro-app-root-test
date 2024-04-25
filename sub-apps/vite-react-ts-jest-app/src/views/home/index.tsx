@@ -13,7 +13,8 @@ type CounterProps = {
 };
 
 const Home: React.FC<any> = (props: CounterProps) => {
-	const { initNum } = props;
+	// const { initNum } = props;
+
 	// const { count, increment } = useCounter(initNum);
 	// useEffect(() => {
 	// 	const Timer = setInterval(() => {
@@ -29,7 +30,7 @@ const Home: React.FC<any> = (props: CounterProps) => {
 				<img src={viteLogo} className="logo" alt="Vite logo" />
 			</a>
 			<a href="https://react.dev" target="_blank">
-				<ReactLogo height="240" width="240" className="logo react" alt="React logo" />
+				<ReactLogo height="240" width="240" className="logo react" title="React logo" />
 			</a>
 			{/* <img src={Logo} height="240" width="240"/> */}
 			<h1>Vite + Jest + React</h1>

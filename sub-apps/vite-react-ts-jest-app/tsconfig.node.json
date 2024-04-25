@@ -4,18 +4,17 @@
 		"composite": true,
 		"skipLibCheck": true,
 		"module": "ESNext", //  "NodeNext",
-		"moduleResolution": "bundler",
-		"allowSyntheticDefaultImports": true
+		"moduleResolution": "Bundler",
+		"allowSyntheticDefaultImports": true,
 		// "jsx": "react",
-		// "esModuleInterop": true,
+		"esModuleInterop": true
 	},
 	"include": [
-		"vite.config.*",
-		"vite.base.config.*",
-		"vite.dev.config.*",
-		"vite.prod.config.*",
-		"jest.config.*",
-		"cypress.config.*"
+		"viter/vite.config.*",
+		"viter/vite.base.config.*",
+		"viter/vite.dev.config.*",
+		"viter/vite.prod.config.*",
+		"jest.config.*"
 		// "nightwatch.conf.*",
 		// "playwright.config.*",
 		// "next-env.d.ts",

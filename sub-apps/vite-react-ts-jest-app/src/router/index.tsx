@@ -3,9 +3,12 @@ import React, { lazy, ReactNode, Suspense } from 'react';
 import { type RouteObject, Navigate, useRoutes } from 'react-router-dom';
 
 // 用懒加载实现优化
-const RootLayout = lazy(() => import('@/layouts/LayoutMainTpl.tsx'));
+const RootLayout = lazy(() => import('@/layouts/LayoutMainTpl'));
 // const OverView = lazy(() => import("@/views/Overview/index"));
 const Home = lazy(() => import('@/views/home/index'));
+const Tables = lazy(() => import('@/views/tables/index'));
+const TableList = lazy(() => import('@/views/tables/tablelist'));
+const TableDetail = lazy(() => import('@/views/tables/detail'));
 const NotFound = lazy(() => import('@/views/error/404'));
 const NoAccess = lazy(() => import('@/views/error/403'));
 
@@ -34,14 +37,14 @@ const routes: RouteObject[] = [
 				path: 'home',
 				element: lazyLoad(<Home />),
 			},
-			// {
-			//   path: "tables",
-			//   element: <Tables/>,
-			//   children: [
-			//     { index: true, element: <TableList /> },
-			//     { path: ":id", element: <TableDetail /> }
-			//   ]
-			// },
+			{
+				path: 'tables',
+				element: <Tables />,
+				children: [
+					{ index: true, element: <TableList /> },
+					{ path: ':id', element: <TableDetail /> },
+				],
+			},
 			// {
 			//     path: '/signin',
 			//     element: <Signin/>,

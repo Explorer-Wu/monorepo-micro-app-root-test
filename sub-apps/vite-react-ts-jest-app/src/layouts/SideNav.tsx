@@ -158,7 +158,7 @@ const NavMenu: React.FC<any> = (props: any, context?: any) => {
 		<>
 			<div className="head-logo">
 				{/* <img src={Logo} alt="logo" /> */}
-				<ReactLogo alt="React logo" />
+				<ReactLogo title="React logo" />
 				<span className="title">React App PC</span>
 			</div>
 			{/* defaultOpenKeys={['sub1']} */}

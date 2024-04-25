@@ -11,8 +11,9 @@ import svgrPlugin from 'vite-plugin-svgr';
 import Inspect from 'vite-plugin-inspect';
 // 为打包后的文件提供传统浏览器兼容性支持
 import legacy from '@vitejs/plugin-legacy';
+// import tsconfigPaths from 'vite-tsconfig-paths';
 // * No declaration file for less-vars-to-js
-import lessToJS from 'less-vars-to-js';
+// import lessToJS from 'less-vars-to-js';
 import fs from 'fs';
 import { fileURLToPath, URL } from 'node:url';
 import path from 'path';
@@ -94,6 +95,8 @@ export default env => {
 					},
 				],
 			}),
+			// 同步tsconfig里的路径映射别名
+			// tsconfigPaths(),
 			// 检查你项目的模块和栈信息
 			Inspect(),
 		],
@@ -165,7 +168,8 @@ export default env => {
 			// 配置别名
 			alias: [
 				{ find: /^~/, replacement: resolve('./') },
-				{ find: '@', replacement: resolve('./src') },
+				{ find: '@/', replacement: resolve('./src/') },
+				{ find: 'tests/', replacement: resolve('./tests/') },
 				// { find: /\/#/, replacement: path.resolve(__dirname, './types') }
 			],
 			// 情景导出 package.json 配置中的exports字段

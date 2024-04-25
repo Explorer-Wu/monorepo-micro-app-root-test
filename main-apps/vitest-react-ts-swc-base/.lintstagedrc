@@ -1,6 +1,6 @@
 {
-  "*.(j|t)s?(x)": [
-    "eslint --cache --fix --max-warnings=0 --no-ignore",
+  "*.(j|t)s(x)？": [
+    "eslint --cache --fix --max-warnings=0",
     "prettier --parser=typescript --write --cache --ignore-unknown",
     "git add"
   ],

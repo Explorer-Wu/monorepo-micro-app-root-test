@@ -1,7 +1,12 @@
 {
 	// "files"指定一个包含相对或绝对文件路径的列表。通过 "files"属性明确指定的文件却总是会被包含在内，不管"exclude"如何设置。
 	"files": ["types/index.d.ts", "types/global.d.ts", "types/axios.d.ts", "types/env.d.ts"], // "src/shims-tsx.d.ts",
-
+	/**
+	 * references 选项允许你将一个 TypeScript 项目作为另一个项目的依赖项进行编译
+	 * 注意，依赖另一个项目的情况， references 选项必须与 composite 选项一起使用才能生效。
+	 * Typescript Project References 可以将项目拆分成更小的几个部分，结合tsc 的build模式，能够实现多条命令并行执行的效果
+	 * 被引用的配置文件中必须配置 composite 选项为true
+	 **/
 	"references": [
 		{
 			"path": "./tsconfig.node.json"
@@ -12,8 +17,23 @@
 		{
 			"path": "./tsconfig.test.json"
 		}
-	]
-
+	],
+	"compilerOptions": {
+		// "composite": true,
+		// "allowJs": true,
+		// "skipLibCheck": true,
+		"esModuleInterop": true,
+		// "allowSyntheticDefaultImports": true,
+		// "strict": true,
+		// "forceConsistentCasingInFileNames": true,
+		// "noFallthroughCasesInSwitch": true,
+		// "module": "esnext",
+		// "moduleResolution": "nodenext",
+		// "resolveJsonModule": true,
+		// "isolatedModules": true,
+		// "noEmit": true,
+		"jsx": "react-jsx"
+	}
 	// 从另一个配置文件里继承配置
 	// "extends": "@tsconfig/recommended",
 	// 让 IDE 在保存文件的时候根据 tsconfig.json 重新生成文件

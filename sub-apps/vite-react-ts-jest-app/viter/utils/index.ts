@@ -12,8 +12,8 @@ const resolve = (_path: string) => path.resolve(appDir, _path); // 获取绝对�
 const join = (dir: any, tier: string = '..') => path.join(__dirname, tier, dir); // 连接路径
 const pathRelative = (_dir: any, _path: string) => path.posix.join(_dir, _path); // 兼容性相对路径
 
-const pathRewrite = (localUrl: string, remoteUrl: string) =>
-	path.replace(new RegExp(localUrl.replace('/', '\\/'), 'g'), remoteUrl);
+const pathRewrite = (localPath: string, regUrl: string, remoteUrl: string) =>
+	resolve(localPath.replace(new RegExp(regUrl.replace('/', '\\/'), 'g'), remoteUrl));
 // {
 //   const assetsSubDirectory = process.env.NODE_ENV === 'production'
 //     ? envConfig.build.assetsSubDirectory

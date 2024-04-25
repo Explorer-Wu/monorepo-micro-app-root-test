@@ -1,6 +1,7 @@
+'use strict';
+
 const path = require('path');
 const camelcase = require('camelcase');
-// const camelcase = import.meta.glob('camelcase');
 
 // module.exports = {
 //   process(sourceText, sourcePath, options) {
@@ -20,6 +21,7 @@ module.exports = {
 			const pascalCaseFilename = camelcase(path.parse(filename).name, {
 				pascalCase: true,
 			});
+
 			const componentName = `Svg${pascalCaseFilename}`;
 			return {
 				code: `const React = require('react');

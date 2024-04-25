@@ -42,17 +42,23 @@ module.exports = {
 		'plugin:react-hooks/recommended',
 		// "plugin:react/jsx-runtime",
 		'plugin:jsx-control-statements/recommended',
+		// 'plugin:import/errors',
+		// 'plugin:import/warnings',
+		'plugin:jest-dom/recommended',
 	],
 
 	// 拓展和支持相关能力的插件库
 	plugins: [
 		'@typescript-eslint',
 		'prettier',
-		// 'react',
+		'import',
+		'react',
 		'react-refresh',
 		'react-hooks',
 		'jsx-a11y',
 		'jsx-control-statements',
+		'jest-dom',
+		'testing-library',
 	],
 	// .eslintignore
 	// ignorePatterns: ['dist', '.eslintrc.cjs'],
@@ -94,7 +100,7 @@ module.exports = {
 		'import/newline-after-import': 0,
 		'import/no-extraneous-dependencies': 0,
 		'import/no-named-as-default': 0,
-		// "import/no-unresolved": [2, { caseSensitive: false }], // ts already checks case sensitive imports
+		'import/no-unresolved': 'error', // [(2, { caseSensitive: false })], // ts already checks case sensitive imports
 		// "import/no-webpack-loader-syntax": 0,
 		'import/prefer-default-export': 0,
 		// "import/no-cycle": 1,
@@ -134,20 +140,41 @@ module.exports = {
 		'prefer-const': ['error', { destructuring: 'all', ignoreReadBeforeAssign: true }],
 		semi: ['error', 'always'],
 		'comma-dangle': ['error', 'always-multiline'],
+
+		'jest-dom/prefer-checked': 'error',
+		'jest-dom/prefer-enabled-disabled': 'error',
+		'jest-dom/prefer-required': 'error',
+		'jest-dom/prefer-to-have-attribute': 'error',
+		'testing-library/await-async-queries': 'error',
+		'testing-library/no-await-sync-queries': 'error',
+		'testing-library/no-debugging-utils': 'warn',
+		'testing-library/no-dom-import': 'off',
 	},
 	settings: {
 		'import/parsers': {
 			'@typescript-eslint/parser': ['.ts', '.tsx'],
 		},
+		// eslint-import-resolver-typescript 解析 TypeScript 模块导入语句的 ESLint 解析器
 		'import/resolver': {
 			typescript: {
 				alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
-				directory: './tsconfig.json',
+				// directory: './tsconfig.json',
+				project: [
+					'./tsconfig.json',
+					'./tsconfig.node.json',
+					'./tsconfig.app.json',
+					'./tsconfig.test.json',
+					'./tsconfig.prod.json',
+				],
 			},
-			node: {
-				extensions: ['.ts', '.tsx', '.js', '.json'],
+			// node: {
+			// 	extensions: ['.ts', '.tsx', '.js', '.json'],
+			// },
+			// alias: [['@/', './src/']],
+			alias: {
+				map: ['@/', './src/'],
+				extensions: ['.ts', '.tsx', '.js', '.cjs', '.json'],
 			},
-			alias: [['@', './src']],
 		},
 		react: {
 			version: 'detect',

@@ -2,11 +2,11 @@ import React from 'react';
 import { Layout, Flex, Spin, Typography } from 'antd';
 import { iteratee } from 'lodash-es';
 
-interface LaodingProps {
+interface LoadingProps {
 	isLoad: boolean;
 	text?: string;
 }
-export default function Loading({ isLoad, text }: LaodingProps) {
+export default function Loading({ isLoad, text }: LoadingProps) {
 	// if (!isLoad) return null;
 
 	return (

@@ -1,30 +1,31 @@
-import type { Config, ConfigContext } from 'postcss-load-config';
-// import autoprefixer from 'autoprefixer';
-// import postcssPresetEnv from 'postcss-preset-env';
-// import postCssPxToRem from 'postcss-pxtorem';
-// import cssnano from 'cssnano';
+/** @type {import('postcss-load-config').Config} */
+import type { Config, Result, ConfigPlugin, ConfigContext } from 'postcss-load-config';
+import autoprefixer from 'autoprefixer';
+import postcssPresetEnv from 'postcss-preset-env';
+import postCssPxToRem from 'postcss-pxtorem';
+import cssnano from 'cssnano';
 
 // postcss 为 CSS 规则添加特定厂商的前缀。 Autoprefixer 自动获取浏览器的流行度和能够支持的属性，并根据这些数据帮你自动为 CSS 规则添加前缀
-module.exports = (ctx: ConfigContext): Config => ({
-	parser: ctx.parser ? 'sugarss' : false, // 解析器
-	map: ctx.env === 'development' ? ctx.map : false, // map文件
+module.exports = (ctx: ConfigContext, path: string, options: any): Config => ({
+	// parser: ctx.parser ? 'sugarss' : false, // 解析器
+	// map: ctx.env === 'development' ? ctx.map : false, // map文件
+	...options,
 	// 配置插件
-	plugins: {
+	plugins: [
 		// 自动添加 CSS3 前缀
-		autoprefixer: {
+		autoprefixer({
 			overrideBrowserslist: ['> 1%', 'last 10 versions', 'Chrome > 31', 'ff > 31', 'not ie <= 10'],
 			grid: true,
-		},
+		}),
 		// 使用最新的 CSS 语法，自动添加前缀，为浏览器按需加载 polyfill
-		'postcss-preset-env': {
+		postcssPresetEnv({
 			// autoprefixer: {
 			//   flexbox: 'no-2009',
 			// },
 			stage: 3, // 这个阶段稳定变化不大，可能成为标准
 			browsers: 'last 10 versions',
-		},
-
-		'postcss-pxtorem': {
+		}),
+		postCssPxToRem({
 			/** 换算的基数 **/
 			// rootValue({ file }) {
 			// 基准分辨率宽度/100
@@ -48,21 +49,22 @@ module.exports = (ctx: ConfigContext): Config => ({
 				// 排除不需要px转换rem的文件
 				return file.indexOf('screen') === -1;
 			},
-		},
-
-		// // 允许使用 import
+		}),
+		// 允许使用 import
 		// 'postcss-import': {},
 		// // css 嵌套
 		// 'postcss-nested': {},
 		// 一个模块化的 CSS 压缩器
-		cssnano: ctx.env === 'production' ? {} : false,
-		'postcss-plugin': 'internal:charset-removal',
-		'at-rule': {
-			charset: atRule => {
-				if (atRule.name === 'charset') {
-					atRule.remove();
-				}
+		ctx.env === 'production' ? cssnano({}) : false,
+		{
+			postcssPlugin: 'internal:charset-removal',
+			AtRule: {
+				charset: atRule => {
+					if (atRule.name === 'charset') {
+						atRule.remove();
+					}
+				},
 			},
 		},
-	},
+	],
 });

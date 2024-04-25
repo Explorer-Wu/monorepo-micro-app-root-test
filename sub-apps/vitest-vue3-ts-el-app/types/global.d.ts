@@ -87,3 +87,5 @@ declare module '*.gif' {
 }
 
 declare module 'mockjs'
+
+export {}

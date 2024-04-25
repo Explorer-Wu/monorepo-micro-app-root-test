@@ -1,4 +1,10 @@
-import { defineConfig, searchForWorkspaceRoot, loadEnv, type ConfigEnv, type UserConfig } from 'vite';
+import {
+	defineConfig,
+	searchForWorkspaceRoot,
+	loadEnv,
+	type ConfigEnv,
+	type UserConfig,
+} from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import legacy from 'vite-plugin-legacy-swc';
 import checker from 'vite-plugin-checker';
@@ -13,6 +19,7 @@ import { cdnjs } from 'vite-plugin-cdn2/resolver/cdnjs';
 import viteCompression from 'vite-plugin-compression';
 // 打包后生成bundle分析报告文件
 import { visualizer } from 'rollup-plugin-visualizer';
+// import Unocss from 'unocss/vite';
 
 // import VitePluginInjectPreload from 'vite-plugin-inject-preload';
 // import EnvironmentPlugin from 'vite-plugin-environment';
@@ -101,10 +108,21 @@ export default defineConfig(({ mode }) => {
 			}),
 			legacy({
 				// 需要兼容的目标列表
-				targets: ['defaults', 'not IE 11', 'Chrome >= 52', 'Safari >= 10.1', 'Firefox >= 54', 'Edge >= 15'],
+				targets: [
+					'defaults',
+					'not IE 11',
+					'Chrome >= 52',
+					'Safari >= 10.1',
+					'Firefox >= 54',
+					'Edge >= 15',
+				],
 				// 面向IE11时需要此插件
 				additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
 			}),
+			// see unocss.config.ts for config
+			// Unocss({
+			// 	configFile: '../my-uno.config.ts'
+			// }),
 		],
 		css: {
 			devSourcemap: !isProd,
@@ -123,7 +141,8 @@ export default defineConfig(({ mode }) => {
 				scss: {
 					charset: false,
 					/** 引入var.scss全局预定义变量 */
-					additionalData: '@import "@/assets/styles/main/normalize.scss"; @import "@/assets/styles/main/function.scss";',
+					additionalData:
+						'@import "@/assets/styles/main/normalize.scss"; @import "@/assets/styles/main/function.scss";',
 				},
 			},
 			// postcss:内联的 PostCSS 配置（格式同 postcss.config.js），或者一个（默认基于项目根目录的）自定义的 PostCSS 配置路径

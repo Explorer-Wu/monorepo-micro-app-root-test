@@ -12,9 +12,7 @@
 		"src/**/*.md",
 		"mock/**/*.ts",
 		"**/*.{test,spec}-d.{ts}",
-		"vite.config.*",
-		"jest.config.*",
-		"cypress.config.*"
+		"jest.config.*"
 	],
 	/*** 不进行类型检查的文件 ***/
 	// ts 排除的文件, "exclude"默认情况下会排除node_modules，bower_components，jspm_packages和<outDir>目录
@@ -31,6 +29,9 @@
 		"**/**/*.js",
 		".{idea,git,cache,output,temp}"
 	],
+	"resolve": {
+		"extensions": [".js", ".jsx", ".ts", ".tsx", ".json"]
+	},
 	"compilerOptions": {
 		/*** 基本配置 ***/
 		/*
@@ -63,7 +64,7 @@
 		// 在 .js文件中报告错误。与 --allowJs配合使用
 		"checkJs": true,
 		// 允许编译器编译JS，JSX文件（ts和js可以混合着写, 一般不建议有js文件，容易出问题）
-		"allowJs": false,
+		"allowJs": true,
 		// "maxNodeModuleJsDepth": 0,
 		// node_modules依赖的最大搜索深度并加载JavaScript文件。仅适用于 --allowJs
 		// 不报告执行不到的代码错误
@@ -152,7 +153,7 @@
 			// "#/*": ["types/*"],
 			"types/*": ["types/*"],
 			"tests/*": ["tests/*"],
-			"public/*": ["./public/*"]
+			"public/*": ["public/*"]
 			// "*": ["node_modules/*"]
 		},
 		// 根（root）文件夹列表，表示运行时组合工程结构的内容
@@ -163,7 +164,7 @@
 		/* 仅用来控制输出的目录结构 --outDir
 		 * 输出目录，即 tsc 编译后的文件输出的文件夹路径（基于tsconfig.json文件的相对路径）
 		 */
-		"outDir": "./dist",
+		// "outDir": "./dist",
 		// 仅支持 "amd" 和 "system" 模块
 		// 将输出文件合并为一个文件。合并的顺序是根据传入编译器的文件顺序、<reference``>和 import的文件顺序决定的
 		// "outFile": "./",

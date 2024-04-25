@@ -28,7 +28,7 @@
 ### git操作
 
 初始化本地仓库
-`git init -b master`  
+`git init`  
 
 添加文件到本地仓库、并提交  
 `git add .`  
@@ -154,7 +154,8 @@ pnpm -F 'sub-apps/vitest-vue3-ts-el-app' exec lint-staged
 
   `pnpm --parallel -r run build` 通过--parallel会执行所有package中的build命令, 加入 -r 是指定为 worksapce 中的子包执行 build 命令   
 
-  `pnpm --parallel -r run watch` 在项目根目录下执行 pnpm run watch，以对每个子包执行 watch 命令监听文件的变更以生成最新的构建产物. watch 命令是会长时间运行监听文件变更，进程不会自动退出（除了报错或者手动退出），因此需要加上 --parallel 告诉 pnpm 运行该脚本时完全忽略并发和拓扑排序。   
+  `pnpm --parallel -r run watch` 在项目根目录下执行 pnpm run watch，以对每个子包执行 watch 命令监听文件的变更以生成最新的构建产物. watch 命令是会长时间运行监听文件变更，进程不会自动退出（除了报错或者手动退出），因此需要加上 --parallel 告诉 pnpm 运行该脚本时完全忽略并发和拓扑排序。
+  `pnpm store prune` 用来清理存储，但不要太频繁
 
 #### Bash
 
@@ -230,9 +231,9 @@ pnpm -F 'sub-apps/vitest-vue3-ts-el-app' exec lint-staged
 
 ### 前置知识 webComponent
 
-microApp是一款轻量级微前端框架,使用webComponent的思想去实现。   
-html中有许多标签,div,p,span等等,这些标签渲染出的都是html元素。   
-webComponent（自定义html元素）, 其实现思路很简单,就是让用户通过js代码自定义一个htmlElement,并注册到document中, 之后便可使用标签。   
+microApp是一款轻量级微前端框架,使用webComponent的思想去实现。
+html中有许多标签,div,p,span等等,这些标签渲染出的都是html元素。
+webComponent（自定义html元素）, 其实现思路很简单,就是让用户通过js代码自定义一个htmlElement,并注册到document中, 之后便可使用标签。
 
   创建一个自定义元素  
   ```
@@ -278,11 +279,11 @@ webComponent（自定义html元素）, 其实现思路很简单,就是让用户�
 
 #### 获取/处理子应用内容
 
-  **body 和 header 的处理**   
+  **body 和 header 的处理**
   首先，micro-app 可以通过 fetch 拿到 url 对应的 html 字符串，然后替换 head 和 body 标签，避免污染主应用。<br>
   micro-app-head 和 micro-app-body 都是自定义标签，自定义标签和已有的标签相比，只是缺少了默认的样式及行为，因此需要通过extractSourceDom 负责处理 header 里头的其他标签，以及加载 link 及 script 标签的内容。<br>
 
-  **其他标签处理**   
+  **其他标签处理**
   flatChildren 函数是处理 header 里的其他标签的具体操作。注意这里用了递归，以确保每个标签都能处理到。<br>
 
 #### 挂载子应用
@@ -315,3 +316,19 @@ webComponent（自定义html元素）, 其实现思路很简单,就是让用户�
   **事件处理**   
   首先是改写原来的 addEventListener 方法，将监听的事件名和事件句柄记录在一个 map中。<br>
   然后在子应用卸载的时候会触发 releaseEffect 方法，将之前监听的事件全部移除。<br>
+
+## micro-app共享组件的方式
+
+Micro-App 可以将前端应用程序拆分为多个独立的 Micro-App（子应用），并在一个主应用（基座应用）中进行整合和管理。如果需要实现多个子应用之间的组件通用，可以考虑以下几种方法：
+
+  1. 插件系统
+Micro-App 支持使用插件系统进行模块和组件的共享和复用。您可以将需要共享的组件抽象成一个独立的插件，然后在多个子应用中引用该插件。插件可以使用 npm 包进行管理和发布，也可以使用本地路径进行引用。使用插件系统可以有效地避免组件重复编写的问题，并提高代码复用性。
+
+  2. 公共库
+另一种方法是使用公共库进行组件的共享和复用。您可以将需要共享的组件封装为一个独立的 JavaScript 库，然后在多个子应用中引用该库。公共库可以使用 Git 仓库进行管理和发布，也可以使用 npm 包进行管理和发布。使用公共库可以实现更加灵活的组件共享和复用，但也需要更多的维护成本。
+
+  3. 基座应用
+如果您的多个子应用之间需要共享的组件较多，可以考虑将这些组件抽象为一个独立的基座应用，然后在多个子应用中进行引用。基座应用可以专门用于提供组件共享服务，也可以包含其他的业务逻辑。使用基座应用可以避免组件的重复编写，并提高代码复用性，但也需要更加复杂的部署和管理。
+
+总之，Micro-App 提供了多种方法来实现多个子应用之间的组件共享和复用。具体的实现方法取决于你的具体业务需求和技术架构。
+

@@ -1,5 +1,5 @@
 {
-  "*.(j|t)s?(x)": [
+  "*.(j|t)s(x)？": [
     "eslint --cache --fix",
     "prettier --parser=typescript --write --cache",
     "git add"
