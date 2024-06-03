@@ -10,6 +10,7 @@
 		"lint-staged": "lint-staged"
 	},
 	"dependencies": {
+		"@arco-design/web-vue": "^2.55.2",
 		"@element-plus/icons-vue": "^2.3.1",
 		"dayjs": "^1.11.10",
 		"element-plus": "^2.4.4",

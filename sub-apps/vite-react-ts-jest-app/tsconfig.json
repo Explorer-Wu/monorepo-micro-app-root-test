@@ -1,6 +1,6 @@
 {
 	// "files"指定一个包含相对或绝对文件路径的列表。通过 "files"属性明确指定的文件却总是会被包含在内，不管"exclude"如何设置。
-	"files": ["types/index.d.ts", "types/global.d.ts", "types/axios.d.ts", "types/env.d.ts"], // "src/shims-tsx.d.ts",
+	"files": [], // "src/shims-tsx.d.ts",
 	/**
 	 * references 选项允许你将一个 TypeScript 项目作为另一个项目的依赖项进行编译
 	 * 注意，依赖另一个项目的情况， references 选项必须与 composite 选项一起使用才能生效。
