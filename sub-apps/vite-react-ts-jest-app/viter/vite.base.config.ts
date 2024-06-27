@@ -14,10 +14,10 @@ import legacy from '@vitejs/plugin-legacy';
 // import tsconfigPaths from 'vite-tsconfig-paths';
 // * No declaration file for less-vars-to-js
 // import lessToJS from 'less-vars-to-js';
-import fs from 'fs';
+// import fs from 'fs';
 import { fileURLToPath, URL } from 'node:url';
-import path from 'path';
-import { resolve } from './utils/index';
+// import path from 'path';
+// import { resolve } from './utils';
 // import ViteRestart from 'vite-plugin-restart'
 // import svGod from './src/utils/svgod';
 
@@ -167,9 +167,19 @@ export default env => {
 
 			// 配置别名
 			alias: [
-				{ find: /^~/, replacement: resolve('./') },
-				{ find: '@/', replacement: resolve('./src/') },
-				{ find: 'tests/', replacement: resolve('./tests/') },
+				// { find: /^~/, replacement: resolve('./') },
+				{
+					find: /^@\//,
+					// replacement: resolve('./src/'),
+					// fileURLToPath结合import.meta.url 路径查找更准确
+					replacement: fileURLToPath(new URL('../src/', import.meta.url)),
+				},
+
+				{
+					find: 'tests/',
+					// replacement: resolve('../tests/')
+					replacement: fileURLToPath(new URL('../tests/', import.meta.url)),
+				},
 				// { find: /\/#/, replacement: path.resolve(__dirname, './types') }
 			],
 			// 情景导出 package.json 配置中的exports字段

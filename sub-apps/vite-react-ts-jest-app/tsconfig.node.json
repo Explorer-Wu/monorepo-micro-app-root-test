@@ -1,13 +1,26 @@
 {
 	"compilerOptions": {
-		"types": ["node"],
 		"composite": true,
-		"skipLibCheck": true,
-		"module": "ESNext", //  "NodeNext",
-		"moduleResolution": "Bundler",
+		"baseUrl": "./",
+		"rootDir": "./",
+		"types": ["node"],
+		"lib": ["ESNext"],
 		"allowSyntheticDefaultImports": true,
-		// "jsx": "react",
-		"esModuleInterop": true
+
+		/* Bundler mode */
+		// "target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler", // "Node", "nodenext",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+
+		/* Linting */
+		"skipLibCheck": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noFallthroughCasesInSwitch": true
 	},
 	"include": [
 		"viter/vite.config.*",

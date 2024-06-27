@@ -2,8 +2,17 @@ import fs from 'fs';
 import path from 'path';
 // import packageConfig from '../../package.json';
 
-// process.cwd() 方法返回的是 Node.js 进程的当前工作目录(即，当前脚本的工作目录的路径)，通常是package.json 文件所在目录，因为包含 process.cwd() 的脚本是在 package.json 中读取执行的
+/**
+ * process 即为当前 node 的 node 进程， process.cwd() 方法则是获取该进程的工作目录(即，当前脚本的工作目录的路径)，
+ * 也就是触发的 node 命令的路径，可以把 cwd 当作 node global 属性
+ *  process.cwd()通常是package.json 文件所在目录，因为包含 process.cwd() 的脚本是在 package.json 中读取执行的
+ * 而 __filename 和 __dirname 则是每个模块的局部属性
+ * __dirname返回当前【执行文件】所在目录的绝对路径
+ * __filename 返回当前【执行文件】所在的绝对路径
+ * */
 const appDir = fs.realpathSync(process.cwd());
+
+console.dir('appDir:', appDir);
 
 const resolve = (_path: string) => path.resolve(appDir, _path); // 获取绝对路径
 /**__dirname 返回的是当前模块的目录名称，即：被执行的 JavaScript 文件所在目录路径

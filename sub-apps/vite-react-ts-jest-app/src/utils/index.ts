@@ -1,5 +1,5 @@
 // 与基座的数据交互
-function handleMicroData() {
+function handleMicroData(): void {
 	// 是否是微前端环境, eventCenterForAppViteReact(新版获取不到) 是基座添加到window的数据通信对象
 	if (window.__MICRO_APP_ENVIRONMENT__) {
 		// 主动获取基座下发的数据

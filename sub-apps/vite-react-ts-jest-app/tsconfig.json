@@ -22,7 +22,7 @@
 		// "composite": true,
 		// "allowJs": true,
 		// "skipLibCheck": true,
-		"esModuleInterop": true,
+		"esModuleInterop": true
 		// "allowSyntheticDefaultImports": true,
 		// "strict": true,
 		// "forceConsistentCasingInFileNames": true,
@@ -32,7 +32,6 @@
 		// "resolveJsonModule": true,
 		// "isolatedModules": true,
 		// "noEmit": true,
-		"jsx": "react-jsx"
 	}
 	// 从另一个配置文件里继承配置
 	// "extends": "@tsconfig/recommended",

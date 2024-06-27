@@ -8,7 +8,7 @@ import { fileURLToPath, URL } from 'node:url';
 import viteBaseConfig from './vite.base.config';
 import viteDevConfig from './vite.dev.config';
 import viteProdConfig from './vite.prod.config';
-import { resolve } from './utils/index';
+import { resolve } from './utils';
 
 const resolveEnvFn = {
 	serve: env => ({ ...viteBaseConfig(env), ...viteDevConfig(env) }),

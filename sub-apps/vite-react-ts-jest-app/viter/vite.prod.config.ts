@@ -11,8 +11,8 @@ import viteCompression from 'vite-plugin-compression';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 // import fs from 'fs';
-import path from 'path';
-import { resolve, pathRelative } from './utils/index';
+// import path from 'path';
+import { resolve, pathRelative } from './utils';
 
 // const themeVariables = lessToJS(
 //   fs.readFileSync(path.resolve(__dirname, './variables.less'), 'utf8')

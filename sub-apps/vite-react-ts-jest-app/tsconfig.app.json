@@ -3,8 +3,8 @@
 	// "include"和"exclude"属性指定一个文件glob匹配模式列表。 支持的glob通配符有：*、**/ 、?。
 	// 使用"include"引入的文件可以使用"exclude"属性过滤。
 	"include": [
-		"viter/*",
-		"viter/**/*",
+		// "viter/*",
+		// "viter/**/*",
 		"types/*.d.ts",
 		"src/**/*.ts",
 		"src/**/*.d.ts",
@@ -111,7 +111,6 @@
 		// 指定模块解析策略, 'node' 用于 Node.js 的 CommonJS 实现
 		// module === "AMD" or "System" or "ES6" ? "Classic" : "Node"
 		"moduleResolution": "bundler",
-		// "allowImportingTsExtensions": true,
 		// 支持 CommonJS 和 ES 模块之间的互操作性,  CommonJS/AMD/UMD 模块导入兼容
 		"esModuleInterop": true,
 		// "importsNotUsedAsValues": "preserve",
@@ -233,6 +232,7 @@
 		 * 但是会进行编译,有错误会抛出
 		 */
 		"noEmit": false,
+		"allowImportingTsExtensions": true,
 		// 从tslib导入辅助工具函数(helper 函数), 比如 __extends， __rest等
 		"importHelpers": true,
 		// 当生成文件时指定行结束符： "crlf"（windows）或 "lf"（unix）
