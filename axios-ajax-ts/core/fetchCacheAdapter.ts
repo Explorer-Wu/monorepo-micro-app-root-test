@@ -1,6 +1,6 @@
 import { AxiosAdapter, AxiosPromise } from 'axios';
 import LRUCache from 'lru-cache'; // lru算法缓存对象
-import { MemoryCache, generateReqUrlKey, isCacheObj, type IsCacheObj } from './utils';
+import { MemoryCache, generateReqUrlKey, isCacheObj, type IsCacheObj } from '../utils/tools';
 
 declare module 'axios' {
 	interface AxiosRequestConfig {
@@ -18,7 +18,10 @@ export type Options = {
 	defaultCache?: IsCacheObj<AxiosPromise>;
 };
 
-export default function cacheAdapterEnhancer(adapter: AxiosAdapter, options: Options = {}): AxiosAdapter {
+export default function cacheAdapterEnhancer(
+	adapter: AxiosAdapter,
+	options: Options = {},
+): AxiosAdapter {
 	const {
 		// maxExpires,
 		enabledByDefault = true,
@@ -30,7 +33,10 @@ export default function cacheAdapterEnhancer(adapter: AxiosAdapter, options: Opt
 	return config => {
 		const { url, method, params, paramsSerializer, forceUpdate } = config;
 
-		const useCache = (config as any)[cacheFlag] !== void 0 && (config as any)[cacheFlag] !== null ? (config as any)[cacheFlag] : enabledByDefault;
+		const useCache =
+			(config as any)[cacheFlag] !== void 0 && (config as any)[cacheFlag] !== null
+				? (config as any)[cacheFlag]
+				: enabledByDefault;
 
 		if (method === 'get' && useCache) {
 			const cache: IsCacheObj<AxiosPromise> = isCacheObj(useCache) ? useCache : defaultCache;

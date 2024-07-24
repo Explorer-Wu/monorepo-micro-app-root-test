@@ -35,7 +35,9 @@ declare global {
     mozIndexedDB: boolean
     scrollHeight: number
     scrollTop: number
-    clientHeight: number
+    clientHeight: number,
+
+    __globalRouter: any,
   }
 }
 

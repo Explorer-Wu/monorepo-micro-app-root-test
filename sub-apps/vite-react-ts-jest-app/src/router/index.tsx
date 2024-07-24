@@ -9,6 +9,10 @@ const Home = lazy(() => import('@/views/home/index'));
 const Tables = lazy(() => import('@/views/tables/index'));
 const TableList = lazy(() => import('@/views/tables/tablelist'));
 const TableDetail = lazy(() => import('@/views/tables/detail'));
+const SynCanvas = lazy(() => import('@/views/canvas/index'));
+const AIChat = lazy(() => import('@/views/aichat/index'));
+const Interviewer = lazy(() => import('@/views/aichat/interviewer'));
+const AIChatFlowise = lazy(() => import('@/views/aichat/aiflowise'));
 const NotFound = lazy(() => import('@/views/error/404'));
 const NoAccess = lazy(() => import('@/views/error/403'));
 
@@ -43,6 +47,18 @@ const routes: RouteObject[] = [
 				children: [
 					{ index: true, element: <TableList /> },
 					{ path: ':id', element: <TableDetail /> },
+				],
+			},
+			{
+				path: 'syncanvas',
+				element: lazyLoad(<SynCanvas />),
+			},
+			{
+				path: 'aichat',
+				element: <AIChat />,
+				children: [
+					{ index: true, element: <Interviewer /> },
+					{ path: 'aiflowise', element: <AIChatFlowise /> },
 				],
 			},
 			// {

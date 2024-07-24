@@ -29,8 +29,8 @@ import path from 'path';
 import { resolve, pathRelative } from './utils';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-	const viteEnv = loadEnv(mode, path.resolve(__dirname, './env'), ['VITE_', 'APP_']);
+export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
+	const viteEnv = loadEnv(mode, resolve('./env'), ['VITE_', 'APP_']);
 	const isProd = ['production', 'staging', 'testing'].includes(viteEnv.VITE_NODE_ENV);
 	// const isDev = mode !== 'production';
 	const isAnalyze = ['testing', 'staging'].includes(mode);
@@ -219,8 +219,8 @@ export default defineConfig(({ mode }) => {
 			},
 			host: '0.0.0.0',
 			// host: true, // 监听所有地址，包括局域网和公网地址 "localhost",
-			port: viteEnv.VITE_PORT, // 开发服务器端口
-			https: true, //是否启用 http 2
+			port: +viteEnv.VITE_PORT, // 开发服务器端口
+			// https: true, //是否启用 http 2
 			// force: true, //是否强制依赖预构建
 			cors: true, // 为开发服务器配置 CORS , 默认启用并允许任何源
 			open: true, //服务启动时自动在浏览器中打开应用
@@ -229,7 +229,7 @@ export default defineConfig(({ mode }) => {
 			hmr: {
 				// host: 'localhost'
 				// overlay: true, // 设为true会导致热更新速度慢
-				port: viteEnv.VITE_PORT,
+				port: +viteEnv.VITE_PORT,
 			},
 			// 传递给 chockidar 的文件系统监视器选项
 			watch: {
@@ -238,7 +238,7 @@ export default defineConfig(({ mode }) => {
 			},
 		},
 		preview: {
-			port: viteEnv.VITE_PORT, // 预览服务器端口
+			port: +viteEnv.VITE_PORT, // 预览服务器端口
 			host: true, // 监听所有地址，包括局域网和公网地址
 			strictPort: true, // 端口被占用时，抛出错误
 		},

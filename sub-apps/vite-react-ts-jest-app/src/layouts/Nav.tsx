@@ -14,6 +14,7 @@ import {
 	PictureOutlined,
 	DragOutlined,
 	InteractionOutlined,
+	BorderInnerOutlined,
 	// BarChartOutlined,
 	// ShopOutlined,
 	// TeamOutlined,
@@ -63,6 +64,7 @@ const MenusList: MenuItem[] = [
 	getItem('表单展示', '/views/forms', <FormOutlined />),
 	getItem('表格展示', '/views/tables', <TableOutlined />),
 	getItem('拖拽组件', '/views/dndpage', <DragOutlined />),
+	getItem('协同画布', '/views/syncanvas', <BorderInnerOutlined />),
 	getItem('设计模式', '/views/designmodes', <InteractionOutlined />, [
 		getItem('单例模式', '/views/designmodes/index'),
 		getItem('策略模式', '/views/designmodes/strategy'),

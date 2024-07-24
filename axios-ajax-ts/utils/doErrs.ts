@@ -42,7 +42,9 @@ export const doneErrStatusMap = (fhttp: any, extra: ExtraTypeOpts) =>
 							fhttp.isRefreshToken = true;
 
 							try {
-								const refreshData = await extra.refreshTokenFn(getUserToken(extra?.envTokenKey, extra?.envRefreshKey).accessToken);
+								const refreshData = await extra.refreshTokenFn(
+									getUserToken(extra?.envTokenKey, extra?.envRefreshKey).accessToken,
+								);
 								updateRefreshToken(refreshData, extra?.envTokenKey, extra?.envRefreshKey);
 								// 已经刷新了token，将所有队列中的请求进行重试
 								fhttp.requests.forEach((cb: any) => cb(getUserToken().accessToken));
@@ -55,7 +57,7 @@ export const doneErrStatusMap = (fhttp: any, extra: ExtraTypeOpts) =>
 								// window.location.href = '/';
 								// 返回 401 清除过期token信息并跳转到登录页
 								removeToken();
-								extra.goToLogin();
+								extra.goToLogin && extra.goToLogin();
 								return Promise.reject();
 							}
 
@@ -66,7 +68,7 @@ export const doneErrStatusMap = (fhttp: any, extra: ExtraTypeOpts) =>
 				}
 
 				// 返回 401 清除过期token信息并跳转到登录页
-				return extra.goToLogin();
+				if (extra.goToLogin) return extra.goToLogin();
 			},
 		],
 		[

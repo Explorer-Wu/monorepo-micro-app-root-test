@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, type ConfigEnv, type UserConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import AutoImport from 'unplugin-auto-import/vite';
@@ -21,7 +21,7 @@ import path from 'path';
 // 	transformerVariantGroup,
 // } from 'unocss';
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 	const viteEnv = loadEnv(mode, path.resolve(__dirname, './env'), ['VITE_', 'APP_']);
 	const isProd = ['production', 'staging', 'testing'].includes(viteEnv.VITE_NODE_ENV);
 	console.log('sub-vue3-APP_BASE_ROUTER', viteEnv);

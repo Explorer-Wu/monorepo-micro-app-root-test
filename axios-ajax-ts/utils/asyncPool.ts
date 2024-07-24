@@ -1,6 +1,6 @@
 async function asyncPoolFn(requestlis: any[], limits: number, callback: any) {
 	// 存储所有的promise异步任务队列
-	const promises = [];
+	const promises: any[] = [];
 
 	// 当前的并发池,用Set结构方便删除
 	const pool = new Set(); // set也是Iterable<any>[]类型，因此可以放入到race里

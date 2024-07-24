@@ -3,13 +3,13 @@ import { HttpAxios, type ReqOpts, type ResDataTypeMode } from 'axios-ajax-ts';
 import type { ReqItem, ApiFnMap } from '../typings/axios';
 import { message } from 'antd';
 // import React, { useReducer, type Dispatch, type PropsWithChildren } from 'react';
-import HistoryRule from '../router/history';
+// import HistoryRule from '../router/history';
 
 import { refreshToken } from './modules/auth';
 
 const isProd = ['production', 'staging', 'testing'].includes(import.meta.env.MODE);
 const envBaseUrl = import.meta.env.APP_API_BASE_URL;
-const { HrefTo } = HistoryRule();
+// const { globalNav } = HistoryRule();
 // export type UserResult = {
 //   success: boolean
 //   data: {
@@ -34,15 +34,19 @@ export const httpAxios = new HttpAxios({
 	// store: any;
 	// loading?: ((target: string) => void);
 	// closeLoading?: any | (() => void);
-	message,
-	goToLogin: () => HrefTo('/auth/login'),
-	refreshTokenFn: refreshToken,
+	// message,
+	// goToLogin: () => window.__globalRouter.globalNav('/auth/login'),
+	// refreshTokenFn: refreshToken,
 });
 
 export function asyncApi(req: ReqItem) {
 	const { headers, url, method, authtoken } = req;
 
-	return async <G = any>(opts: ReqOpts, sucmsg?: string, errmsg?: string): Promise<false | G | undefined> => {
+	return async <G = any>(
+		opts: ReqOpts,
+		sucmsg?: string,
+		errmsg?: string,
+	): Promise<false | G | undefined> => {
 		let queryData = JSON.parse(JSON.stringify(opts));
 		console.log('api-opts:', opts);
 
@@ -61,14 +65,15 @@ export function asyncApi(req: ReqItem) {
 				headers: (headers as any) || {},
 				...queryData,
 			});
-			if (code === 'success') {
+			if (code === 'success' || code === 0) {
 				if (sucmsg) {
-					message.success(sucmsg);
+					message.success(sucmsg, 3);
 				}
 				return data;
 			}
 		} catch (error: any) {
-			message.error(`${error.message ? `${error.message},` : undefined}${errmsg}`);
+			console.log('asyncApi-err:', error.cause);
+			message.error(`${error.message ? error.message : errmsg}`, 3);
 			return false;
 		}
 	};

@@ -32,14 +32,14 @@ const routes: Array<RouteRecordRaw> = [
 			{
 				path: '/403',
 				name: '403',
-				hidden: true,
+				// hidden: true,
 				component: () => import('@/views/error/403.vue'),
 				meta: { title: '403', index: 2, icon: '' },
 			},
 			{
 				path: '/404',
 				name: '404',
-				hidden: true,
+				// hidden: true,
 				component: () => import('@/views/error/404.vue'),
 				meta: { title: '404', index: 3, icon: '' },
 			},

@@ -1,32 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import reactLogo from '@/assets/images/svg/react.svg';
 import viteLogo from '/vite.svg';
+
+import { testListApi } from '@/apis/modules/test';
 
 function Home() {
 	const [count, setCount] = useState(0);
 
+	const getListFn = async () => {
+		const list = await testListApi()({}, '获取测试列表成功', '请求失败！');
+		console.log('testListApi:', list);
+	};
+
+	useEffect(() => {
+		getListFn();
+	}, []);
+
 	return (
 		<div className="main-wrapper">
 			<div className="App">
-				<a
-					href="https://vitejs.dev"
-					target="_blank"
-				>
-					<img
-						src={viteLogo}
-						className="logo"
-						alt="Vite logo"
-					/>
+				<a href="https://vitejs.dev" target="_blank">
+					<img src={viteLogo} className="logo" alt="Vite logo" />
 				</a>
-				<a
-					href="https://react.dev"
-					target="_blank"
-				>
-					<img
-						src={reactLogo}
-						className="logo react"
-						alt="React logo"
-					/>
+				<a href="https://react.dev" target="_blank">
+					<img src={reactLogo} className="logo react" alt="React logo" />
 				</a>
 			</div>
 			<h1>Vite + React</h1>

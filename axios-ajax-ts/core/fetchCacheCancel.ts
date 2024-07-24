@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, Canceler } from 'axios';
-import { isTypeFn, isFunction, generateReqUrlKey } from './utils';
+import { isTypeFn, isFunction, generateReqUrlKey } from '../utils/tools';
 
 // * 声明一个 Map 用于存储每个请求的标识 和 取消函数
 let pendingMap = new Map<string, Canceler>();

@@ -5,7 +5,9 @@ enum MenuIcon {
 	PieChart = IEpPieChart,
 	Postcard = IEpPostcard,
 	Grid = IEpGrid,
-	Pointer = IEpPointer,
+	Rank = IEpRank,
+	EditPen = IEpEditPen,
+	ChatLineSquare = IEpChatLineSquare,
 	MagicStick = IEpMagicStick,
 	Picture = IEpPicture,
 }

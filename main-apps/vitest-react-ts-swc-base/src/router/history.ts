@@ -1,4 +1,4 @@
-import { HTMLAttributeAnchorTarget } from 'react';
+import { useRef, useEffect, type HTMLAttributeAnchorTarget } from 'react';
 import { useNavigate, useLocation, useHref, useLinkClickHandler, To } from 'react-router-dom';
 
 export default function HistoryRule() {
@@ -27,6 +27,17 @@ export default function HistoryRule() {
 		return HistoryNav(to, action); // history 的 replace 模式
 	};
 
+	// 组件外，全局使用
+	const globalNav = HistoryNav;
+	const globalLocation = Location;
+	if (!window.__globalRouter) {
+		window.__globalRouter = {
+			globalNav,
+			globalLocation,
+		};
+	}
+
+	// 组件内使用
 	return {
 		HistoryNav,
 		LinkTo,
@@ -34,4 +45,14 @@ export default function HistoryRule() {
 		HrefTo,
 		LinkNav,
 	};
+}
+
+export function usePrevious(value: any) {
+	const ref = useRef();
+
+	useEffect(() => {
+		ref.current = value;
+	}, [value]);
+
+	return ref.current;
 }

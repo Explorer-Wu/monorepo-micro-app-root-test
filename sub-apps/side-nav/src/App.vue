@@ -27,7 +27,7 @@ const emit = defineEmits<{
   update: [params: object]
 }>();
 
-const menuState = reactive({
+const menuState: any = reactive({
   activeName: '/',
   navItems: [
     // {
@@ -132,7 +132,7 @@ onMounted(async () => {
   await nextTick();
 
   // 判断微前端环境
-  if (window.__MICRO_APP_ENVIRONMENT__) {
+  if ((window as Window).__MICRO_APP_ENVIRONMENT__) {
     console.log('nav-microApp:', window.microApp.getData());
     // 获取基座下发的数据
     microAppData.value = window.microApp.getData();
@@ -170,7 +170,7 @@ onUnmounted(() => {
     :router="true"
   >
     <template v-for="(item, indx) in menuState.navItems">
-      <el-sub-menu v-if="item!.children" :index="item!.path" :key="`${item.path}+${indx}`">
+      <el-sub-menu v-if="item!.children" :index="item!.path" :key="`${item!.path}+${indx}`">
         <template #title>
           <el-icon><render-icon :itag="getIcon(item.iconTag)"/></el-icon>
           <span>{{ item.title }}</span>
@@ -180,7 +180,7 @@ onUnmounted(() => {
           <el-menu-item v-for="chitem in item!.children" :key="chitem.path" :index="chitem.path">{{ chitem.title }}</el-menu-item>
         </el-menu-item-group>
       </el-sub-menu>
-      <el-menu-item v-else :index="item.path" :key="item.path">
+      <el-menu-item v-else :index="item!.path" :key="item!.path">
         <el-icon><component :is="getIcon(item.iconTag)" /></el-icon>
         <template #title>{{ item.title }}</template>
       </el-menu-item>

@@ -13,7 +13,7 @@ interface ImportMetaEnv extends Readonly<Record<string, unknown>> {
   readonly VITE_OUTPUT_DIR: boolean
 
   // 公共基础路径
-  // readonly BASE_URL: string
+  readonly VITE_BASE_URL: string
   readonly APP_BASE_ROUTER: string
   // 前端服务端口号
   readonly VITE_PORT: number

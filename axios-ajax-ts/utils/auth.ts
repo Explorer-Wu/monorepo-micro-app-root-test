@@ -1,7 +1,12 @@
-import { cookiesFn, storageSessionFn } from './storagecookies/index';
+import { cookiesFn, storageSessionFn } from '../storagecookies';
 
 const { get: getCookie, set: setCookie, remove: delCookie } = cookiesFn;
-const { get: getSession, set: setSession, remove: delSession, clear: clearSession } = storageSessionFn;
+const {
+	get: getSession,
+	set: setSession,
+	remove: delSession,
+	clear: clearSession,
+} = storageSessionFn;
 
 export interface AuthInfo<T> {
 	/** token */
@@ -18,16 +23,21 @@ export const formatToken = (token: string): string => {
 };
 
 // 从sessionStorage中获取token
-export function getUserToken(tokenkey: string = 'user_token', refreshkey: string = 'refresh_key'): any {
+export function getUserToken(tokenkey: string = 'user_token', refreshkey?: string): any {
+	// = 'refresh_key'
 	// clearCookie('user_token');
 	const userToken = getSession(tokenkey);
 	return {
 		accessToken: userToken ? userToken : '',
-		refreshToken: getCookie(refreshkey),
+		refreshToken: refreshkey ? getCookie(refreshkey) : undefined,
 	};
 }
 
-export function setToken(data: AuthInfo<string | number>, tokenkey: string = 'user_token', refreshkey: string = 'refresh_key') {
+export function setToken(
+	data: AuthInfo<string | number>,
+	tokenkey: string = 'user_token',
+	refreshkey: string = 'refresh_key',
+) {
 	// | Date
 	const { accessToken, refreshToken, expires } = data;
 	// 如果后端直接设置时间戳，将此处代码改为expires = data.expires，然后把上面的AuthInfo<Date>改成AuthInfo<number>即可
@@ -45,7 +55,10 @@ export function setToken(data: AuthInfo<string | number>, tokenkey: string = 'us
 	});
 }
 
-export function removeToken(tokenkey: string = 'user_token', refreshkey: string = 'refresh_key'): void {
+export function removeToken(
+	tokenkey: string = 'user_token',
+	refreshkey: string = 'refresh_key',
+): void {
 	delSession(tokenkey);
 	delCookie(refreshkey);
 }

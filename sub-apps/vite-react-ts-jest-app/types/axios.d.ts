@@ -1,3 +1,19 @@
+import { ReqOpts } from "axios-ajax-ts";
+
+/** 自定义实例化接口配置类型 */
+export interface ReqItem {
+	name?: string;
+	url: string;
+	method?: string;
+	authtoken?: boolean;
+	// isFormdata?: boolean; 存headers里
+	headers?: any;
+}
+
+export interface ApiFnMap {
+	[propName: string]: <G = any>(opts: ReqOpts, sucmsg?: string, errmsg?: string) => Promise<false | G | undefined>;
+}
+
 export type ErrorMessageMode = 'none' | 'modal' | 'message' | undefined;
 
 export interface RequestOptions {

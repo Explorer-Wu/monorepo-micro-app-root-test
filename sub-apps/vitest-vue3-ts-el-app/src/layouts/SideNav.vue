@@ -67,7 +67,12 @@ const menuList: any[] = [
 		path: '/tables',
 	},
 	{
-		iconTag: 'Pointer',
+		iconTag: 'ChatLineSquare',
+		title: 'Ai问答',
+		path: '/aichat',
+	},
+	{
+		iconTag: 'Rank',
 		title: '拖拽组件',
 		path: '/pagedraggable',
 	},

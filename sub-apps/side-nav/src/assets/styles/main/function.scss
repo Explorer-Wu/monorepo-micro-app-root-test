@@ -92,7 +92,7 @@ $bar-shadow-b-right: 10px -2px 10px rgba(0, 0, 0, 0.5);
 	display: -webkit-box; /* 老版本语法: Chrome 4+, Safari 3.1, iOS Safari 3.2+, Safari, iOS, Android browser, older WebKit browsers. */
 	display: -moz-box; /* 老版本语法: Firefox (buggy) */
 	display: -ms-flexbox; /* 混合版本语法: IE 10 */
-	display: box; /* OLD - Android 4.4- */
+	// display: box; /* OLD - Android 4.4- */
 
 	display: -webkit-flex; /* 新版本语法: Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */
 	display: -moz-flex; /* Firefox 18+ */

@@ -40,24 +40,43 @@ declare global {
   // const xtest: typeof import('@jest/globals').xtest
   // const expect: typeof import('@jest/globals').expect
   // const jest: typeof import('@jest/globals').jest
-}
-declare interface Window {
-  eventCenterForAppViteReact: any
-  microApp: any
-  __MICRO_APP_NAME__: string
-  __MICRO_APP_ENVIRONMENT__: string
-  __MICRO_APP_BASE_APPLICATION__: string
-  __MICRO_APP_PUBLIC_PATH__: string
-  __MICRO_APP_BASE_ROUTE__: string
 
-  ActiveXObject: boolean
-  webkitIndexedDB: boolean
-  mozIndexedDB: boolean
-  scrollHeight: number
-  scrollTop: number
-  clientHeight: number
-  location: any
+  interface Window {
+    eventCenterForAppViteReact: any
+    microApp: any
+    __MICRO_APP_NAME__: string
+    __MICRO_APP_ENVIRONMENT__: string
+    __MICRO_APP_BASE_APPLICATION__: string
+    __MICRO_APP_PUBLIC_PATH__: string
+    __MICRO_APP_BASE_ROUTE__: string
+
+    ActiveXObject: boolean
+    webkitIndexedDB: boolean
+    mozIndexedDB: boolean
+    scrollHeight: number
+    scrollTop: number
+    clientHeight: number,
+
+    __globalRouter: any
+  }
 }
+// declare interface Window {
+//   eventCenterForAppViteReact: any
+//   microApp: any
+//   __MICRO_APP_NAME__: string
+//   __MICRO_APP_ENVIRONMENT__: string
+//   __MICRO_APP_BASE_APPLICATION__: string
+//   __MICRO_APP_PUBLIC_PATH__: string
+//   __MICRO_APP_BASE_ROUTE__: string
+
+//   ActiveXObject: boolean
+//   webkitIndexedDB: boolean
+//   mozIndexedDB: boolean
+//   scrollHeight: number
+//   scrollTop: number
+//   clientHeight: number
+//   location: Location
+// }
 
 //  declare const REACT_APP_ENV: 'test' | 'dev' | 'uat' | 'prod' | false;
 declare module 'mockjs';

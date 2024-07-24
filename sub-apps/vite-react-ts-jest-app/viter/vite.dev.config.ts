@@ -56,21 +56,37 @@ export default env => {
 			// 反向代理配置
 			proxy: (() => {
 				const proxyPath = [
-					'/api',
-					'/mock',
-					'/auth',
+					`/api`,
+					`/mock`,
+					`/auth`,
+					`/ai-dify`,
 					// '/socket.io'
 				];
 				let proxyConfig = {};
 				for (let item of proxyPath) {
-					let regExp = new RegExp(`^\${item}`); // ,'g'
+					let regExp = new RegExp(`^` + item);
+					const envObj = {
+						[`/ai-dify`]: env.APP_AI_DIFY_API_URL,
+						[`/auth`]: env.APP_API_AURTH_URL,
+					};
 					proxyConfig[item] = {
-						target: env.APP_API_BASE_URL,
+						target: envObj[item] ? envObj[item] : env.APP_API_BASE_URL,
 						// logLevel: 'debug', // 查看代理请求的真实地址
 						changeOrigin: true,
-						rewrite: path => path.replace(regExp, '/'),
-						cookieDomainRewrite: '',
-						secure: false,
+						rewrite: path => {
+							// console.log('rewrite:', regExp);
+							return path.replace(regExp, '');
+						},
+						// cookieDomainRewrite: '',
+						// secure: false,
+						// configure: (proxy, options) => {
+						// 	// proxy 是 'http-proxy' 的实例
+						// 	console.log('proxy-config:', proxy, options);
+						// 	// const proxyUrl = new URL(options.rewrite(req.url))
+						// 	// proxy.proxyRequest(req => {
+						// 	// 	console.log('proxyRequest:', req);
+						// 	// });
+						// },
 					};
 				}
 				// console.log('proxyConfig:', proxyConfig);

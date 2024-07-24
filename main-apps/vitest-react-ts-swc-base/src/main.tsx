@@ -5,6 +5,8 @@ import microApp from '@micro-zoe/micro-app';
 import App from './App.tsx';
 import './utils/flexibleRem';
 
+// import '@/mock/index.ts';
+
 import '@/assets/styles/main/base.scss';
 import '@/assets/styles/components/general.scss';
 import '@/assets/styles/components/app.scss';

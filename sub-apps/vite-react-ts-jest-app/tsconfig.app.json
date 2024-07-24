@@ -149,8 +149,7 @@
 		 */
 		"paths": {
 			"@/*": ["src/*"],
-			// "#/*": ["types/*"],
-			"types/*": ["types/*"],
+			"$types/*": ["types/*"],
 			"tests/*": ["tests/*"],
 			"public/*": ["public/*"]
 			// "*": ["node_modules/*"]

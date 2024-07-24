@@ -243,3 +243,5 @@ class StorageSessionFn implements StorageClass {
 export const cookiesFn = new CookiesFn();
 export const storageLocalFn = new StorageLocalFn();
 export const storageSessionFn = new StorageSessionFn();
+
+export * from './types';

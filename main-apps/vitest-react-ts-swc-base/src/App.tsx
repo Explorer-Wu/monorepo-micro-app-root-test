@@ -1,6 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, useRoutes } from 'react-router-dom';
 import { WrapRoutes } from '@/router/index';
-
+import { message } from 'antd';
+message.config({
+	top: 50,
+	duration: 3,
+	maxCount: 5,
+	rtl: true,
+	prefixCls: 'main',
+});
 const App: React.FC<any> = (): JSX.Element => {
 	return (
 		// <BrowserRouter forceRefresh={!supportsHistory}>

@@ -4,6 +4,14 @@
 		"useDefineForClassFields": true,
 		"module": "ESNext",
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		// 根路径, 非绝对地址的模块会基于这个目录去解析，默认值是当前目录
+		"baseUrl": "./",
+		// 默认所有可见的"@types"包会在编译过程中被包含进来， 而typeRoots指定要包含的类型声明文件路径列表（仅以下路径的包），
+		"typeRoots": ["node_modules/@types", "./types"],
+		// 设置引入的类型声明文件名列表。 指定了types，只有被列出来的包才会被包含进来，指定"types": []来禁用自动引入@types包
+		// 如不设置此项，默认会加载全部能找到的 node_modules/@types/xxx 包
+		// types设置typeRoots目录下需要包括在编译之中的类型模块。默认情况下，该目录下的所有类型模块，都会自动包括在编译之中
+		"types": ["vite/client", "node", "vue", "lodash-es"],
 		"skipLibCheck": true,
 
 		/* Bundler mode */
@@ -21,6 +29,6 @@
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true
 	},
-	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
+	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "types/*.d.ts"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

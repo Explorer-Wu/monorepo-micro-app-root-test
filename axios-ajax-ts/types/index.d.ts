@@ -40,7 +40,7 @@ export interface ReqOptsConfig<D = any> extends ReqOpts, AxiosRequestConfig {
 	// method: string;
 	// url: string;
 	authtoken?: boolean;
-	// isFormdata?: boolean;
+	isFormdata?: boolean;
 }
 // 实例化请求附加配置类型接口
 export interface ExtraTypeOpts {
@@ -54,8 +54,8 @@ export interface ExtraTypeOpts {
 	message?: any | ((obj: object) => void);
 	loading?: any | ((target: string) => void);
 	closeLoading?: any | (() => void);
-	goToLogin: () => void;
-	refreshTokenFn: Function; 
+	goToLogin?: () => void;
+	refreshTokenFn?: Function; 
 }
 
 // 自定义实例化上传数据类型
@@ -126,3 +126,11 @@ export class HttpAxios {
   // patch<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
   // postForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
 }
+
+import { cookiesFn, storageLocalFn, storageSessionFn } from '../storagecookies';
+
+export type StorageSessionFn  = InstanceType<typeof storageSessionFn>;
+export type StorageLocalFn = InstanceType<typeof storageLocalFn>;
+export type CookiesFn = InstanceType<typeof cookiesFn>;
+
+export {};

@@ -174,13 +174,19 @@ export default env => {
 					// fileURLToPath结合import.meta.url 路径查找更准确
 					replacement: fileURLToPath(new URL('../src/', import.meta.url)),
 				},
-
+				{
+					find: /\/$types\//,
+					replacement: fileURLToPath(new URL('../types/', import.meta.url)),
+				},
 				{
 					find: 'tests/',
 					// replacement: resolve('../tests/')
 					replacement: fileURLToPath(new URL('../tests/', import.meta.url)),
 				},
-				// { find: /\/#/, replacement: path.resolve(__dirname, './types') }
+				{
+					find: 'public/',
+					replacement: fileURLToPath(new URL('../public/', import.meta.url)),
+				},
 			],
 			// 情景导出 package.json 配置中的exports字段
 			// conditions: [],
