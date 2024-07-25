@@ -1,9 +1,10 @@
-import moment from 'moment';
-
+import dayjs from 'dayjs';
+import { Popover } from 'antd';
 import moreSvg from './icons/more.svg';
 
-const MessageView = ({ content, isChatbot, chatTime, ...rest }) => {
-	console.log('MessageView :: ', rest);
+const MessageView = ({ content, isChatbot }) => {
+	// chatTime, ...rest
+	// console.log('MessageView:', rest);
 
 	const textStyles = `message-box ${isChatbot ? 'chatbot' : 'user'}`;
 	const msgTimeStyle = `message-time ${isChatbot ? 'chatbot' : 'user'}`;
@@ -24,7 +25,7 @@ const MessageView = ({ content, isChatbot, chatTime, ...rest }) => {
 	return (
 		<div className={textStyles}>
 			<div className="message-wrapper">
-				<div className={messageTimeStyle}>{dayjs(chatTime).format('LTS')}</div>
+				{/* <div className={messageTimeStyle}>{dayjs(chatTime).format('LTS')}</div> */}
 				<div className="message-con">
 					<Popover placement={popPlace} content={content} open></Popover>
 					{/* {isChatbot && renderPopuMenu()}

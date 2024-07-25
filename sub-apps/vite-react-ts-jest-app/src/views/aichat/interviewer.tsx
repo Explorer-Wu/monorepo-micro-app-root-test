@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
+import { useImmer } from 'use-immer';
 import { Element } from 'react-scroll';
-import { Form, Button, Input, Spin, message, Col, Row } from 'antd';
+import { Flex, Form, Button, Input, Spin, message, Col, Row } from 'antd';
 import Loading from '@/components/Loading';
 
 // import ChatOperatorView from './components/ChatOperatorView';
-import ChatbotItem from './components/ChatbotItem';
-import UserItem from './components/UserItem';
-
+import ChatsItem from './components/ChatsItem';
+import ModalRole from './components/ModalRole';
 // import { getDiffChatId } from '@/utils/utils';
 // import { initFriendList } from '@/mock/userList';
 // import { scrollToBottom } from '@/utils/scroller';
@@ -20,16 +21,42 @@ import './styles/index.scss';
 // { chat, dispatch, user, loading }
 const ChatList: React.FC<any> = () => {
 	// const { content, chatUserInfo } = chat;
-
-	// const { messageChatList, pageNum, hasMore } = chat;
 	// const { currentUser } = user;
 	// const { userId, userName } = currentUser;
 
 	const [isload, setIsload] = useState(false);
+	const [isShow, setIsShow] = useState(true);
+	const [isDisabled, setIsDisabled] = useState(false);
+	const [chatMsgs, setChatMsgs] = useImmer([]);
 	const [form] = Form.useForm();
 	const formItemLayout = { wrapperCol: { span: 24 } };
+	const roleInputs: any = {
+		jobName: '',
+		name: '',
+	};
+	// const messageChatList: any[] = [];
 
-	const buttonItemLayout = { wrapperCol: { span: 8, offset: 4 } };
+	const enterInterViewFn = (inputs: any, open: boolean) => {
+		setIsShow(open);
+		Reflect.set(roleInputs, 'name', inputs.name);
+		Reflect.set(roleInputs, 'jobName', inputs.jobName);
+		if (roleInputs.name && roleInputs.jobName) {
+			setIsDisabled(true);
+			console.log('roleInputs:', roleInputs, isDisabled);
+			setChatMsgs(draft => {
+				draft.push({
+					id: '0',
+					isUser: false,
+					conversation_id: '',
+					content: `你好，${roleInputs.name}。我是你的面试官，Polo。你准备好了吗？`,
+				});
+			});
+		} else {
+			setIsDisabled(false);
+		}
+	};
+
+	// const buttonItemLayout = { wrapperCol: { span: 8, offset: 4 } };
 
 	// const loadingMsg = (function () {
 	// 	return function (msg) {
@@ -50,10 +77,28 @@ const ChatList: React.FC<any> = () => {
 	// })();
 
 	// const chatbotId = getDiffChatId(chatUserInfo, userId);
+	const onSendMessage = useCallback(
+		(values: any) => {
+			flushSync(() => {
+				setChatMsgs(draft => {
+					draft.push({
+						id: String(chatMsgs.length),
+						isUser: true,
+						conversation_id: chatMsgs[chatMsgs.length - 1].conversation_id,
+						content: values.askQuestion,
+					});
+				});
+			});
+			console.log('chatMsgs:', chatMsgs, values);
+			askQuestionFn(values.askQuestion);
+		},
+		[chatMsgs],
+	);
 
 	const askQuestionFn = async (query: string) => {
+		console.log('chatMsgs-askQuestionFn0:', chatMsgs);
 		setIsload(true);
-		const res = await sendMsgesApi()(
+		const { id, answer, conversation_id } = await sendMsgesApi()(
 			{
 				data: {
 					// response_mode: 'streaming',
@@ -71,8 +116,18 @@ const ChatList: React.FC<any> = () => {
 			'请求失败！',
 		);
 
-		console.log('sendMsgesApi:', res);
+		console.log('sendMsgesApi:', id, answer, conversation_id);
 		setIsload(false);
+		flushSync(() => {
+			setChatMsgs(draft => {
+				draft.push({
+					id: id,
+					isUser: false,
+					conversation_id,
+					content: answer,
+				});
+			});
+		});
 	};
 
 	// const addChatItemScrollListener = () => {
@@ -87,47 +142,41 @@ const ChatList: React.FC<any> = () => {
 	// 	chatList && chatList.removeEventListener('mousewheel', onChatItemScroll, false);
 	// };
 
-	// useEffect(() => {
-	// 	if (!chatbotId) {
-	// 		// history.replace({ pathname: '/im' });
-	// 		return;
-	// 	}
-	// 	// onChatItemScroll();
-	// 	// addChatItemScrollListener();
-	// 	// eslint-disable-next-line consistent-return
-	// 	return () => {
-	// 		removeChatItemScrollListener();
-	// 	};
-	// }, [pageNum, hasMore, loading]);
+	useEffect(() => {
+		console.log('chatMsgs-all:', chatMsgs);
+		// if (!chatbotId) {
+		// 	// history.replace({ pathname: '/im' });
+		// 	return;
+		// }
+		// onChatItemScroll();
+		// addChatItemScrollListener();
+		// eslint-disable-next-line consistent-return
+		// return () => {
+		// 	removeChatItemScrollListener();
+		// };
+	}, [chatMsgs]);
 
 	// console.log('onChatItemScroll chat :: ', pageNum, hasMore, loading);
 
-	const onSendMessage = (values: any) => {
-		askQuestionFn(values.askQuestion);
-	};
-
 	return (
 		<div className="chat-container">
+			<Flex gap="middle" justify="flex-end" wrap>
+				<Button type="primary" disabled={isDisabled} onClick={() => setIsShow(true)}>
+					面试信息
+				</Button>
+			</Flex>
 			<div id="chatList" className="chat-list">
 				<Loading isLoad={isload} text={'加载...'} />
-				{/* {Array.isArray(messageChatList) &&
-					messageChatList.map((item, index) => {
+				{!!chatMsgs.length &&
+					chatMsgs.map((item, index) => {
 						// 判断发送者不是当前用户, Id 就为接受者
 						// 显示接受者视图
-						// item.sendId !== userId
-						const [userInfo] = initFriendList.filter(u => u.userId === item.sendId);
-						if (!userInfo) return null;
-						return userInfo.userId !== userId ? (
-							<div className="chat-li" key={item.messageId || index}>
-								<ChatbotItem userName={userInfo.userName} item={item} />
-							</div>
-						) : (
-							<div className="chat-li" key={item.messageId || index}>
-								<UserItem userName={userName} item={item} />
+						return (
+							<div className="chat-li" key={item.id || index}>
+								<ChatsItem msg={item.content} isUser={item.isUser} />
 							</div>
 						);
-					})} */}
-
+					})}
 				<Element name="bottomElement"></Element>
 			</div>
 
@@ -141,22 +190,23 @@ const ChatList: React.FC<any> = () => {
 					onFinish={onSendMessage}
 				>
 					<Row gutter={16}>
-						<Col className="gutter-row" span={18}>
+						<Col className="gutter-row" span={16}>
 							<Form.Item name="askQuestion">
 								<Input.TextArea placeholder="请输入消息" autoSize={{ minRows: 3, maxRows: 12 }} />
 								{/* value={content} onChange={e => onMessageInputChange(e.target.value)} */}
 							</Form.Item>
 						</Col>
-						<Col className="gutter-row" span={6}>
+						<Col className="gutter-row" span={8}>
 							<Form.Item shouldUpdate>
 								<Button type="primary" htmlType="submit">
-									回复
+									面试回复
 								</Button>
 							</Form.Item>
 						</Col>
 					</Row>
 				</Form>
 			</div>
+			<ModalRole isOpen={isShow} goInterView={enterInterViewFn} />
 		</div>
 	);
 };

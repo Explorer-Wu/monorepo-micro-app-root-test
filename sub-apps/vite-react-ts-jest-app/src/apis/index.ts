@@ -61,26 +61,32 @@ export function asyncApi(req: ReqItem, isAi?: boolean) {
 		}
 
 		try {
-			const {
-				code,
-				data,
-				message: msg,
-			}: ResDataTypeMode<G> = await httpAxios(!!isAi).ajax({
+			const resData: any = await httpAxios(!!isAi).ajax({
 				method: method || 'get',
 				// url: (opts && opts.paramId) ? (url + opts.paramId) : url,
 				url: opts?.paramId ? url + opts.paramId : url,
 				headers: (headers as any) || {},
 				...queryData,
 			});
-
-			if (code === 'success' || code === 0) {
-				if (sucmsg) {
-					message.success(sucmsg, 2);
+			if (!!isAi) {
+				const { mode, answer, id, conversation_id } = await resData;
+				if (mode && answer) {
+					if (sucmsg) {
+						message.success(sucmsg, 2);
+					}
+					return { id, answer, conversation_id } as G;
 				}
-				return data;
+				throw new Error(errmsg);
+			} else {
+				const { code, data, message: msg }: ResDataTypeMode<G> = resData;
+				if (code === 'success' || code === 0) {
+					if (sucmsg) {
+						message.success(sucmsg, 2);
+					}
+					return data;
+				}
+				throw new Error(msg);
 			}
-
-			throw new Error(msg);
 		} catch (error: any) {
 			console.log('ai-asyncApi-err:', error.cause);
 			message.error(`${error.message ? error.message : errmsg}`, 2);
