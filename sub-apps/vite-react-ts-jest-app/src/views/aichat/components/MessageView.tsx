@@ -2,13 +2,13 @@ import dayjs from 'dayjs';
 import { Popover } from 'antd';
 import moreSvg from './icons/more.svg';
 
-const MessageView = ({ content, isChatbot }) => {
+const MessageView = ({ user, content }) => {
 	// chatTime, ...rest
 	// console.log('MessageView:', rest);
 
-	const textStyles = `message-box ${isChatbot ? 'chatbot' : 'user'}`;
-	const msgTimeStyle = `message-time ${isChatbot ? 'chatbot' : 'user'}`;
-	const popPlace = isChatbot ? 'leftTop' : 'rightTop';
+	const conStyles = `message-con ${user ? 'user' : 'chatbot'}`;
+	// const msgTimeStyle = `message-time ${isChatbot ? 'chatbot' : 'user'}`;
+	const popPlace = user ? 'leftTop' : 'rightTop';
 	// const popMenuStyles = cls(styles['show-popmenu'], {
 	// 	[styles.sender]: isChatbot,
 	// 	[styles.receiver]: !isChatbot,
@@ -23,14 +23,17 @@ const MessageView = ({ content, isChatbot }) => {
 	// };
 
 	return (
-		<div className={textStyles}>
-			<div className="message-wrapper">
-				{/* <div className={messageTimeStyle}>{dayjs(chatTime).format('LTS')}</div> */}
-				<div className="message-con">
-					<Popover placement={popPlace} content={content} open></Popover>
-					{/* {isChatbot && renderPopuMenu()}
+		<div className="message-wrapper">
+			{/* <div className={messageTimeStyle}>{dayjs(chatTime).format('LTS')}</div> */}
+			<div className={conStyles}>
+				<Popover
+					placement={popPlace}
+					content={content}
+					style={{ maxWidth: 600, lineHeight: 30 }}
+					open
+				></Popover>
+				{/* {isChatbot && renderPopuMenu()}
 					{!isChatbot && renderPopuMenu()} */}
-				</div>
 			</div>
 		</div>
 	);

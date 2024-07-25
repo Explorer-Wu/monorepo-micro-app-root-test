@@ -79,14 +79,14 @@ const ChatList: React.FC<any> = () => {
 	// const chatbotId = getDiffChatId(chatUserInfo, userId);
 	const onSendMessage = useCallback(
 		(values: any) => {
-			flushSync(() => {
-				setChatMsgs(draft => {
-					draft.push({
-						id: String(chatMsgs.length),
-						isUser: true,
-						conversation_id: chatMsgs[chatMsgs.length - 1].conversation_id,
-						content: values.askQuestion,
-					});
+			// flushSync(() => {
+			// });
+			setChatMsgs(draft => {
+				draft.push({
+					id: String(chatMsgs.length),
+					isUser: true,
+					conversation_id: chatMsgs[chatMsgs.length - 1].conversation_id,
+					content: values.askQuestion,
 				});
 			});
 			console.log('chatMsgs:', chatMsgs, values);
@@ -95,30 +95,32 @@ const ChatList: React.FC<any> = () => {
 		[chatMsgs],
 	);
 
-	const askQuestionFn = async (query: string) => {
-		console.log('chatMsgs-askQuestionFn0:', chatMsgs);
-		setIsload(true);
-		const { id, answer, conversation_id } = await sendMsgesApi()(
-			{
-				data: {
-					// response_mode: 'streaming',
-					conversation_id: '',
-					query,
-					inputs: {
-						jobName: '前端架构师',
-						name: 'Exploer-Wu',
+	const askQuestionFn = useCallback(
+		async (query: string) => {
+			console.log('chatMsgs-askQuestionFn0:', chatMsgs);
+			setIsload(true);
+			const { id, answer, conversation_id } = await sendMsgesApi()(
+				{
+					data: {
+						// response_mode: 'streaming',
+						conversation_id: '',
+						query,
+						inputs: {
+							jobName: '前端架构师',
+							name: 'Exploer-Wu',
+						},
+						user: 'exp',
+						files: [],
 					},
-					user: 'exp',
-					files: [],
 				},
-			},
-			'发送信息后获取聊天回复成果',
-			'请求失败！',
-		);
+				'发送信息后获取聊天回复成果',
+				'请求失败！',
+			);
 
-		console.log('sendMsgesApi:', id, answer, conversation_id);
-		setIsload(false);
-		flushSync(() => {
+			console.log('sendMsgesApi:', id, answer, conversation_id);
+			setIsload(false);
+			// flushSync(() => {
+			// });
 			setChatMsgs(draft => {
 				draft.push({
 					id: id,
@@ -127,8 +129,9 @@ const ChatList: React.FC<any> = () => {
 					content: answer,
 				});
 			});
-		});
-	};
+		},
+		[chatMsgs],
+	);
 
 	// const addChatItemScrollListener = () => {
 	// 	const chatList = document.getElementById('chatList');
@@ -165,17 +168,13 @@ const ChatList: React.FC<any> = () => {
 					面试信息
 				</Button>
 			</Flex>
-			<div id="chatList" className="chat-list">
+			<div id="chatList" className="chat-lists">
 				<Loading isLoad={isload} text={'加载...'} />
 				{!!chatMsgs.length &&
 					chatMsgs.map((item, index) => {
 						// 判断发送者不是当前用户, Id 就为接受者
 						// 显示接受者视图
-						return (
-							<div className="chat-li" key={item.id || index}>
-								<ChatsItem msg={item.content} isUser={item.isUser} />
-							</div>
-						);
+						return <ChatsItem key={item.id || index} msg={item.content} isUser={item.isUser} />;
 					})}
 				<Element name="bottomElement"></Element>
 			</div>

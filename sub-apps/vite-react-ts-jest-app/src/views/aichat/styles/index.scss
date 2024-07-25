@@ -10,7 +10,7 @@
   padding: 20px;
   background-color: #fff;
 
-  .chat-list {
+  .chat-lists {
     position: relative;
     padding: 10px;
     overflow-y: auto;
@@ -26,13 +26,27 @@
 
     .chat-li {
       width: 100%;
+      overflow: hidden;
       padding: 10px 0;
-      p {
-        margin: 0;
-        padding: 6px;
-        background-color: #fff;
-        border-radius: 4px;
+
+      &.user {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
       }
+
+      &.chatbot {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      // p {
+      //   margin: 0;
+      //   padding: 6px;
+      //   background-color: #fff;
+      //   border-radius: 4px;
+      // }
     }
   }
 
@@ -61,31 +75,16 @@
   }
 }
 
-.message-box {
-  position: relative;
-  width: 100%;
-  min-height: 48px;
-
-  .message-wrapper {
+.message-wrapper {
+    position: relative;
+    width: 100%;
     overflow: hidden;
     padding: 8px;
-    white-space: pre;
-    text-align: left;
-    word-wrap: break-word;
-    word-break: break-all;
+    // white-space: pre;
+    // text-align: left;
+    // word-wrap: break-word;
+    // word-break: break-all;
     cursor: default;
-
-    &.user {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
-
-    &.chatbot {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
 
     .message-time {
       color: #666;
@@ -101,19 +100,25 @@
     }
 
     .message-con {
+      width: 600px;
+      max-width: 680px;
+      min-height: 60px;
+      overflow: hidden;
       display: flex;
 
       &.user {
+        text-align: right;
+        flex-direction: column;
         align-items: flex-end;
-        justify-content: flex-end;
+        // justify-content: flex-end;
       }
 
       &.chatbot {
-        align-items: flex-end;
-        justify-content: flex-start;
+        text-align: left;
+        flex-direction: column;
+        align-items: flex-start;
+        // justify-content: flex-start;
       }
 
     }
   }
-}
-
