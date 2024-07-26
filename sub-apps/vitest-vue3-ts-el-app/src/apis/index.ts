@@ -1,13 +1,13 @@
-// import type { AxiosResponse, AxiosError } from 'axios';
 import { HttpAxios, type ReqOpts, type ResDataTypeMode } from 'axios-ajax-ts';
-import type { ReqItem, ApiFnMap } from '../typings/axios';
-import { message } from 'antd';
-// import React, { useReducer, type Dispatch, type PropsWithChildren } from 'react';
 import { useRouter } from 'vue-router';
+
+import type { ReqItem, ApiFnMap } from '$types/axios';
 import { refreshToken } from './modules/auth';
 
 const isProd = ['production', 'staging', 'testing'].includes(import.meta.env.MODE);
-const envBaseUrl = import.meta.env.APP_API_BASE_URL;
+const envBaseUrlFn = (reqai: boolean) =>
+	reqai ? import.meta.env.APP_AI_OLLAMA_API_URL : import.meta.env.APP_API_BASE_URL;
+
 const $router = useRouter();
 // export type UserResult = {
 //   success: boolean
@@ -23,29 +23,26 @@ const $router = useRouter();
 //   }
 // }
 
-export const httpAxios = new HttpAxios({
-	isProd,
-	envBaseUrl: isProd ? envBaseUrl : import.meta.env.BASE_URL,
-	// envUploadUrl: '',
-	// envTokenKey: 'access_token',
-	// envRefreshKey?: string,
-	// router: any;
-	// store: any;
-	// loading?: ((target: string) => void);
-	// closeLoading?: any | (() => void);
-	message,
-	goToLogin: () => $router.push('/auth/login'),
-	refreshTokenFn: refreshToken,
-});
+export const httpAxios = (reqai: boolean) => {
+	return new HttpAxios({
+		isProd,
+		envBaseUrl: isProd ? envBaseUrlFn(reqai) : import.meta.env.VITE_BASE_URL,
+		// envUploadUrl: '',
+		// envTokenKey: 'ai_auth',
+		// envRefreshKey?: string,
+		// router: any;
+		// store: any;
+		// loading?: ((target: string) => void);
+		// closeLoading?: any | (() => void);
+		// message,
+		// goToLogin: () => $router.push('/auth/login'), // window.__globalRouter.globalNav('/auth/login'),
+		// refreshTokenFn: refreshToken,
+	});
+};
 
 export function asyncApi(req: ReqItem) {
-	const { headers, url, method, authtoken } = req;
-
-	return async <G = any>(
-		opts: ReqOpts,
-		sucmsg?: string,
-		errmsg?: string,
-	): Promise<false | G | undefined> => {
+	const { headers, url, method, authtoken, isAi } = req;
+	return async <G = any>(opts: ReqOpts, sucmsg?: string, errmsg?: string): Promise<G | false> => {
 		let queryData = JSON.parse(JSON.stringify(opts));
 		console.log('api-opts:', opts);
 
@@ -57,21 +54,36 @@ export function asyncApi(req: ReqItem) {
 		}
 
 		try {
-			const { code, data }: ResDataTypeMode<G> = await httpAxios.ajax({
+			const resData: any = await httpAxios(!!isAi).ajax({
 				method: method || 'get',
 				// url: (opts && opts.paramId) ? (url + opts.paramId) : url,
 				url: opts?.paramId ? url + opts.paramId : url,
 				headers: (headers as any) || {},
 				...queryData,
 			});
-			if (code === 'success') {
-				if (sucmsg) {
-					message.success(sucmsg);
+			if (!!isAi) {
+				const { mode, created_at, message: chatMsg, done, done_reason } = await resData;
+
+				if (mode && chatMsg) {
+					if (sucmsg) {
+						ElMessage.success(sucmsg);
+					}
+					return { mode, created_at, chatMsg, done, done_reason } as G;
 				}
-				return data;
+				throw new Error(errmsg);
+			} else {
+				const { code, data, message: msg }: ResDataTypeMode<G> = resData;
+				if (code === 'success' || code === 0) {
+					if (sucmsg) {
+						ElMessage.success(sucmsg);
+					}
+					return data;
+				}
+				throw new Error(msg);
 			}
 		} catch (error: any) {
-			message.error(`${error.message ? `${error.message},` : undefined}${errmsg}`);
+			console.log('ai-asyncApi-err:', error.cause);
+			ElMessage.error(`${error.message ? error.message : errmsg}`);
 			return false;
 		}
 	};

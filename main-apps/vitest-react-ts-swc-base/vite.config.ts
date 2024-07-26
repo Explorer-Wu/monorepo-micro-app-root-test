@@ -95,17 +95,6 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 				],
 			}),
 			viteCompression(), // gzip压缩
-			visualizer({
-				sourcemap: true,
-				// "sunburst" | "treemap" | "network" | "flamegraph";
-				// template: 'flamegraph',
-				// emitFile: true, // 使分析文件出现在打包目录里， 否则在项目目录下
-				// 打包完成后自动打开浏览器，显示产物体积报告
-				open: true,
-				// gzipSize: true,
-				// brotliSize: true,
-				filename: 'analyse.html',
-			}),
 			legacy({
 				// 需要兼容的目标列表
 				targets: [
@@ -123,6 +112,19 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			// Unocss({
 			// 	configFile: '../my-uno.config.ts'
 			// }),
+			//打包体积分析
+			visualizer({
+				// json: true,
+				sourcemap: true,
+				// "sunburst" | "treemap" | "network" | "flamegraph";
+				// template: 'flamegraph',
+				// emitFile: true, // 使分析文件出现在打包目录里， 否则在项目目录下
+				// 打包完成后自动打开浏览器，显示产物体积报告
+				open: true,
+				// gzipSize: true,
+				// brotliSize: true,
+				filename: 'analyse.html',
+			}),
 		],
 		css: {
 			devSourcemap: !isProd,
@@ -236,6 +238,34 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 				// ignored:["!**/node_modules/your-package-name/**"],
 				usePolling: true, // 修复HMR热更新失效
 			},
+			proxy: (() => {
+				const proxyPath = [
+					`/api`,
+					`/mock`,
+					`/auth`,
+					// '/socket.io'
+				];
+				let proxyConfig = {};
+				for (let item of proxyPath) {
+					let regExp = new RegExp(`^` + item);
+					const envObj = {
+						[`/auth`]: viteEnv.APP_API_AURTH_URL,
+					};
+					proxyConfig[item] = {
+						target: envObj[item] ? envObj[item] : viteEnv.APP_API_BASE_URL,
+						// logLevel: 'debug', // 查看代理请求的真实地址
+						changeOrigin: true,
+						rewrite: path => {
+							// console.log('rewrite:', regExp);
+							return path.replace(regExp, '');
+						},
+						// cookieDomainRewrite: '',
+						// secure: false,
+					};
+				}
+				// console.log('proxyConfig:', proxyConfig);
+				return proxyConfig;
+			})(),
 		},
 		preview: {
 			port: +viteEnv.VITE_PORT, // 预览服务器端口

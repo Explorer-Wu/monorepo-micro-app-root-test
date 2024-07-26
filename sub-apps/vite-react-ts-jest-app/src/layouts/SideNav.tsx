@@ -51,6 +51,16 @@ const menuList: any[] = [
 		iconTag: 'ChatLineSquare',
 		title: 'Ai问答',
 		path: '/aichat',
+		children: [
+			{
+				title: '面试官问答',
+				path: '/aichat',
+			},
+			{
+				title: '低码聊天',
+				path: '/aichat/aiflowise',
+			},
+		],
 	},
 	{
 		iconTag: 'EditPen',

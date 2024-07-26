@@ -23,24 +23,21 @@ declare global {
   // 	// 全局变量设置
   // 	const _: typeof lodash;
 
-  // interface Window {
-  // }
-}
-
-declare interface Window {
-  eventCenterForAppViteVue3: any
-  microApp: any
-  __MICRO_APP_NAME__: string
-  __MICRO_APP_ENVIRONMENT__: string
-  __MICRO_APP_BASE_APPLICATION__: string
-  __MICRO_APP_PUBLIC_PATH__: string
-  __MICRO_APP_BASE_ROUTE__: string
-  ActiveXObject: boolean
-  webkitIndexedDB: boolean
-  mozIndexedDB: boolean
-  scrollHeight: number
-  scrollTop: number
-  clientHeight: number
+  interface Window {
+    eventCenterForAppViteVue3: any
+    microApp: any
+    __MICRO_APP_NAME__: string
+    __MICRO_APP_ENVIRONMENT__: string
+    __MICRO_APP_BASE_APPLICATION__: string
+    __MICRO_APP_PUBLIC_PATH__: string
+    __MICRO_APP_BASE_ROUTE__: string
+    ActiveXObject: boolean
+    webkitIndexedDB: boolean
+    mozIndexedDB: boolean
+    scrollHeight: number
+    scrollTop: number
+    clientHeight: number
+  }
 }
 
 declare module 'crypto-js' {

@@ -288,8 +288,17 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 					replacement: fileURLToPath(new URL('./src/', import.meta.url)),
 				},
 				{
-					find: /^tests/,
-					replacement: fileURLToPath(new URL('./tests', import.meta.url)),
+					find: /\/$types\//,
+					replacement: fileURLToPath(new URL('./types/', import.meta.url)),
+				},
+				{
+					find: 'tests/',
+					// replacement: resolve('../tests/')
+					replacement: fileURLToPath(new URL('./tests/', import.meta.url)),
+				},
+				{
+					find: 'public/',
+					replacement: fileURLToPath(new URL('./public/', import.meta.url)),
 				},
 				// { find: /\/#/, replacement: path.resolve(__dirname, './types') }
 			],
@@ -301,8 +310,8 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			fs: {
 				strict: true,
 			},
-			host: '0.0.0.0',
-			// host: true, // 监听所有地址，包括局域网和公网地址 "localhost",
+			// host: '0.0.0.0',
+			host: true, // 监听所有地址，包括局域网和公网地址 "localhost",
 			port: +viteEnv.VITE_PORT, // 开发服务器端口
 			// https: false, //是否启用 http 2
 			// force: true, //是否强制依赖预构建
@@ -311,7 +320,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			strictPort: false, //端口严格模式， 为true时，当端口被占用则直接退出，不会尝试下一个可用端口
 			//HMR连接配置{}, false-禁用
 			hmr: {
-				// host: 'localhost'
+				host: 'localhost',
 				// overlay: true, // 设为true会导致热更新速度慢
 				port: +viteEnv.VITE_PORT,
 			},
@@ -326,43 +335,36 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			//   exclude: ['your-package-name'],
 			// },
 			// 反向代理配置
-			// proxy: (() => {
-			//   const proxyPath = [
-			//     '/api',
-			//     '/mock'
-			//     // '/socket.io'
-			//   ]
-			//   const proxyConfig = {}
-			//   for (const item of proxyPath) {
-			//     const regExp = new RegExp(`^\${item}`) // ,'g'
-			//     proxyConfig[item] = {
-			//       target: env.APP_API_BASE_URL,
-			//       // logLevel: 'debug', // 查看代理请求的真实地址
-			//       changeOrigin: true,
-			//       rewrite: (path) => path.replace(regExp, '/'),
-			//       cookieDomainRewrite: '',
-			//       secure: false
-			//     }
-			//   }
-			//   // console.log('proxyConfig:', proxyConfig);
-			//   return proxyConfig
-			// })()
-
-			// proxy: {
-			// Using the proxy instance
-			// '/api': {
-			//   target: 'http://jsonplaceholder.typicode.com',
-			//   changeOrigin: true,
-			//   configure: (proxy, options) => {
-			//     // proxy will be an instance of 'http-proxy'
-			//   }
-			// },
-			// // Proxying websockets or socket.io
-			// '/socket.io': {
-			//   target: 'ws://localhost:3000',
-			//   ws: true
-			// }
-			// },
+			proxy: (() => {
+				const proxyPath = [
+					// `/api`,
+					`/mock`,
+					`/auth`,
+					'/ai-ollama',
+					// '/socket.io'
+				];
+				let proxyConfig = {};
+				for (let item of proxyPath) {
+					let regExp = new RegExp(`^` + item);
+					const envObj = {
+						[`/ai-ollama`]: viteEnv.APP_AI_OLLAMA_API_URL,
+						[`/auth`]: viteEnv.APP_API_AURTH_URL,
+					};
+					proxyConfig[item] = {
+						target: envObj[item] ? envObj[item] : viteEnv.APP_API_BASE_URL,
+						logLevel: 'debug', // 查看代理请求的真实地址
+						changeOrigin: true,
+						rewrite: path => {
+							// console.log('rewrite:', regExp);
+							return path.replace(regExp, '');
+						},
+						// cookieDomainRewrite: '',
+						secure: false,
+					};
+				}
+				console.log('proxyConfig:', proxyConfig);
+				return proxyConfig;
+			})(),
 		},
 
 		build: {

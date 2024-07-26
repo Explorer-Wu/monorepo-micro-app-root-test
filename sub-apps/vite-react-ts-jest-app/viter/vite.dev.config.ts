@@ -71,7 +71,7 @@ export default env => {
 					};
 					proxyConfig[item] = {
 						target: envObj[item] ? envObj[item] : env.APP_API_BASE_URL,
-						// logLevel: 'debug', // 查看代理请求的真实地址
+						logLevel: 'debug', // 查看代理请求的真实地址
 						changeOrigin: true,
 						rewrite: path => {
 							// console.log('rewrite:', regExp);

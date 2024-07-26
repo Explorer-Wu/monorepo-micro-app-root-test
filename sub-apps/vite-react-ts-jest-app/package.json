@@ -4,7 +4,7 @@
 	"version": "0.0.0",
 	"description": "vite 构建react+ts+jest pc端微应用模版",
 	"scripts": {
-		"dev": "vite --config ./viter/vite.config.ts --debug",
+		"dev": "vite --config ./viter/vite.config.ts",
 		"dev:local": "pnpm dev --mode _local",
 		"testing": "pnpm dev --mode testing",
 		"staging": "pnpm dev --mode staging",

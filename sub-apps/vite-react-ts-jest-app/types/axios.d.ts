@@ -7,7 +7,8 @@ export interface ReqItem {
 	method?: string;
 	authtoken?: boolean;
 	// isFormdata?: boolean; 存headers里
-	headers?: any;
+  headers?: any;
+  isAi?: boolean;
 }
 
 export interface ApiFnMap {

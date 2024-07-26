@@ -6,7 +6,7 @@ import {
 } from 'vue-router';
 import MainLayout from '@/layouts/LayoutTemp.vue';
 import HomeView from '@/views/home/index.vue';
-import About from '@/views/about/index.vue';
+import AiChat from '@/views/aichat/index.vue';
 // import routes from 'virtual:generated-pages'
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -24,11 +24,11 @@ const routes: Array<RouteRecordRaw> = [
 				// },
 				// props: true,
 			},
-			// {
-			// 	path: '/about',
-			// 	name: 'about',
-			// 	component: About,
-			// },
+			{
+				path: '/aichat',
+				name: 'aichat',
+				component: AiChat,
+			},
 			{
 				path: '/403',
 				name: '403',

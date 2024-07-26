@@ -21,6 +21,7 @@
 		"baseUrl": ".",
 		// 路径映射，别名
 		"paths": {
+			"vite": ["node_modules/vite"],
 			"@/*": ["./src/*"]
 		},
 

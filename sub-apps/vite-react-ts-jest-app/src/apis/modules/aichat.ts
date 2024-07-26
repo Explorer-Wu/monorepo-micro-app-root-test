@@ -14,33 +14,28 @@ const {
 setSession('ai_auth', import.meta.env.APP_AI_DIFY_APP_KEY);
 
 export function sendMsgesApi() {
-	return asyncApi(
-		{
-			url: '/ai-dify/chat-messages',
-			method: 'post',
-			authtoken: true,
-			headers: {
-				// isFormdata: false,
-				'Content-Type': 'application/json',
-			},
+	return asyncApi({
+		url: '/ai-dify/chat-messages',
+		method: 'post',
+		authtoken: true,
+		headers: {
+			// isFormdata: false,
+			'Content-Type': 'application/json',
 		},
-		true,
-	);
+		isAi: true,
+	});
 }
 
 export function stopMsgesApi(taskid: string | number) {
-	return asyncApi(
-		{
-			url: `/ai-dify/chat-messages/:${taskid}/stop`,
-			method: 'post',
-			authtoken: false,
-			headers: {
-				'Content-Type': 'application/json',
-				// isFormdata: false,
-			},
+	return asyncApi({
+		url: `/ai-dify/chat-messages/:${taskid}/stop`,
+		method: 'post',
+		authtoken: true,
+		headers: {
+			'Content-Type': 'application/json',
 		},
-		true,
-	);
+		isAi: true,
+	});
 }
 
 /**
@@ -49,13 +44,11 @@ export function stopMsgesApi(taskid: string | number) {
  * @returns
  */
 export function feedbackMsgesApi(msgid: string) {
-	return asyncApi(
-		{
-			url: `/ai-dify/messages/:${msgid}/feedbacks`,
-			method: 'post',
-		},
-		true,
-	);
+	return asyncApi({
+		url: `/ai-dify/messages/:${msgid}/feedbacks`,
+		method: 'post',
+		isAi: true,
+	});
 }
 
 /**
@@ -64,22 +57,23 @@ export function feedbackMsgesApi(msgid: string) {
  * 上传的文件仅供当前终端用户使用
  **/
 export function uploadAiFileApi() {
-	return asyncApi(
-		{
-			url: '/ai-dify/files/adlopu',
-			method: 'post',
+	return asyncApi({
+		url: '/ai-dify/files/adlopu',
+		method: 'post',
+		authtoken: true,
+		headers: {
+			'Content-Type': 'application/json',
 		},
-		true,
-	);
+		isAi: true,
+	});
 }
 
 // 获取下一轮建议问题列表
 export function suggestedListApi(msgid: string) {
-	return asyncApi(
-		{
-			url: `/ai-dify/messages/${msgid}/suggested`,
-			method: 'get',
-		},
-		true,
-	);
+	return asyncApi({
+		url: `/ai-dify/messages/${msgid}/suggested`,
+		method: 'get',
+		authtoken: true,
+		isAi: true,
+	});
 }

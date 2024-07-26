@@ -47,8 +47,8 @@ export const httpAxios = (reqai: boolean) => {
 	});
 };
 
-export function asyncApi(req: ReqItem, isAi?: boolean) {
-	const { headers, url, method, authtoken } = req;
+export function asyncApi(req: ReqItem) {
+	const { headers, url, method, authtoken, isAi } = req;
 	return async <G = any>(opts: ReqOpts, sucmsg?: string, errmsg?: string): Promise<G | false> => {
 		let queryData = JSON.parse(JSON.stringify(opts));
 		console.log('api-opts:', opts);

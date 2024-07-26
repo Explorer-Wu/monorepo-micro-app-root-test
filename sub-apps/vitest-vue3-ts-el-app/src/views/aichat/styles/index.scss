@@ -1,0 +1,124 @@
+.chat-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  min-width: 600px;
+  min-height: 100%;
+  padding: 20px;
+  background-color: #fff;
+
+  .chat-lists {
+    position: relative;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #fff;
+    height: calc(100% - 180px);
+
+    // .chat-loading {
+    //   position: absolute;
+    //   left: 50%;
+    //   padding-top: 50px;
+    //   text-align: center;
+    // }
+
+    .chat-li {
+      width: 100%;
+      overflow: hidden;
+      padding: 10px 0;
+
+      &.user {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      &.chatbot {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      // p {
+      //   margin: 0;
+      //   padding: 6px;
+      //   background-color: #fff;
+      //   border-radius: 4px;
+      // }
+    }
+  }
+
+  .chat-input-operator {
+    display: flex;
+    height: 180px;
+    background: #fff;
+    border-top: 1px solid rgb(227, 229, 230);
+    flex-direction: column;
+
+    textarea {
+      border: none;
+      outline: none;
+      flex: 1;
+
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    .chat-send {
+      display: flex;
+      justify-content: flex-end;
+      margin: 8px 16px;
+    }
+  }
+}
+
+.message-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 8px;
+    // white-space: pre;
+    // text-align: left;
+    // word-wrap: break-word;
+    // word-break: break-all;
+    cursor: default;
+
+    .message-time {
+      color: #666;
+      font-size: 12px;
+
+      &.user {
+        text-align: right;
+      }
+
+      &.chatbot {
+        text-align: left;
+      }
+    }
+
+    .message-con {
+      width: 600px;
+      max-width: 680px;
+      min-height: 60px;
+      overflow: hidden;
+      display: flex;
+
+      &.user {
+        text-align: right;
+        flex-direction: column;
+        align-items: flex-end;
+        // justify-content: flex-end;
+      }
+
+      &.chatbot {
+        text-align: left;
+        flex-direction: column;
+        align-items: flex-start;
+        // justify-content: flex-start;
+      }
+
+    }
+  }

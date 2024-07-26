@@ -41,10 +41,10 @@ const whiteList = ['/login', '/404', '/403', '/500'];
  * @description 加载所有 Plugins
  * @param  {ReturnType<typeof createApp>} app 整个应用的实例
  */
-export function useGlobalPlugins(app: ReturnType<typeof createApp>, store: any, router: unknown) {
+export function useGlobalPlugins(app: ReturnType<typeof createApp>, store: any, router: any) {
 	// (app: any, store: any, router: any)
 	// const files = import.meta.glob('./*.ts'); // 为过动态导入，构建时，会分离为独立的 chunk
-	const files = import.meta.glob('./*.ts', { eager: true }); // 直接引入
+	const files: Record<string, any> = import.meta.glob('./*.ts', { eager: true }); // 直接引入
 	console.log('Plugins-files0:', files);
 
 	for (const key in files) {

@@ -165,7 +165,7 @@ const ChatList: React.FC<any> = () => {
 		<div className="chat-container">
 			<Flex gap="middle" justify="flex-end" wrap>
 				<Button type="primary" disabled={isDisabled} onClick={() => setIsShow(true)}>
-					面试信息
+					面试信息填写
 				</Button>
 			</Flex>
 			<div id="chatList" className="chat-lists">
