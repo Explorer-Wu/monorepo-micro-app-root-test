@@ -6,7 +6,7 @@ import Axios, {
 	// type AxiosResponse,
 	// AxiosError,
 } from 'axios';
-import qs from 'qs';
+import Qs from 'qs';
 
 // import { addPendingRequest, removePendingRequest } from './utils/cancelRepeatRquest'; // 取消重复请求
 // import { againRequest } from './utils/requestAgainSend'; // 请求重发

@@ -26,13 +26,16 @@ const popPlace = isUser ? 'left-start' : 'right-start';
 		<div :class="['chat-li', isUser ? 'user' : 'chatbot']">
 			<el-popover
 				ref="popover"
+				:visible="true"
 				:placement="popPlace"
 				:width="600"
-				trigger="focus"
-				:content="msg"
 			>
+			<!-- trigger="focus" -->
 				<template #reference>
 					<el-avatar :class="isUser ? 'avatar-user' : 'avatar-chatbot'" :size="50" :icon="isUser ? User : ChatLineRound" />
+				</template>
+				<template #default>
+					<pre>{{ msg }}</pre>
 				</template>
 			</el-popover>
 		</div>

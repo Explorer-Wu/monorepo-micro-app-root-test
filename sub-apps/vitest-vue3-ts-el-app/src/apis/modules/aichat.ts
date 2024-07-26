@@ -27,6 +27,7 @@ const ApiAiOpts = [
 			'Content-Type': 'application/json',
 		},
 		isAi: true,
+		timeout: 300000,
 	},
 	// 创建模型接口
 	{

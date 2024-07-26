@@ -35,7 +35,7 @@ const sendMsgForm = async (formEl: FormInstance | undefined) => {
 		try {
 			if (valid) {
 				chatMsgs.value.push({
-					id: String(chatMsgs.length),
+					id: String(chatMsgs.value.length),
 					model: "llama3.1",
 					role: "user",
 					content: formSend.askQuestion,
@@ -56,10 +56,9 @@ const sendMsgForm = async (formEl: FormInstance | undefined) => {
 };
 
 const askQuestionFn = async (query: string) => {
-	console.log('chatMsgs-askQuestionFn:', chatMsgs.value);
 	loading.value = true;
 	try {
-		const { model, created_at, message: chatData, done, done_reason } = await ApiAis.generateChatApi(
+		const { model, created_at, chatData, done, done_reason } = await ApiAis.generateChatApi(
 		{
 			data: {
 				model: "llama3.1",
@@ -74,8 +73,8 @@ const askQuestionFn = async (query: string) => {
 		},
 		'发送信息后获取聊天回复成果',
 		'请求失败！',
-	);
-
+		);
+	
 		console.log('sendChatApi:', model, chatData, done, done_reason);
 		loading.value = false;
 		chatMsgs.value.push({
@@ -84,6 +83,7 @@ const askQuestionFn = async (query: string) => {
 			role: chatData.role,
 			content: chatData.content,
 		});
+		console.log('chatMsgs-askQuestionFn:', chatMsgs.value);
 	} catch (error) {
 		console.log('sendChatApi-error:', error);
 	}

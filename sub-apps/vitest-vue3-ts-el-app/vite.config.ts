@@ -310,8 +310,8 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			fs: {
 				strict: true,
 			},
-			// host: '0.0.0.0',
-			host: true, // 监听所有地址，包括局域网和公网地址 "localhost",
+			host: '0.0.0.0',
+			// host: true, // 监听所有地址，包括局域网和公网地址 "localhost",
 			port: +viteEnv.VITE_PORT, // 开发服务器端口
 			// https: false, //是否启用 http 2
 			// force: true, //是否强制依赖预构建

@@ -23,25 +23,30 @@ const $router = useRouter();
 //   }
 // }
 
-export const httpAxios = (reqai: boolean) => {
-	return new HttpAxios({
-		isProd,
-		envBaseUrl: isProd ? envBaseUrlFn(reqai) : import.meta.env.VITE_BASE_URL,
-		// envUploadUrl: '',
-		// envTokenKey: 'ai_auth',
-		// envRefreshKey?: string,
-		// router: any;
-		// store: any;
-		// loading?: ((target: string) => void);
-		// closeLoading?: any | (() => void);
-		// message,
-		// goToLogin: () => $router.push('/auth/login'), // window.__globalRouter.globalNav('/auth/login'),
-		// refreshTokenFn: refreshToken,
-	});
+export const httpAxios = (reqai: boolean, timeout?: number) => {
+	return new HttpAxios(
+		{
+			isProd,
+			envBaseUrl: isProd ? envBaseUrlFn(reqai) : import.meta.env.VITE_BASE_URL,
+			// envUploadUrl: '',
+			// envTokenKey: 'ai_auth',
+			// envRefreshKey?: string,
+			// router: any;
+			// store: any;
+			// loading?: ((target: string) => void);
+			// closeLoading?: any | (() => void);
+			// message,
+			// goToLogin: () => $router.push('/auth/login'), // window.__globalRouter.globalNav('/auth/login'),
+			// refreshTokenFn: refreshToken,
+		},
+		{
+			timeout,
+		},
+	);
 };
 
 export function asyncApi(req: ReqItem) {
-	const { headers, url, method, authtoken, isAi } = req;
+	const { headers, url, method, authtoken, isAi, timeout } = req;
 	return async <G = any>(opts: ReqOpts, sucmsg?: string, errmsg?: string): Promise<G | false> => {
 		let queryData = JSON.parse(JSON.stringify(opts));
 		console.log('api-opts:', opts);
@@ -54,29 +59,29 @@ export function asyncApi(req: ReqItem) {
 		}
 
 		try {
-			const resData: any = await httpAxios(!!isAi).ajax({
+			const resData: any = await httpAxios(!!isAi, timeout).ajax({
 				method: method || 'get',
 				// url: (opts && opts.paramId) ? (url + opts.paramId) : url,
 				url: opts?.paramId ? url + opts.paramId : url,
 				headers: (headers as any) || {},
 				...queryData,
 			});
-			if (!!isAi) {
-				const { mode, created_at, message: chatMsg, done, done_reason } = await resData;
 
-				if (mode && chatMsg) {
-					if (sucmsg) {
-						ElMessage.success(sucmsg);
-					}
-					return { mode, created_at, chatMsg, done, done_reason } as G;
+			if (sucmsg) {
+				ElMessage.success(sucmsg);
+			}
+
+			if (!!isAi) {
+				console.log('ai-asyncApi-res:', resData);
+				const { model, created_at, message: chatData, done, done_reason } = resData;
+				if (model && created_at) {
+					return { model, created_at, chatData, done, done_reason } as G;
 				}
+
 				throw new Error(errmsg);
 			} else {
 				const { code, data, message: msg }: ResDataTypeMode<G> = resData;
 				if (code === 'success' || code === 0) {
-					if (sucmsg) {
-						ElMessage.success(sucmsg);
-					}
 					return data;
 				}
 				throw new Error(msg);

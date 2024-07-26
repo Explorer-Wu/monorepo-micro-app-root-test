@@ -6,7 +6,7 @@ import { asyncApi } from '../index';
  */
 export function testListApi() {
 	return asyncApi({
-		url: '/articles',
+		url: '/api/articles',
 		method: 'get',
 		authtoken: false,
 	});

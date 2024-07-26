@@ -1,3 +1,4 @@
+import Qs from 'qs';
 import {
 	isPlainObject,
 	isFormData,
@@ -69,12 +70,13 @@ export function transformReqHeaderData(headers: any, data: any): any {
 }
 
 export function transformResData(data: any): any {
-	if (typeof data === 'string') {
+	if (typeof data === 'string' && !!data) {
 		try {
+			console.log('transformResData:', data);
 			data = JSON.parse(data);
 		} catch (e: any) {
 			// do nothing
-			throw e;
+			// throw e;
 		}
 	}
 	return data;

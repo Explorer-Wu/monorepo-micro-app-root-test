@@ -26,7 +26,7 @@ const envBaseUrl = import.meta.env.APP_API_BASE_URL;
 
 export const httpAxios = new HttpAxios({
 	isProd,
-	envBaseUrl: isProd ? envBaseUrl : import.meta.env.BASE_URL,
+	envBaseUrl: isProd ? envBaseUrl : import.meta.env.VITE_BASE_URL,
 	// envUploadUrl: '',
 	// envTokenKey: 'access_token',
 	// envRefreshKey?: string,

@@ -7,6 +7,7 @@ export interface ReqItem {
 	// isFormdata?: boolean; 存headers里
   headers?: any;
   isAi?: boolean;
+  timeout?: number;
 }
 
 export interface ApiFnMap {
