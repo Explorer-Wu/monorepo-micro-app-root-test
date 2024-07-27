@@ -2,6 +2,7 @@
 import { reactive, UnwrapRef, ref, type Ref, toRefs, computed, onUmounted, watchEffect, getCurrentInstance, provide, inject } from 'vue';
 import { useRouter, useRoute } from "vue-router";
 import { cloneDeep, isEqual } from 'lodash-es';
+import { User, ChatLineRound } from '@element-plus/icons-vue';
 
 import ChatsItem from './components/ChatsItem.vue';
 import { ApiAis } from '@/apis/modules/aichat';
@@ -9,6 +10,10 @@ import { ApiAis } from '@/apis/modules/aichat';
 import './styles/index.scss';
 
 import type { FormInstance, FormRules } from 'element-plus';
+
+defineOptions({
+  name: 'LlamaAIChat',
+})
 
 const loading = ref(false);
 const chatMsgs: Ref<any[]> = ref([]);
@@ -98,18 +103,18 @@ const askQuestionFn = async (query: string) => {
 		<div id="chatList" class="chat-lists" v-loading="loading">
 			<!-- 显示聊天视图， 判断信息来自当前用户还是接受者 -->
 			<template v-if="!!chatMsgs.length">
-				<chats-item v-for="(item, index) in chatMsgs" :key="item.id || index" :infos="item" />
+				<chats-item v-for="({id, role, content: msg}, index) in chatMsgs" :key="id || index" :infos="{role, msg}" />
 			</template>
 		</div>
 
 		<div class="chat-inputer">
 			<el-form ref="sendFormRef" :inline="true" :model="formSend" :rules="sendRules" style="max-width: 800px"
 				class="form-send">
-				<el-form-item prop="askQuestion">
+				<el-form-item class="chat-textarea" prop="askQuestion">
 					<el-input type="textarea" v-model="formSend.askQuestion" placeholder="请输入消息" clearable />
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="sendMsgForm(sendFormRef)">发送</el-button>
+					<el-button class="chat-send" type="primary" @click="sendMsgForm(sendFormRef)">发送</el-button>
 				</el-form-item>
 			</el-form>
 		</div>

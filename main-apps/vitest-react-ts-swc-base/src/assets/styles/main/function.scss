@@ -116,7 +116,7 @@ $bar-shadow-b-right: 10px -2px 10px rgba(0, 0, 0, 0.5);
 // 混合宏（Mixin）
 // Flex 容器属性
 @mixin flex-flow($direction: 'row', $wrap: 'nowrap', $box: 'normal') {
-	//flex-direction属性，决定主轴的方向（即项目的排列方向）。 水平方向：row，row-reverse |  垂直方向：column，column-reverse
+	// flex-direction属性，决定主轴的方向（即项目的排列方向）。 水平方向：row，row-reverse |  垂直方向：column，column-reverse
 	//flex-wrap属性:  nowrap（默认）:不换行 ｜ wrap：换行，第一行在上方 ｜ wrap-reverse：换行，第一行在下方。
 	-webkit-flex-flow: $direction $wrap;
 	-moz-flex-flow: $direction $wrap;

@@ -3,36 +3,46 @@ import { reactive, UnwrapRef, ref, type Ref, toRefs, computed, onUmounted, watch
 import { cloneDeep, isEqual } from 'lodash-es';
 import { User, ChatLineRound } from '@element-plus/icons-vue';
 
+defineOptions({
+  name: 'ChatbotItem',
+})
+
 interface InfoObj {
-	isUser: boolean;
+	role: 'string';
 	msg: string;
 }
 const props = withDefaults(defineProps<{ infos: InfoObj }>(), {
-  infos: () => {}
+	infos: () => ({
+		// role: 'user',
+		// msg: ''
+	})
 });
 
-const { infos: {isUser, msg} } = props;
+const { infos: { role, msg } } = props;  // toRefs();
+
+console.log('chatMsgs-props:', props);
 
 const userStyle = { backgroundColor: '#005EFF', verticalAlign: 'middle' };
 const chatbotStyle = { backgroundColor: '#f56a00', verticalAlign: 'middle' };
 
-const conStyles = `message-con ${isUser ? 'user' : 'chatbot'}`;
+const conStyles = `message-con ${role === 'user' ? 'user' : 'chatbot'}`;
 // const msgTimeStyle = `message-time ${isChatbot ? 'chatbot' : 'user'}`;
-const popPlace = isUser ? 'left-start' : 'right-start';
+const popPlace = role === 'user' ? 'left-start' : 'right-start';
 
 </script>
 
 <template>
-		<div :class="['chat-li', isUser ? 'user' : 'chatbot']">
+		<div :class="['chat-li', role === 'user' ? 'user' : 'chatbot']">
 			<el-popover
-				ref="popover"
+				ref="chatPopover"
+				popper-style="display: inline-block !important; max-width: 600px;"
 				:visible="true"
 				:placement="popPlace"
-				:width="600"
+				width="auto"
 			>
 			<!-- trigger="focus" -->
 				<template #reference>
-					<el-avatar :class="isUser ? 'avatar-user' : 'avatar-chatbot'" :size="50" :icon="isUser ? User : ChatLineRound" />
+					<el-avatar :class="role === 'user' ? 'avatar-user' : 'avatar-chatbot'" :size="50" :icon="role === 'user' ? User : ChatLineRound" />
 				</template>
 				<template #default>
 					<pre>{{ msg }}</pre>
@@ -42,15 +52,22 @@ const popPlace = isUser ? 'left-start' : 'right-start';
 </template>
 
 <style lang="scss" scoped>
+	// .popper-wrapper {		
+	// }
+	 pre {
+			@extend %txt-pw-wb;
+			border-width: 0 !important;
+	 }
+
 	.avatar {
 		color: #fff;
 		&-user {
+			float: right;
 			background-color: rgb(8, 91, 185);
 		}
 		&-chatbot {
+			float: left;
 			background-color: rgb(34, 251, 255);
 		}
 	}
 </style>
-
-// export default ChatbotItem;
