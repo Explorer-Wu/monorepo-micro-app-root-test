@@ -15,7 +15,7 @@ const ChatbotItem = ({ msg, isUser }) => {
 		<div className={`chat-li ${isUser ? 'user' : 'chatbot'}`}>
 			{/* <div className="avatar-wrap">
 			</div> */}
-			<Popover placement={popPlace} content={msg} open>
+			<Popover placement={popPlace} content={msg} fresh={true} open={true}>
 				<Avatar
 					size="large"
 					icon={isUser ? <UserOutlined /> : <CommentOutlined />}

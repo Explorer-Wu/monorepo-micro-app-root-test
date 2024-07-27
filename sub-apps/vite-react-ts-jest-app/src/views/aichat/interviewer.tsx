@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useState, useRef, useDeferredValue } from 'react';
 import { flushSync } from 'react-dom';
 import { useImmer } from 'use-immer';
 import { Element } from 'react-scroll';
@@ -28,6 +28,8 @@ const ChatList: React.FC<any> = () => {
 	const [isShow, setIsShow] = useState(true);
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [chatMsgs, setChatMsgs] = useImmer([]);
+	// const chatMsgsRef: any = useRef([]);
+	const defChatMsgs = useDeferredValue(chatMsgs);
 	const [form] = Form.useForm();
 	const formItemLayout = { wrapperCol: { span: 24 } };
 	const roleInputs: any = {
@@ -95,43 +97,39 @@ const ChatList: React.FC<any> = () => {
 		[chatMsgs],
 	);
 
-	const askQuestionFn = useCallback(
-		async (query: string) => {
-			console.log('chatMsgs-askQuestionFn0:', chatMsgs);
-			setIsload(true);
-			const { id, answer, conversation_id } = await sendMsgesApi()(
-				{
-					data: {
-						// response_mode: 'streaming',
-						conversation_id: '',
-						query,
-						inputs: {
-							jobName: '前端架构师',
-							name: 'Exploer-Wu',
-						},
-						user: 'exp',
-						files: [],
+	const askQuestionFn = async (query: string) => {
+		console.log('chatMsgs-askQuestionFn0:', chatMsgs);
+		setIsload(true);
+		const { id, answer, conversation_id } = await sendMsgesApi()(
+			{
+				data: {
+					// response_mode: 'streaming',
+					conversation_id: '',
+					query,
+					inputs: {
+						jobName: '前端架构师',
+						name: 'Exploer-Wu',
 					},
+					user: 'exp',
+					files: [],
 				},
-				'发送信息后获取聊天回复成果',
-				'请求失败！',
-			);
+			},
+			'发送信息后获取聊天回复成果',
+			'请求失败！',
+		);
 
-			console.log('sendMsgesApi:', id, answer, conversation_id);
-			setIsload(false);
-			// flushSync(() => {
-			// });
-			setChatMsgs(draft => {
-				draft.push({
-					id: id,
-					isUser: false,
-					conversation_id,
-					content: answer,
-				});
+		console.log('sendMsgesApi:', id, answer, conversation_id);
+		setIsload(false);
+
+		setChatMsgs(draft => {
+			draft.push({
+				id: id,
+				isUser: false,
+				conversation_id,
+				content: answer,
 			});
-		},
-		[chatMsgs],
-	);
+		});
+	};
 
 	// const addChatItemScrollListener = () => {
 	// 	const chatList = document.getElementById('chatList');
@@ -145,19 +143,20 @@ const ChatList: React.FC<any> = () => {
 	// 	chatList && chatList.removeEventListener('mousewheel', onChatItemScroll, false);
 	// };
 
-	useEffect(() => {
-		console.log('chatMsgs-all:', chatMsgs);
-		// if (!chatbotId) {
-		// 	// history.replace({ pathname: '/im' });
-		// 	return;
-		// }
-		// onChatItemScroll();
-		// addChatItemScrollListener();
-		// eslint-disable-next-line consistent-return
-		// return () => {
-		// 	removeChatItemScrollListener();
-		// };
-	}, [chatMsgs]);
+	// useLayoutEffect(() => {
+	// 	chatMsgsRef.current = chatMsgs;
+	// 	console.log('chatMsgs-all:', chatMsgsRef);
+	// 	// if (!chatbotId) {
+	// 	// 	// history.replace({ pathname: '/im' });
+	// 	// 	return;
+	// 	// }
+	// 	// onChatItemScroll();
+	// 	// addChatItemScrollListener();
+	// 	// eslint-disable-next-line consistent-return
+	// 	// return () => {
+	// 	// 	removeChatItemScrollListener();
+	// 	// };
+	// }, [chatMsgs]);
 
 	// console.log('onChatItemScroll chat :: ', pageNum, hasMore, loading);
 
@@ -170,11 +169,11 @@ const ChatList: React.FC<any> = () => {
 			</Flex>
 			<div id="chatList" className="chat-lists">
 				<Loading isLoad={isload} text={'加载...'} />
-				{!!chatMsgs.length &&
-					chatMsgs.map((item, index) => {
+				{!!defChatMsgs.length &&
+					defChatMsgs.map((item, index) => {
 						// 判断发送者不是当前用户, Id 就为接受者
 						// 显示接受者视图
-						return <ChatsItem key={item.id || index} msg={item.content} isUser={item.isUser} />;
+						return <ChatsItem key={index} msg={item.content} isUser={item.isUser} />;
 					})}
 				<Element name="bottomElement"></Element>
 			</div>

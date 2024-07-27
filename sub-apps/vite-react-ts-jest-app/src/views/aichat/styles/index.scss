@@ -1,22 +1,24 @@
 .chat-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  // position: relative;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-between;
+  overflow: hidden;
   width: 100%;
-  height: 100%;
+  // height: 100%;
   min-width: 600px;
-  min-height: 100%;
+  // min-height: 100%;
   padding: 20px;
   background-color: #fff;
 
   .chat-lists {
-    position: relative;
+    // position: relative;
+    height: calc(100vh - 360px);
+    overflow: hidden;
     padding: 10px;
     overflow-y: auto;
     background-color: #fff;
-    height: calc(100% - 180px);
-
+  
     // .chat-loading {
     //   position: absolute;
     //   left: 50%;
@@ -50,22 +52,24 @@
     }
   }
 
-  .chat-input-operator {
+  .chat-inputer {
     display: flex;
-    height: 180px;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 20px 10px 0px;
     background: #fff;
     border-top: 1px solid rgb(227, 229, 230);
-    flex-direction: column;
+    
 
-    textarea {
-      border: none;
-      outline: none;
-      flex: 1;
+    // textarea {
+    //   border: none;
+    //   outline: none;
+    //   flex: 1;
 
-      &:focus {
-        box-shadow: none;
-      }
-    }
+    //   &:focus {
+    //     box-shadow: none;
+    //   }
+    // }
 
     .chat-send {
       display: flex;
