@@ -1,6 +1,6 @@
 # monorepo-micro-app-root-test
 
-微前端框架micro-app+pnmp+monorepo搭建测试版应用  
+微前端框架micro-app+pnmp+monorepo搭建测试版应用
 
 本项目使用micro-app实现微前端应用，并使用pnpm和Monorepo管理项目代码。运行环境为 node>=16.8.0, pnpm>=7.32.0。  
 
@@ -114,7 +114,7 @@ pnpm -F 'sub-apps/vitest-vue3-ts-el-app' exec lint-staged
 
 ## Monorepo架构搭建
   
-  Monorepo 代表"单一代码仓库"（Monolithic Repository）, 是一种将多个项目存储在一个代码库中的策略，这使得跨项目共享和管理代码变得更加容易。   
+  Monorepo 代表"单一代码仓库"（Monolithic Repository）, 是一种将多个项目存储在一个代码库中的策略，这使得跨项目共享和管理代码变得更加容易。
 
 ### 包管理工具
   
@@ -249,7 +249,7 @@ microApp是一款轻量级微前端框架,使用webComponent的思想去实现�
 html中有许多标签,div,p,span等等,这些标签渲染出的都是html元素。
 webComponent（自定义html元素）, 其实现思路很简单,就是让用户通过js代码自定义一个htmlElement,并注册到document中, 之后便可使用标签。
 
-  创建一个自定义元素  
+  创建一个自定义元素
   ```
     class CustomEle extends HTMLElement {  
         constructor() {  
@@ -327,7 +327,7 @@ webComponent（自定义html元素）, 其实现思路很简单,就是让用户�
   使用 injectedKeys 将 key 记录下来，方便子应用在频繁切换应用时恢复现场。<br>
 
   
-  **事件处理**   
+  **事件处理**
   首先是改写原来的 addEventListener 方法，将监听的事件名和事件句柄记录在一个 map中。<br>
   然后在子应用卸载的时候会触发 releaseEffect 方法，将之前监听的事件全部移除。<br>
 
