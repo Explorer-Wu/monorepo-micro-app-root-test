@@ -4,6 +4,7 @@ import autoprefixer from 'autoprefixer';
 import postcssPresetEnv from 'postcss-preset-env';
 import postCssPxToRem from 'postcss-pxtorem';
 import cssnano from 'cssnano';
+import tailwindCss from '@tailwindcss/postcss';
 
 // postcss 为 CSS 规则添加特定厂商的前缀。 Autoprefixer 自动获取浏览器的流行度和能够支持的属性，并根据这些数据帮你自动为 CSS 规则添加前缀
 module.exports = (ctx: ConfigContext, path: string, options: any): Config => ({
@@ -50,6 +51,7 @@ module.exports = (ctx: ConfigContext, path: string, options: any): Config => ({
 				return file.indexOf('screen') === -1;
 			},
 		}),
+		tailwindCss({}),
 		// 允许使用 import
 		// 'postcss-import': {},
 		// // css 嵌套

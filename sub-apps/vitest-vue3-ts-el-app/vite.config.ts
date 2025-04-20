@@ -58,15 +58,15 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			// exclude: ['your-package-name'] //排除在优化之外
 		},
 		plugins: [
-			// vue(),
-			vue({
-				include: [/\.vue$/, /\.md$/],
-				template: {
-					compilerOptions: {
-						isCustomElement: tag => /^micro-app/.test(tag),
-					},
-				},
-			}),
+			vue(),
+			// vue({
+			// 	include: [/\.vue$/, /\.md$/],
+			// 	template: {
+			// 		compilerOptions: {
+			// 			isCustomElement: tag => /^micro-app/.test(tag),
+			// 		},
+			// 	},
+			// }),
 			// vueJsx({
 			//   mergeProps: false,
 			//   enableObjectSlots: false,

@@ -1,10 +1,12 @@
-declare interface Fn<T = any, R = T> {
-  (...arg: T[]): R;
-}
+import type { RouteObject } from 'react-router-dom';
 
-declare interface PromiseFn<T = any, R = T> {
-  (...arg: T[]): Promise<R>;
-}
+type RouteItem = RouteObject & {
+	isAuth?: boolean;
+};
+
+type RouteItemTypes = RouteItem & {
+  children?: (RouteItem | RouteObject)[];
+};
 
 // declare function useNavigate(): NavigateFunction;
 
@@ -38,16 +40,11 @@ declare interface PromiseFn<T = any, R = T> {
 // 定义 State 结构类型
 // export type StoreState = number;
 
-declare function Navigate(props: NavigateProps): null;
-
 interface NavigateProps {
   to: To;
   replace?: boolean;
   state?: any;
 }
-
-declare function useNavigate(): NavigateFunction;
-
 interface NavigateFunction {
   (
     to: To,
@@ -55,6 +52,9 @@ interface NavigateFunction {
   ): void;
   (delta: number): void;
 }
+
+declare function Navigate(props: NavigateProps): null;
+declare function useNavigate(): NavigateFunction;
 
 declare function useNavigationType(): NavigationType;
 
@@ -112,3 +112,11 @@ declare function useParams<
 >(): Readonly<Params<K>>;
 
 declare function useResolvedPath(to: To): Path;
+
+declare interface Fn<T = any, R = T> {
+  (...arg: T[]): R;
+}
+
+declare interface PromiseFn<T = any, R = T> {
+  (...arg: T[]): Promise<R>;
+}

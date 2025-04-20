@@ -1,0 +1,254 @@
+.Resizer {
+    background: #f0f0f0;
+    opacity: 0.2;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+}
+
+.Resizer:hover {
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    opacity: 1;
+}
+
+.Resizer.vertical {
+    width: 8px;
+    margin: 0 -4px;
+    border-left: 4px solid rgba(255, 255, 255, 0);
+    border-right: 4px solid rgba(255, 255, 255, 0);
+    cursor: col-resize;
+}
+
+.Resizer.vertical:hover {
+    border-left: 4px solid rgba(0, 0, 0, 0.1);
+    border-right: 4px solid rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 容器样式 */
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: #f5f5f5;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* 左侧聊天框样式 */
+.chat-container {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+}
+
+.message-wrapper {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-wrapper.user {
+    align-items: flex-end;
+}
+
+.message-wrapper.ai {
+    align-items: flex-start;
+}
+
+.message-content {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    word-break: break-word;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.message-content.user {
+    background-color: #1890ff;
+    color: #fff;
+    margin-left: auto;
+}
+
+.message-content.ai {
+    background-color: #fff;
+    color: #333;
+    margin-right: auto;
+}
+
+.message-content.pdf {
+    background-color: #e6f7ff;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 输入区域样式 */
+.input-container {
+    padding: 16px;
+    border-top: 1px solid #e8e8e8;
+    background-color: #fff;
+}
+
+.upload-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.message-input {
+    flex: 1;
+    padding: 12px 40px 12px 16px; /* 为右侧图标留出空间 */
+    border-radius: 20px;
+    border: 1px solid #e8e8e8;
+    outline: none;
+    font-size: 14px;
+    background-color: #f5f5f5;
+}
+
+.message-input:focus {
+    border-color: #1890ff;
+    background-color: #fff;
+}
+
+.upload-button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-button:hover {
+    color: #1890ff;
+}
+
+.send-button {
+    padding: 12px 24px;
+    background-color: #1890ff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* PDF预览区域样式 */
+.pdf-container {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+.pdf-viewer {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 20px;
+}
+
+/* 浮动工具栏样式 */
+.floating-toolbar {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: flex;
+    gap: 8px;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.toolbar-button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.toolbar-button.copy {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.toolbar-button.copy:hover {
+    background-color: #e0e0e0;
+}
+
+.toolbar-button.explain {
+    background-color: #1890ff;
+    color: #fff;
+}
+
+.toolbar-button.explain:hover {
+    background-color: #40a9ff;
+}
+
+/* PDF文本层样式 */
+.textLayer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    opacity: 0.2;
+    line-height: 1.0;
+}
+
+.textLayer > span {
+    color: transparent;
+    position: absolute;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+} 

@@ -98,7 +98,7 @@ export function handleMicroData(router: Router) {
 		console.log('child-vite getData:', window.microApp.getData());
 
 		// 监听基座下发的数据变化
-		window.microApp.addDataListener((data: Record<string, unknown>) => {
+		(window as Window).microApp.addDataListener((data: Record<string, unknown>) => {
 			console.log('child-vite addDataListener:', data);
 
 			if (data.path && typeof data.path === 'string') {
@@ -112,7 +112,7 @@ export function handleMicroData(router: Router) {
 
 		// 向基座发送数据
 		setTimeout(() => {
-			window.microApp.dispatch({ myname: 'child-vite-vue3' });
+			(window as Window).microApp.dispatch({ myname: 'child-vite-vue3' });
 		}, 3000);
 	}
 }

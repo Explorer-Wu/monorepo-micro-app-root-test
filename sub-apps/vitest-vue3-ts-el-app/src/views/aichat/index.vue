@@ -1,15 +1,18 @@
-<script setup lang="ts">
-import { reactive, UnwrapRef, ref, type Ref, toRefs, computed, onUmounted, watchEffect, getCurrentInstance, provide, inject } from 'vue';
+<script lang="ts" setup>
+import { reactive, ref, type Ref, toRefs, computed, watchEffect, getCurrentInstance, provide, inject } from 'vue';
 import { useRouter, useRoute } from "vue-router";
 import { cloneDeep, isEqual } from 'lodash-es';
 import { User, ChatLineRound } from '@element-plus/icons-vue';
+// import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus';
+import type { FormInstance, FormRules } from 'element-plus';
 
 import ChatsItem from './components/ChatsItem.vue';
 import { ApiAis } from '@/apis/modules/aichat';
 
+import '@/utils/langchainOpenai.ts';
+
 import './styles/index.scss';
 
-import type { FormInstance, FormRules } from 'element-plus';
 
 defineOptions({
   name: 'LlamaAIChat',
@@ -23,7 +26,7 @@ interface FormSend {
 }
 
 const sendFormRef = ref<FormInstance>()
-const formSend = reactive<RuleForm>({
+const formSend = reactive<FormSend>({
 	askQuestion: '',
 });
 
@@ -50,7 +53,7 @@ const sendMsgForm = async (formEl: FormInstance | undefined) => {
 
 			} else {
 				console.log('error submit!', fields)
-				throw new error(`${fields} 验证不通过!`)
+				throw new Error(`${fields} 验证不通过!`)
 			}
 
 		} catch (error) {
@@ -83,7 +86,7 @@ const askQuestionFn = async (query: string) => {
 		console.log('sendChatApi:', model, chatData, done, done_reason);
 		loading.value = false;
 		chatMsgs.value.push({
-			id: String(chatMsgs.length),
+			id: String(chatMsgs.value.length),
 			model: "llama3.1",
 			role: chatData.role,
 			content: chatData.content,

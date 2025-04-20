@@ -1,5 +1,5 @@
 import { asyncModuleApi } from '../index';
-import type { ApiFnMap } from '../../typings/axios';
+import type { ApiFnMap } from '@/typings/axios';
 
 const ApiChartOpts = [
 	{

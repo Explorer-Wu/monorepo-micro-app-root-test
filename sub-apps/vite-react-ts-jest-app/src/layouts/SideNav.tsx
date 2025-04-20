@@ -9,12 +9,12 @@ import ReactLogo from '@/assets/images/svg/react.svg?react';
 import subMicroApp, { getActiveApps, EventCenterForMicroApp } from '@micro-zoe/micro-app';
 
 subMicroApp.start({
-	tagName: 'micro-app-subreact',
+	tagName: 'micro-app-navreact',
 	iframe: true,
 });
 
 // @ts-ignore 因为vite子应用关闭了沙箱，我们需要为子应用appname-vite创建EventCenterForMicroApp对象来实现数据通信
-// window.eventCenterForAppViteSideNav = new EventCenterForMicroApp('app-sidenav');
+// window.eventCenterForAppViteSideNav = new EventCenterForMicroApp('app-sidenav-react');
 // type MenuItem = Required<MenuProps>['items'][number]; // GetProp<MenuProps, 'items'>[number];
 
 const menuList: any[] = [
@@ -161,7 +161,7 @@ const NavMenu: React.FC<any> = (props: any, context?: any) => {
 
 	useEffect(() => {
 		// 👇 主应用向sidebar子应用下发一个名为pushState的方法
-		subMicroApp.setData('app-sidenav', {
+		subMicroApp.setData('app-sidenav-react', {
 			pushState,
 			menuList,
 			baseRouter: '/sub-vite-react',
@@ -192,11 +192,11 @@ const NavMenu: React.FC<any> = (props: any, context?: any) => {
 				onClick={linkToNav}
 			/> */}
 			{/* data只接受对象类型，采用严格对比(===)，当传入新的data对象时会重新发送  /sub-vite-side/subnav/ */}
-			<micro-app-subreact
-				name="app-sidenav"
+			<micro-app-navreact
+				name="app-sidenav-react"
 				url="http://localhost:3606/sub-vite-menu/"
 				baseroute="/sub-vite-menu/"
-			></micro-app-subreact>
+			></micro-app-navreact>
 		</>
 	);
 };

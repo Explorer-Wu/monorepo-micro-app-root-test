@@ -62,5 +62,5 @@ export default defineConfig(configEnv =>
 				module: { type: 'es6' },
 			}),
 		],
-	} as VitestConfigExport),
+	}),
 );

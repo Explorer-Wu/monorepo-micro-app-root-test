@@ -15,6 +15,9 @@ describe('App', () => {
 		document.getElementById('subreact-app');
 		// expect(screen.getByText('My favorite fruit is banana')).toBeInTheDocument();
 		// expect(screen.getByRole('heading').textContent).toBe('Vite + Vitest + React');
+
+		const linkElement = screen.getByText(/Learn React/i);
+		expect(linkElement).toBeInTheDocument();
 	});
 
 	afterEach(cleanup);

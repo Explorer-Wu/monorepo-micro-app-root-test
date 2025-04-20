@@ -33,6 +33,7 @@ module.exports = {
 	// 继承的规则 [扩展]
 	extends: [
 		// "eslint:recommended",
+		// 'eslint-config-prettier',
 		// Uses the recommended rules from the @typescript-eslint/eslint-plugin
 		// "plugin:@typescript-eslint/eslint-recommended",
 		'plugin:@typescript-eslint/recommended',
@@ -40,7 +41,7 @@ module.exports = {
 		'prettier', // === 'prettier/@typescript-eslint' + 'prettier/react'
 		'plugin:react/recommended',
 		'plugin:react-hooks/recommended',
-		// "plugin:react/jsx-runtime",
+		'plugin:react/jsx-runtime', // react补充配置
 		'plugin:jsx-control-statements/recommended',
 		// 'plugin:import/errors',
 		// 'plugin:import/warnings',
@@ -63,7 +64,6 @@ module.exports = {
 	// .eslintignore
 	// ignorePatterns: ['dist', '.eslintrc.cjs'],
 	rules: {
-		'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 		'@typescript-eslint/explicit-function-return-type': 'off',
 		'@typescript-eslint/no-unused-vars': 'off',
 		// [
@@ -107,6 +107,7 @@ module.exports = {
 		// These rules don't add much value, are better covered by TypeScript and good definition files
 
 		// React相关校验规则
+		'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 		'react/no-unknown-property': ['error', { ignore: ['css'] }],
 		'react/no-unescaped-entities': 'off',
 		'react/no-direct-mutation-state': 'off',

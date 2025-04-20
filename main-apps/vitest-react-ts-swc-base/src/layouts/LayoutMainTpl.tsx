@@ -63,16 +63,9 @@ export default function MainLayout(props: any, context?: any): React.ReactElemen
 	console.log('lay-router:', props);
 
 	return (
-		<ConfigProvider
-			locale={zhCN}
-			theme={themeConfig}
-		>
+		<ConfigProvider locale={zhCN} theme={themeConfig}>
 			<Layout>
-				<Header
-					style={headerStyle}
-					propCollapsed={collapsed}
-					onToggleMenu={toggleMenu}
-				/>
+				<Header style={headerStyle} propCollapsed={collapsed} onToggleMenu={toggleMenu} />
 				<Content style={contentStyle}>
 					<Outlet />
 				</Content>

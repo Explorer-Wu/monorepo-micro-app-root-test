@@ -1,6 +1,6 @@
 // import type { AxiosResponse, AxiosError } from 'axios';
 import { HttpAxios, type ReqOpts, type ResDataTypeMode } from 'axios-ajax-ts';
-import type { ReqItem, ApiFnMap } from '../typings/axios';
+import type { ReqItem, ApiFnMap } from '@/typings/axios';
 import { message } from 'antd';
 // import React, { useReducer, type Dispatch, type PropsWithChildren } from 'react';
 // import HistoryRule from '../router/history';

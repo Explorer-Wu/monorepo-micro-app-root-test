@@ -16,6 +16,8 @@ const AIChatFlowise = lazy(() => import('@/views/aichat/aiflowise'));
 const NotFound = lazy(() => import('@/views/error/404'));
 const NoAccess = lazy(() => import('@/views/error/403'));
 
+import ErrorBoundary from '@/components/ErrorBoundary';
+
 import Loading from '@/components/Loading';
 // import SideBar from '@/components/sidebar';
 
@@ -36,6 +38,7 @@ const routes: RouteObject[] = [
 	{
 		path: '/',
 		element: <RootLayout />,
+		errorElement: <ErrorBoundary />,
 		children: [
 			{
 				path: 'home',

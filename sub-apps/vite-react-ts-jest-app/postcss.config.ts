@@ -24,5 +24,7 @@ module.exports = {
 		'postcss-normalize': {},
 		// require('postcss-nested'),  // 废弃的，将会在下一个主要版本中移除
 		cssnano: {}, // cssnano基于 PostCSS 生态系统的 CSS 压缩工具
+		'tailwindcss/nesting': 'postcss-nesting',
+		tailwindcss: {},
 	},
 };

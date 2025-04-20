@@ -2,20 +2,20 @@
 
 微前端框架micro-app+pnmp+monorepo搭建测试版应用
 
-本项目使用micro-app实现微前端应用，并使用pnpm和Monorepo管理项目代码。运行环境为 node>=16.8.0, pnpm>=7.32.0。  
+本项目使用micro-app实现微前端应用，并使用pnpm和Monorepo管理项目代码。运行环境为 node>=16.8.0, pnpm>=7.32.0。
 
 ## 项目目录结构
 
 ```
   .
   ├── main-app // 主应用 Vite + react (history路由)   
-  ├── sub-pps // 子应用  
+  ├── sub-apps // 子应用  
   │  ├── vite-react-ts-jest-app  
   │  ├── vitest-vue3-ts-el-app // Vite + vue3 (history路由)   
   ├── package.json   
   ├── pnpm-workspace.yaml  
   └── pnpm-lock.yaml  
-```  
+```
 
 ## 工具
 
@@ -30,7 +30,7 @@
 初始化本地仓库
 `git init`  
 
-添加文件到本地仓库、并提交  
+添加文件到本地仓库、并提交
 `git add .`  
 
 `git commit -m "init"`  
@@ -314,7 +314,6 @@ webComponent（自定义html元素）, 其实现思路很简单,就是让用户�
   micro-app 是修改了 Document 原型链上的方法，通过判断 appName，如果 appName 非空，则说明是子应用调用的 querySelector，这时候我们就可以直接使用 appInstanceMap.get(appName)?.container?.querySelector(selectors) 方法，从而做到元素的隔离。<br>
   子应用在访问 document 对象时实际上还做了一层拦截， throttleDeferForSetAppName 方法作用是修改 appName，并创建一个微任务，执行微任务将appName置空。所以 appName 仅在子应用访问 document 对象时才会存在，当主应用访问 document 时，appName 被清空了。<br>
 
-
   **实现js隔离**   
   主要利用了强大的 Proxy，下面简要分析get 和 set 拦截器：
   
@@ -326,7 +325,6 @@ webComponent（自定义html元素）, 其实现思路很简单,就是让用户�
   当沙箱处于 active 状态才会处理<br>
   使用 injectedKeys 将 key 记录下来，方便子应用在频繁切换应用时恢复现场。<br>
 
-  
   **事件处理**
   首先是改写原来的 addEventListener 方法，将监听的事件名和事件句柄记录在一个 map中。<br>
   然后在子应用卸载的时候会触发 releaseEffect 方法，将之前监听的事件全部移除。<br>
@@ -345,4 +343,3 @@ Micro-App 支持使用插件系统进行模块和组件的共享和复用。您�
 如果您的多个子应用之间需要共享的组件较多，可以考虑将这些组件抽象为一个独立的基座应用，然后在多个子应用中进行引用。基座应用可以专门用于提供组件共享服务，也可以包含其他的业务逻辑。使用基座应用可以避免组件的重复编写，并提高代码复用性，但也需要更加复杂的部署和管理。
 
 总之，Micro-App 提供了多种方法来实现多个子应用之间的组件共享和复用。具体的实现方法取决于你的具体业务需求和技术架构。
-

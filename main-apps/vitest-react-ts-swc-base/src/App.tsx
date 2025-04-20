@@ -1,5 +1,7 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useRoutes } from 'react-router-dom';
-import { WrapRoutes } from '@/router/index';
+import { RouterAuth, WrapRoutes } from '@/router/index';
+import { routes } from '@/router/routesConfig';
 import { message } from 'antd';
 message.config({
 	top: 50,
@@ -8,11 +10,14 @@ message.config({
 	rtl: true,
 	prefixCls: 'main',
 });
+
 const App: React.FC<any> = (): JSX.Element => {
 	return (
 		// <BrowserRouter forceRefresh={!supportsHistory}>
 		<Router basename={import.meta.env.APP_BASE_ROUTER}>
-			<WrapRoutes />
+			<RouterAuth routes={routes} />
+			{/* <WrapRoutes routes={routes} />
+			</RouterAuth> */}
 		</Router>
 		//   <Routes>
 		//   <Route path="/screenfull" element={<LayoutScreen />} />

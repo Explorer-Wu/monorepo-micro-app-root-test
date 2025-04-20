@@ -20,7 +20,7 @@ function handleMicroData(): void {
 
 		// 向基座发送数据
 		setTimeout(() => {
-			(window as Window).microApp.dispatch({ myname: 'child-react' });
+			(window as Window).microApp.dispatch({ myname: 'child-vite-react' });
 		}, 3000);
 	}
 }

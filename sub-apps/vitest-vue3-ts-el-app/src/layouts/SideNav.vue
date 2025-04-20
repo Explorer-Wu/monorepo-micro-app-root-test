@@ -5,7 +5,7 @@ import { trimEnd } from 'lodash-es';
 import subMicroApp, { getActiveApps, EventCenterForMicroApp } from '@micro-zoe/micro-app';
 
 subMicroApp.start({
-	tagName: 'micro-app-subvue',
+	tagName: 'micro-app-navvue3',
 	iframe: true,
 	// 'keep-alive': true, // 全局开启保活模式，默认为false
 	// 'keep-router-state': true,
@@ -84,24 +84,24 @@ const menuList: any[] = [
 ];
 
 // 👇 主应用向sidebar子应用下发一个名为pushState的方法
-// const sidebarData: Ref<any> = ref({
-//   menuList,
-//   baseRouter: '/sub-vite-vue3',
-//   subName: 'app-subvue3',
-//   // 子应用sidebar通过pushState控制主应用跳转
-//   pushState: async (path: string, hash: string, appName?: string) => {
-//     hash && (path += `/${hash}`);
-// 		// 主应用跳转
-//     $router.push(path);
+const sidebarData: Ref<any> = ref({
+  menuList,
+  baseRouter: '/sub-vite-vue3',
+  subName: 'app-subvue3',
+  // 子应用sidebar通过pushState控制主应用跳转
+  pushState: async (path: string, hash: string, appName?: string) => {
+    hash && (path += `/${hash}`);
+		// 主应用跳转
+    $router.push(path);
 
-//     await nextTick();
-//     // 子应用内部跳转时，通知侧边栏改变菜单状态
-//     // if (window.eventCenterForAppViteSideNav) {
-//     //   // 发送全局数据，通知侧边栏修改菜单展示
-//     //   window.eventCenterForAppViteSideNav.setGlobalData({ name: 'app-sidenav-vue3' })
-//     // }
-//   },
-// })
+    await nextTick();
+    // 子应用内部跳转时，通知侧边栏改变菜单状态
+    // if (window.eventCenterForAppViteSideNav) {
+    //   // 发送全局数据，通知侧边栏修改菜单展示
+    //   window.eventCenterForAppViteSideNav.setGlobalData({ name: 'app-sidenav-vue3' })
+    // }
+  },
+})
 
 // const refreshMenu = (route: any) => {
 //   console.log('lo-route:', trimEnd(route.path, '/'));
@@ -117,14 +117,16 @@ onMounted(() => {
   // refreshMenu(proxy.$route);
   //      this.$router.afterEach((to, from) => {
   //        this.refreshMenu(to)
-  //      })
-
+	//      })
+	
 	subMicroApp.setData('app-sidenav-vue3', {
 		menuList,
 		baseRouter: '/sub-vite-vue3',
 		subName: 'app-subvue3',
 		// 子应用sidebar通过pushState控制主应用跳转
 		pushState: async (path: string, hash: string, appName?: string) => {
+			console.log('subvue3-pushState:', path, hash, appName);
+
 			hash && (path += `/${hash}`);
 			// 主应用跳转
 			$router.push(path);
@@ -141,11 +143,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- data只接受对象类型，采用严格对比(===)，当传入新的data对象时会重新发送  /sub-vite-side/subnav/ -->
-  <micro-app-subvue
+  <!-- data只接受对象类型，采用严格对比(===)，当传入新的data对象时会重新发送  /sub-vite-side/subnav/ :data="sidebarData"-->
+  <micro-app-navvue3
     name="app-sidenav-vue3"
     url="http://localhost:3606/sub-vite-menu/"
     baseroute="/sub-vite-menu/"
-    :data="sidebarData"
-  ></micro-app-subvue>
+  ></micro-app-navvue3>
 </template>

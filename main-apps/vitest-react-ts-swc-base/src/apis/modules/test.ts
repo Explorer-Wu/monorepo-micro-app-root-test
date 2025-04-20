@@ -1,5 +1,5 @@
 import { asyncApi } from '../index';
-// import type { ApiFnMap } from '../../typings';
+// import type { ApiFnMap } from '@/typings';
 
 /**
  * 登录接口

@@ -25,6 +25,8 @@ interface ImportMetaEnv extends Readonly<Record<string, unknown>> {
   readonly APP_API_WS_URL: string
   // CDN请求包地址
   readonly APP_CDN_URL: string
+  // OpenAi ApiKey
+  readonly APP_AI_OPENAI_API_KEY: string
 
   // 透传参数
   readonly VITE_POSITION: string

@@ -19,7 +19,7 @@ declare global {
       style?: any,
     }
     interface IntrinsicElements {
-      'micro-app-subreact': React.DetailedHTMLProps<
+      'micro-app-navreact': React.DetailedHTMLProps<
         any, // React.HTMLAttributes<HTMLElement>,
         HTMLElement
       >;
@@ -44,6 +44,8 @@ declare global {
   interface Window {
     eventCenterForAppViteReact: any
     microApp: any
+    mount: Function
+    unmount: Function
     __MICRO_APP_NAME__: string
     __MICRO_APP_ENVIRONMENT__: string
     __MICRO_APP_BASE_APPLICATION__: string

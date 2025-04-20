@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/prettierrc",
   "tabWidth": 2,
   "singleQuote": true,
-  "printWidth": 100,
+  "printWidth": 120,
   "useTabs": true,
   "trailingComma": "all",
   "semi": true,
@@ -14,7 +14,7 @@
   "proseWrap": "preserve",
   "quoteProps": "as-needed",
   "requirePragma": false,
-  "endOfLine": "lf",
+  "endOfLine": "auto",
   "overrides": [
     {
       "files": [

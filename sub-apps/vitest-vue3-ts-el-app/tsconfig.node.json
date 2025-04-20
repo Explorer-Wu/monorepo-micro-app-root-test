@@ -1,4 +1,11 @@
 {
+	"include": [
+		"vite.config.*",
+		"vitest.config.*",
+		"cypress.config.*",
+		"nightwatch.conf.*",
+		"playwright.config.*"
+	],
 	"compilerOptions": {
 		"composite": true,
 		"module": "ESNext",
@@ -6,6 +13,5 @@
 		"moduleResolution": "Node",
 		"skipLibCheck": true,
 		"allowSyntheticDefaultImports": true
-	},
-	"include": ["vite.config.ts", "vitest.config.ts", "cypress.config.ts"]
+	}
 }

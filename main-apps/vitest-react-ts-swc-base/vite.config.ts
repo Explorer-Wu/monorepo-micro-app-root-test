@@ -25,8 +25,10 @@ import { visualizer } from 'rollup-plugin-visualizer';
 // import EnvironmentPlugin from 'vite-plugin-environment';
 // import ResizeImage from 'vite-plugin-resize-image/vite'; // 没有下载权限
 import webfontDownload from 'vite-plugin-webfont-dl';
+// import tailwindcss from '@tailwindcss/vite';
+
 import path from 'path';
-import { resolve, pathRelative } from './utils';
+import { resolve, pathRelative } from './tools';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
@@ -57,6 +59,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			}),
 			// preload(),
 			webfontDownload(),
+			// tailwindcss(),
 			// http2 开启
 			// mkcert({
 			// 	// 自定义域名，默认使用 localhost + 本地 ip 列表

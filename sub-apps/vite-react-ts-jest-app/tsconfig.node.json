@@ -27,6 +27,7 @@
 		"viter/vite.base.config.*",
 		"viter/vite.dev.config.*",
 		"viter/vite.prod.config.*",
+		"viter/utils.*",
 		"jest.config.*"
 		// "nightwatch.conf.*",
 		// "playwright.config.*",

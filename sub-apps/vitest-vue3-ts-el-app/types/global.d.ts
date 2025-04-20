@@ -26,6 +26,8 @@ declare global {
   interface Window {
     eventCenterForAppViteVue3: any
     microApp: any
+    mount: Function
+    unmount: Function
     __MICRO_APP_NAME__: string
     __MICRO_APP_ENVIRONMENT__: string
     __MICRO_APP_BASE_APPLICATION__: string

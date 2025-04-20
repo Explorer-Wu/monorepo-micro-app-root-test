@@ -30,7 +30,7 @@ import { getUserToken, formatToken } from '../utils/auth';
 import { transformReqHeaderData, transformResData } from '../utils/doDatas';
 import { handleErrorFn } from '../utils/doErrs';
 // import CookieStorage from '../storagecookies/index';
-import { showLoading, hideLoading } from '../utils/loading';
+// import { showLoading, hideLoading } from '../utils/loading';
 
 import { StreamPost, StreamGet, convertRes2Blob } from './upDownloadFile';
 import { FetchCacheCanceler } from './fetchCacheCancel';
@@ -138,24 +138,14 @@ export class HttpAxios {
 				config: NewInternalAxiosReqConfig,
 			): NewInternalAxiosReqConfig | Promise<NewInternalAxiosReqConfig> => {
 				// NProgress.start();
-				// 有loading组件则显示
-				// if (this.loading) {
-				// 	showLoading(HttpAxios, this, config?.loadTarget);
-				// }
-
-				/** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
-				const whiteList = ['/refreshToken', '/auth/login'];
-				if (whiteList.some(v => config?.url!.indexOf(v) > -1)) {
-					return config;
-				}
 
 				// 是否静态提示响应信息
 				$quietMsg = config.quiet ? config.quiet : false;
 				// 请求锁
-				// fetchLock = config.fetchLock !== undefined ? config.fetchLock : true;
-				// if (fetchLock) {
-				// 	fetchCacheCanceler.addPending(config);
-				// }
+				fetchLock = config.fetchLock !== undefined ? config.fetchLock : true;
+				if (fetchLock) {
+					fetchCacheCanceler.addPending(config);
+				}
 
 				// 判断是否需要token，如果存在的话，则每个http header都加上token
 				if (config.authtoken) {
@@ -172,6 +162,13 @@ export class HttpAxios {
 						] = formatToken(getTokenKey.accessToken));
 
 					Reflect.deleteProperty(config, 'authtoken');
+				} else {
+					/** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
+					const whiteList = []; // ['/refreshToken', '/auth/login'];
+					whiteList.push(config?.url);
+					// if (whiteList.some(v => config?.url!.indexOf(v) > -1)) {
+					// 	return config;
+					// }
 				}
 
 				// 处理请求之前的配置
@@ -179,27 +176,23 @@ export class HttpAxios {
 				return config;
 			},
 			(error: NewAxiosError) => {
-				// 有loading组件则关闭
-				// if (this.loading) {
-				// 	hideLoading(HttpAxios, this);
-				// }
 				// 请求错误处理
 				console.log('request_err:', error);
 				return Promise.reject(error);
 			},
-			// {
-			// 	/**
-			// 	 * synchronous: 是否同步, false
-			// 	 * runWhen: 接收一个类型为NewInternalAxiosReqConfig的 config 参数，返回一个 boolean。
-			// 	 * 触发时机为每次请求触发拦截器之前，当runWhen返回true, 则执行本请求拦截器里的方法, 否则不执行
-			// 	 **/
-			// 	synchronous: this.axiosConfig?.isSync || false, // 默认异步 Async
-			// 	runWhen: (config: NewInternalAxiosReqConfig): boolean => {
-			// 		// if return true, axios will execution interceptor method
-			// 		if (!config?.isSync) return true;
-			// 		return false;
-			// 	},
-			// },
+			{
+				/**
+				 * synchronous: 是否同步, false
+				 * runWhen: 接收一个类型为NewInternalAxiosReqConfig的 config 参数，返回一个 boolean。
+				 * 触发时机为每次请求触发拦截器之前，当runWhen返回true, 则执行本请求拦截器里的方法, 否则不执行
+				 **/
+				synchronous: this.axiosConfig?.isSync || false, // 默认异步 Async
+				runWhen: (config: NewInternalAxiosReqConfig): boolean => {
+					// if return true, axios will execution interceptor method
+					if (!config?.isSync) return true;
+					return false;
+				},
+			},
 		);
 	}
 
@@ -248,11 +241,6 @@ export class HttpAxios {
 				// 处理响应数据
 				!this.otherOpts.isProd && console.log('interceptors.res:', data);
 
-				// 有loading组件则关闭
-				// if (this.loading) {
-				// 	hideLoading(HttpAxios, this);
-				// }
-
 				return response;
 			},
 			(error: NewAxiosError<ResDataTypeMode, any>) => {
@@ -263,12 +251,7 @@ export class HttpAxios {
 					return new Promise(() => null);
 				}
 
-				const {
-					// code,
-					status,
-					response,
-					message,
-				} = error;
+				const { status, response, message } = error;
 
 				if (error && response && status) {
 					handleErrorFn(error, status, HttpAxios, this.otherOpts);
@@ -276,11 +259,6 @@ export class HttpAxios {
 				const { headers }: any = response;
 				// 追踪错误信息
 				// !$quietMsg && handleErrMessage(this.otherOpts, message, headers?.traceId);
-
-				// 有loading组件则关闭
-				// if (this.loading) {
-				// 	hideLoading(HttpAxios, this);
-				// }
 
 				// 处理响应失败
 				return Promise.reject(

@@ -13,18 +13,6 @@ module.exports = {
 		esnext: true,
 		browser: true,
 	},
-	// 继承的规则 [扩展]
-	extends: [
-		'eslint:recommended',
-		// Uses the recommended rules from the @typescript-eslint/eslint-plugin
-		'plugin:@typescript-eslint/recommended',
-		'plugin:react/recommended',
-		'plugin:react-hooks/recommended',
-		'plugin:prettier/recommended',
-		// 'prettier', // === 'prettier/@typescript-eslint' + 'prettier/react'
-		// "plugin:react/jsx-runtime",
-		'plugin:jsx-control-statements/recommended',
-	],
 	// 解析器
 	parser: '@typescript-eslint/parser',
 	// 配置解析选项
@@ -43,15 +31,34 @@ module.exports = {
 		// createDefaultProgram: true,
 	},
 
+	// 继承的规则 [扩展]
+	extends: [
+		'eslint:recommended',
+		// 'eslint-config-prettier',
+		// Uses the recommended rules from the @typescript-eslint/eslint-plugin
+		// "plugin:@typescript-eslint/eslint-recommended",
+		'plugin:@typescript-eslint/recommended',
+		'plugin:prettier/recommended',
+		'prettier', // === 'prettier/@typescript-eslint' + 'prettier/react'
+		'plugin:react/recommended',
+		'plugin:react-hooks/recommended',
+		'plugin:react/jsx-runtime', // react补充配置
+		'plugin:jsx-control-statements/recommended',
+		// 'plugin:import/errors',
+		// 'plugin:import/warnings',
+	],
+
 	// 拓展和支持相关能力的插件库
 	plugins: [
 		'@typescript-eslint',
 		'prettier',
-		// 'react',
+		'import',
+		'react',
 		'react-refresh',
 		'react-hooks',
 		'jsx-a11y',
 		'jsx-control-statements',
+		'testing-library',
 	],
 	/**
 	 * "off" 或 0 - 关闭规则
@@ -60,9 +67,8 @@ module.exports = {
 	 */
 
 	rules: {
-		'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 		'@typescript-eslint/explicit-function-return-type': 'off',
-		'@typescript-eslint/no-unused-vars': ['warn'], //
+		'@typescript-eslint/no-unused-vars': 'off', // ['warn'],
 		'no-unused-vars': 'off',
 		// [
 		// 	'off',
@@ -71,17 +77,14 @@ module.exports = {
 		// 		varsIgnorePattern: '^_',
 		// 	},
 		// ],
-		'@typescript-eslint/ban-ts-comment': 'off',
 		'@typescript-eslint/ban-types': 'off',
 		'@typescript-eslint/no-var-requires': 'off',
 		// "@typescript-eslint/interface-name-prefix": "off",
 		// "@typescript-eslint/explicit-member-accessibility": "off",
 		// "@typescript-eslint/no-triple-slash-reference": "off",
 		'@typescript-eslint/ban-ts-ignore': 'off',
-		'@typescript-eslint/no-this-alias': 'off',
 		'@typescript-eslint/no-empty-function': 'off',
 		'@typescript-eslint/no-use-before-define': 'off',
-		'@typescript-eslint/no-non-null-assertion': 'off',
 		// "@typescript-eslint/triple-slash-reference": [
 		//   "error",
 		//   { path: "always", types: "never", lib: "never" }
@@ -89,8 +92,16 @@ module.exports = {
 
 		// 优先使用 interface 而不是 type
 		'@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-		'@typescript-eslint/no-explicit-any': 'off',
 		'@typescript-eslint/explicit-module-boundary-types': 'off',
+		'@typescript-eslint/no-explicit-any': ['off'], //允许使用any
+		'@typescript-eslint/no-this-alias': [
+			'error',
+			{
+				allowedNames: ['that'], // this可用的局部变量名称
+			},
+		],
+		'@typescript-eslint/ban-ts-comment': 'off', //允许使用@ts-ignore
+		'@typescript-eslint/no-non-null-assertion': 'off', //允许使用非空断言
 
 		// This rule enforces the preference for using '@ts-expect-error' comments in TypeScript
 		// code to indicate intentional type errors, improving code clarity and maintainability.
@@ -107,7 +118,6 @@ module.exports = {
 		'@typescript-eslint/no-import-type-side-effects': 'error',
 
 		'import/no-dynamic-require': 'off',
-		'import/order': 0,
 		'import/imports-first': 0,
 		'import/newline-after-import': 0,
 		'import/no-extraneous-dependencies': 0,
@@ -115,10 +125,53 @@ module.exports = {
 		// "import/no-unresolved": [2, { caseSensitive: false }], // ts already checks case sensitive imports
 		// "import/no-webpack-loader-syntax": 0,
 		'import/prefer-default-export': 0,
+
+		//import导入顺序规则
+		// 'import/order': 0,
+		'import/order': [
+			'error',
+			{
+				//按照分组顺序进行排序
+				groups: ['builtin', 'external', 'parent', 'sibling', 'index', 'internal', 'object', 'type'],
+				//通过路径自定义分组
+				pathGroups: [
+					{
+						pattern: 'react*', //对含react的包进行匹配
+						group: 'builtin', //将其定义为builtin模块
+						position: 'before', //定义在builtin模块中的优先级
+					},
+					{
+						pattern: '@/components/**',
+						group: 'parent',
+						position: 'before',
+					},
+					{
+						pattern: '@/utils/**',
+						group: 'parent',
+						position: 'after',
+					},
+					{
+						pattern: '@/apis/**',
+						group: 'parent',
+						position: 'after',
+					},
+				],
+				//将react包不进行排序，并放在前排，可以保证react包放在第一行
+				pathGroupsExcludedImportTypes: ['react'],
+				'newlines-between': 'always', //每个分组之间换行
+				//根据字母顺序对每个组内的顺序进行排序
+				alphabetize: {
+					order: 'asc',
+					caseInsensitive: true,
+				},
+			},
+		],
+		'sort-imports': ['error', { ignoreDeclarationSort: true }],
 		// "import/no-cycle": 1,
 		// These rules don't add much value, are better covered by TypeScript and good definition files
 
 		// React相关校验规则
+		'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 		'react/no-unknown-property': ['error', { ignore: ['css'] }],
 		'react/no-unescaped-entities': 'off',
 		'react/no-direct-mutation-state': 'off',
@@ -148,7 +201,7 @@ module.exports = {
 		'jsx-control-statements/jsx-use-if-tag': 'off',
 		'prettier/prettier': ['error', prettierRc],
 		'no-cond-assign': 2,
-		'no-console': ['warn', { allow: ['log', 'warn', 'error', 'info'] }], // 'off',
+		'no-console': ['warn', { allow: ['log', 'warn', 'error', 'info'] }], // 提交时不允许有console.log 'off',
 		// 禁止 function 定义中出现重名参数
 		'no-dupe-args': 2,
 		// 禁止对象字面量中出现重复的 key
@@ -170,14 +223,13 @@ module.exports = {
 		// 	},
 		// ],
 		// "global-require": 0,
-		'no-debugger': isProd ? 'error' : 'off',
+		'no-debugger': isProd ? 'error' : 'off', // 'warn' 提交时不允许有debugger
 		eqeqeq: ['warn', 'always'], // 对于”==“和”===“的校验
 		'prefer-const': ['error', { destructuring: 'all', ignoreReadBeforeAssign: true }],
 		semi: ['error', 'always'],
 		'comma-dangle': ['error', 'always-multiline'],
 		'unsafe-optional-chaining': 'off',
 		'no-unsafe-optional-chaining': 'off',
-
 		'no-restricted-syntax': [
 			'error',
 			banConstEnum,
@@ -189,7 +241,6 @@ module.exports = {
 			'ObjectExpression > SpreadElement',
 			'AwaitExpression',
 		],
-		'sort-imports': ['error', { ignoreDeclarationSort: true }],
 	},
 
 	settings: {
@@ -199,7 +250,14 @@ module.exports = {
 		'import/resolver': {
 			typescript: {
 				alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
-				directory: './tsconfig.json',
+				// directory: './tsconfig.json',
+				project: [
+					'./tsconfig.json',
+					'./tsconfig.node.json',
+					'./tsconfig.app.json',
+					'./tsconfig.vitest.json',
+					'./tsconfig.prod.json',
+				],
 			},
 			node: {
 				extensions: ['.ts', '.tsx', '.js', '.json'],

@@ -66,7 +66,7 @@ export default env => {
 			// 	],
 			// }),
 			// viteCompression(), // gzip压缩
-			//在plugins配置数组里添加gzip插件
+			// 在plugins配置数组里添加gzip插件
 			viteCompression({
 				verbose: true, // 默认即可
 				disable: false, // 开启压缩(不禁用)，默认即可
@@ -75,7 +75,13 @@ export default env => {
 				algorithm: 'gzip', // 压缩算法
 				ext: '.gz', // 文件类型
 			}),
-			visualizer() as any,
+			// visualizer() as any,
+			visualizer({
+				open: true,
+				gzipSize: true,
+				brotliSize: true,
+				template: 'treemap', // 使用树形图更直观
+			}) as any,
 		],
 		build: {
 			// 构建后是否生成 source map 文件
@@ -134,6 +140,9 @@ export default env => {
 					// 	react: 'React',
 					// },
 					/** 分包策略 **/
+					chunkFileNames: 'static/js/[name]-[hash].js',
+					entryFileNames: 'static/js/[name]-[hash].js',
+					assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
 					// 1. 对象配置
 					manualChunks: {
 						// 将 React 相关库打包成单独的 chunk 中
@@ -141,7 +150,8 @@ export default env => {
 						// // 将 Lodash 库的代码单独打包
 						// lodash: ['lodash-es'],
 						// 将组件库的代码打包
-						library: ['antd'], // '@arco-design/web-react'
+						library: ['antd', '@ant-design/icons'], // '@arco-design/web-react' 'vendor-ui': ['antd', '@ant-design/cssinjs', 'framer-motion', 'styled-components'],
+						'vendor-utils': ['axios', 'dayjs', 'i18next', 'zustand', '@iconify/react'],
 						// Echarts 单独拆分
 						echarts: ['echarts', 'echarts-for-react'],
 					},
@@ -174,7 +184,7 @@ export default env => {
 			// 启用/禁用 gzip 压缩大小报告。压缩大型输出文件可能会很慢，因此禁用该功能可能会提高大型项目的构建性能
 			reportCompressedSize: true,
 			//chunk 大小警告的限制
-			chunkSizeWarningLimit: 500,
+			chunkSizeWarningLimit: 1500,
 			/** 构建为库
 			 * 如果你指定了 build.lib，那么 build.assetsInlineLimit 将被忽略
 			 * 无论文件大小或是否为 Git LFS 占位符，资源都会被内联。

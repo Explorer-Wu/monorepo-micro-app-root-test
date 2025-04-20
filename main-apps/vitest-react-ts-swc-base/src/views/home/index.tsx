@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import reactLogo from '@/assets/images/svg/react.svg';
 import viteLogo from '/vite.svg';
 

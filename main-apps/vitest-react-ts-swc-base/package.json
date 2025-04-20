@@ -37,10 +37,13 @@
 		"mockjs": "^1.1.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"react-router-dom": "^6.21.1"
+		"react-router-dom": "^6.21.1",
+		"zustand": "^5.0.3"
 	},
 	"devDependencies": {
 		"@swc/core": "^1.4.2",
+		"@tailwindcss/postcss": "^4.0.14",
+		"@tailwindcss/vite": "^4.0.14",
 		"@testing-library/jest-dom": "^6.1.6",
 		"@testing-library/react": "^14.1.2",
 		"@testing-library/react-hooks": "^8.0.1",
@@ -79,6 +82,7 @@
 		"sass": "^1.69.6",
 		"source-map-explorer": "^2.5.3",
 		"styled-jsx": "^5.1.2",
+		"tailwindcss": "^4.0.14",
 		"typescript": "^5.2.2",
 		"unocss": "^0.58.6",
 		"unplugin-swc": "^1.4.4",

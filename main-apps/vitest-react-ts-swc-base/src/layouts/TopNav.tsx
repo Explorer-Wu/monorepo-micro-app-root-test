@@ -5,11 +5,17 @@ import { Menu, type MenuProps } from 'antd'; // , type GetProp
 import { HomeOutlined, TrademarkCircleOutlined, SendOutlined } from '@ant-design/icons';
 import config from '@/config';
 import HistoryRule from '@/router/history';
-import { routes } from '@/router/index';
+import { routes } from '@/router/routesConfig';
 
 type MenuItem = Required<MenuProps>['items'][number]; // GetProp<MenuProps, 'items'>[number];
 
-function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[], type?: 'group'): MenuItem {
+function getItem(
+	label: React.ReactNode,
+	key: React.Key,
+	icon?: React.ReactNode,
+	children?: MenuItem[],
+	type?: 'group',
+): MenuItem {
 	// link: string,
 	return {
 		key,

@@ -1,0 +1,7 @@
+services:
+  slash:
+    build:
+      context: .
+    ports:
+      - "8081:80"
+    restart: always

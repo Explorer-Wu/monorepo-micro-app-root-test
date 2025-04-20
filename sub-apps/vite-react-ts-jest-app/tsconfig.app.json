@@ -44,6 +44,7 @@
 		 * 启用 --strict相当于启用 --noImplicitAny, --noImplicitThis, --alwaysStrict， --strictNullChecks和 --strictFunctionTypes和--strictPropertyInitialization。
 		 */
 		"strict": false,
+
 		// 以严格模式解析并为每个源文件生成 "use strict"语句
 		// "alwaysStrict": true,
 		// "strictFunctionTypes": true, // 禁用函数参数双向协变检查
@@ -83,7 +84,7 @@
 		"lib": ["DOM", "DOM.Iterable", "ESNext", "ScriptHost"],
 
 		/*** Source Map 相关配置项 ***/
-		// 生成相应的 .map文件， 可用于 debug 的 sourceMap, 与inlineSourceMap二选一
+		// 输出 *.map 文件提供源码映射， 可用于 debug 的 sourceMap, 与inlineSourceMap二选一
 		"sourceMap": true,
 		// "inlineSourceMap": false, // 生成单个sourcemaps文件，而不是将每sourcemaps生成不同的文件。
 		// "inlineSources": false, // 将代码与sourcemaps生成到一个文件中，要求同时设置了 --inlineSourceMap或 --sourceMap属性
@@ -106,12 +107,17 @@
 		 * 指定采用的模块系统 module：
 		 * "None"， "CommonJS"， "AMD"， "System"， "UMD"， "ES6"或 "ES2015"
 		 * target === "ES6" ? "ES6" : "commonjs"
+		 * ESNext 支持更多特性，比如动态导入等。
 		 */
 		"module": "ESNext",
 		// 指定模块解析策略, 'node' 用于 Node.js 的 CommonJS 实现
 		// module === "AMD" or "System" or "ES6" ? "Classic" : "Node"
 		"moduleResolution": "bundler",
 		// 支持 CommonJS 和 ES 模块之间的互操作性,  CommonJS/AMD/UMD 模块导入兼容
+		// 使 TypeScript 可以更好地与 CommonJS 模块兼容。在使用 CommonJS 模块系统时，导出的模块将会被包装在一个对象中，这是因为 CommonJS 使用的是类似于 module.exports 的语法来导出模块。
+		// 而某些工具和库可能需要以 ES6 模块的方式导入这些 CommonJS 模块，这时候就可以开启 esModuleInterop 选项。
+		// 开启后，在导入 CommonJS 模块时不需要再使用默认导出才能正确引入，也不需要手动处理 require() 和 module.exports。
+		// 这使得导入和使用 CommonJS 模块的过程变得更加简洁方便。
 		"esModuleInterop": true,
 		// "importsNotUsedAsValues": "preserve",
 		// 通过从以前的编译中读取/写入信息到磁盘上的文件来启用增量编译
@@ -142,18 +148,19 @@
 			"react-dom",
 			"react-router-dom"
 		],
-		/* 配置具体如何解析 require/import 的导入，
+		/* alias 配置具体如何解析 require/import 的导入，
 		 * 模块名到基于 baseUrl的路径映射的列表（指定特殊模块的路径）
 		 * 路径映射，与 baseUrl 关联
 		 * 如使用jq时不想使用默认版本，而需要手动指定版本，可进行如下配置
 		 */
 		"paths": {
 			"@/*": ["src/*"],
-			"$types/*": ["types/*"],
+			"$types/*": ["types/*"], // "#/*": ["types/*"]
 			"tests/*": ["tests/*"],
 			"public/*": ["public/*"]
 			// "*": ["node_modules/*"]
 		},
+
 		// 根（root）文件夹列表，表示运行时组合工程结构的内容
 		"rootDir": "./",
 		// 一般设置tsconfig.json 所在目录
@@ -196,11 +203,13 @@
 		"noUnusedParameters": false,
 		// 报告switch语句的fallthrough错误。（即，不允许switch的case语句贯穿）
 		"noFallthroughCasesInSwitch": true,
+		// 为 true 时，在 catch 块中声明的变量类型会被视为 unknown 而非默认的 any。
+		"useUnknownInCatchVariables": false,
 		// 不是函数的所有返回路径都有返回值时报错。
 		"noImplicitReturns": true,
 		// 保留 const和 enum声明
 		"preserveConstEnums": true,
-		// 保留watch模式下过时的控制台输出
+		// 保留watch模式下过时的控制台输出， 该选项允许在监视模式下保留先前编译的文件，从而避免增量编译时删除更改的文件导致的重新编译
 		"preserveWatchOutput": false,
 		// 忽略库的默认声明文件的类型检查
 		"skipDefaultLibCheck": false,
@@ -225,12 +234,14 @@
 		// 不截短错误消息
 		"noErrorTruncation": false,
 		// 忽略所有的声明文件（ *.d.ts）的类型检查 (跳过库声明文件的类型检查), 在上游仓库修复好之前暂时缓解错误
-		"skipLibCheck": false,
-		/* 设置是否输出 js 文件，一般是设置为 false，将打包等工作交给 Webpack 等工具
+		"skipLibCheck": false, // 跳过编译器对引入库文件的检查，以加快构建速度
+		/*
+		 * 设置是否输出 js 文件，一般是设置为 false，将打包等工作交给 Webpack 等工具
 		 * 为true时, 不生成输出文件，这个一般比较少用,这个build目录下将没有任何文件,
 		 * 但是会进行编译,有错误会抛出
 		 */
 		"noEmit": false,
+		// 允许在 import 导入语句中导入 .ts 或 .tsx 扩展名的模块，而不需要显式地指定扩展名
 		"allowImportingTsExtensions": true,
 		// 从tslib导入辅助工具函数(helper 函数), 比如 __extends， __rest等
 		"importHelpers": true,
@@ -239,7 +250,7 @@
 		// 给错误和消息设置样式，使用颜色和上下文。
 		"pretty": true,
 		// 将每个文件作为单独的模块（与“ts.transpileModule”类似）。
-		// 提供额外的一些语法检查，如文件没有模块导出会报错
+		// 提供额外的一些语法检查，如文件没有模块导出会报错。 让typescript处理每个文件时都是独立的单元（可加快编译速度）
 		"isolatedModules": true,
 		// 显示诊断信息
 		"diagnostics": true,

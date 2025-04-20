@@ -25,6 +25,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
 	// 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
 	const viteEnv = loadEnv(mode, resolve('./env'), ['VITE_', 'APP_']); // prefix ['VITE_', 'APP_']
 	const isAnalyze = mode === 'analyze';
+	const isProduction = mode === 'production';
 
 	const processEnvPrefix = Object.entries(viteEnv).reduce((prev, [key, val]) => {
 		return {
@@ -38,7 +39,13 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
 
 	return {
 		...resolveEnvFn[command](viteEnv),
-		base: viteEnv.APP_BASE_ROUTER, //  './',
+		// base: viteEnv['APP_BASE_ROUTER'], //  './',
+		// esbuild 优化配置
+		esbuild: {
+			drop: isProduction ? ['console', 'debugger'] : [],
+			legalComments: 'none',
+			target: 'esnext',
+		},
 		define: {
 			...processEnvPrefix,
 		},

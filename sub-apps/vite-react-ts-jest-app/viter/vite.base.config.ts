@@ -1,5 +1,5 @@
 // @ts-ignore
-import { defineConfig } from 'vite';
+import { defineConfig, UserConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react'; // 和plugin-react-refresh冲突
 // import reactJsx from 'vite-react-jsx';
 
@@ -7,11 +7,13 @@ import react from '@vitejs/plugin-react'; // 和plugin-react-refresh冲突
 import vitePluginImp from 'vite-plugin-imp';
 // 使svg作为react component在vite中使用
 import svgrPlugin from 'vite-plugin-svgr';
+// import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+
 // 用来检查 Vite 插件的中间状态，访问 localhost:5173/__inspect/ 来检查你项目的模块和栈信息
 import Inspect from 'vite-plugin-inspect';
 // 为打包后的文件提供传统浏览器兼容性支持
 import legacy from '@vitejs/plugin-legacy';
-// import tsconfigPaths from 'vite-tsconfig-paths';
+import tsconfigPaths from 'vite-tsconfig-paths';
 // * No declaration file for less-vars-to-js
 // import lessToJS from 'less-vars-to-js';
 // import fs from 'fs';
@@ -30,7 +32,7 @@ export default env => {
 
 	return defineConfig({
 		// root: path.resolve(__dirname, '../'),
-		base: `${env.APP_BASE_ROUTER}`,
+		base: `${env.APP_BASE_ROUTER}`, // || '/';
 		//静态资源服务的文件夹
 		publicDir: 'public',
 		// 环境变量设置所在文件夹路径
@@ -42,7 +44,7 @@ export default env => {
 		logLevel: 'info',
 		// 设为false 可以避免 vite 清屏而错过在终端中打印某些关键信息
 		clearScreen: false,
-		// 强制预构建插件包
+		// 优化依赖预构建 || 强制预构建插件包
 		optimizeDeps: {
 			//检测需要预构建的依赖项
 			// entries: [],
@@ -53,17 +55,28 @@ export default env => {
 				'linked-dep',
 				'react',
 				'react-dom',
-				// 'react-router-dom',
+				'react-router-dom',
+				// 'react-router',
+				'antd',
+				'@ant-design/icons',
 				'axios',
 				'lodash-es',
 				'dayjs',
 				// 'async-validator',
 			],
-			// exclude: [], //排除在优化之外
+			exclude: ['@iconify/react'], // 排除不需要预构建的依赖
 		},
 
 		plugins: [
-			react(), // 避免配置 Babel 选项，这样它就会在构建期间跳过转换（只使用 esbuild）
+			// react(), // 避免配置 Babel 选项，这样它就会在构建期间跳过转换（只使用 esbuild）
+			react({
+				// 添加 React 插件的优化配置
+				babel: {
+					parserOpts: {
+						plugins: ['decorators-legacy', 'classProperties'],
+					},
+				},
+			}),
 			// reactJsx(),
 			// reactRefresh(), 不要使用 @vitejs/plugin-react-refresh，  建议使用 React Fast Refresh 的原生支持
 			svgrPlugin(), // 使svg作为react component在vite中使用
@@ -96,9 +109,13 @@ export default env => {
 				],
 			}),
 			// 同步tsconfig里的路径映射别名
-			// tsconfigPaths(),
+			tsconfigPaths(),
 			// 检查你项目的模块和栈信息
 			Inspect(),
+			// createSvgIconsPlugin({
+			// 	iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
+			// 	symbolId: 'icon-[dir]-[name]',
+			// }),
 		],
 		json: {
 			//是否支持从 .json 文件中进行按名导入
@@ -197,5 +214,5 @@ export default env => {
 		//   //列出的是防止被 SSR 外部化依赖项
 		//   noExternal: []
 		// }
-	});
+	} as UserConfig);
 };

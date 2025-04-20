@@ -36,7 +36,8 @@ declare global {
     scrollHeight: number
     scrollTop: number
     clientHeight: number,
-
+    WebSocket: any,
+    MozWebSocket: any,
     __globalRouter: any,
   }
 }

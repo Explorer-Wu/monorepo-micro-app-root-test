@@ -8,7 +8,7 @@ const isProd = ['production', 'staging', 'testing'].includes(import.meta.env.MOD
 const envBaseUrlFn = (reqai: boolean) =>
 	reqai ? import.meta.env.APP_AI_OLLAMA_API_URL : import.meta.env.APP_API_BASE_URL;
 
-const $router = useRouter();
+// const $router = useRouter();
 // export type UserResult = {
 //   success: boolean
 //   data: {

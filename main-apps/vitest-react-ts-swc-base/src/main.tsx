@@ -21,12 +21,17 @@ microApp.start({
 	'keep-alive': true, // 全局开启保活模式，默认为false
 	// 'disable-memory-router': true, // 全局关闭虚拟路由系统，默认值false
 	// 'keep-router-state': true, // 子应用在卸载时保留路由状态，默认值false
-	// 'disable-patch-request': true, // 关闭子应用请求的自动补全功能，默认值false
+	// 'disable-patch-request': true, // 关闭对子应用请求的拦截，默认值false
 	// iframeSrc: location.origin, // 设置iframe沙箱中iframe的src地址，默认为子应用所在页面地址
 });
 
-createRoot(document.getElementById('root')!).render(
-	<React.StrictMode>
-		<App />
-	</React.StrictMode>,
-);
+const rootElement = document.getElementById('root')! as HTMLElement;
+if (rootElement) {
+	const root = createRoot(rootElement);
+	// root.render(
+	// 	<React.StrictMode>
+	// 		<App />
+	// 	</React.StrictMode>,
+	// );
+	root.render(React.createElement(React.StrictMode, null, React.createElement(App)));
+}
