@@ -25,6 +25,50 @@
 "@commitlint/config-conventional": 配置指定需要的规范，在.commitlintrc文件中引入  
 "@commitlint/cz-commitlint": git cz相关插件  
 
+  **volta —— Node.js 版本管理工具**
+  1. fetch
+  从远程仓库获取工具（如 Node.js 或 npm）的特定版本，但不安装它们，可以将工具缓存到本地机器以供离线使用。
+  `volta fetch node@22.15.1`
+
+  2. install
+  安装工具的指定版本，设置工具的默认版本，并使其成为全局默认版本或项目级别的版本。
+  ```
+    # 全局安装 Node.js v22.15.1
+    volta install node@22.15.1
+
+    # 项目级别的安装
+    cd /path/to/project
+    volta install node@22.15.1
+  ```
+
+  3. uninstall
+  卸载之前安装的工具版
+  `volta uninstall node@22.15.1`
+
+  4. pin
+  固定项目的运行时或包管理器，将工具版本与项目关联起来，通常用于将版本写入 package.json 文件中的 volta 属性。
+  `volta pin node@22.15.1`
+
+  5. list
+  列出已安装的工具版本。
+  `volta list`
+
+  6. which
+  显示指定工具的可执行文件路径，查看 volta 安装的工具的目录
+  `volta which node`
+
+  7. setup
+  初始化 Volta 的环境，包括安装和配置必要的组件，为当前用户/shell 启用 volta
+  `volta setup`
+
+  8. help
+  输出帮助信息，显示特定命令的帮助文档。
+  ```
+    # 显示 `volta install` 的帮助
+    volta help install
+  ```
+  这些命令可以帮助你有效地管理和使用不同版本的工具，特别是在多项目环境中。
+
 ### git操作
 
 初始化本地仓库
