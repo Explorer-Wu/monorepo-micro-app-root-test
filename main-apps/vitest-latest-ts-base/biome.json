@@ -12,11 +12,17 @@
       "**/*.tsx",
       "**/*.mts",
       "**/*.cts"
+    ],
+    "ignore": [
+      "**/*.d.ts"
     ]
   },
   "files": {
     "ignoreUnknown": false,
     "ignore": [
+      "**/public/**",
+      "**/docs/**",
+      "**/bin/**",
       "**/dist/**",
       "**/build/**",
       "**/coverage/**",
@@ -27,7 +33,13 @@
       "**/.vscode/**",
       "**/.idea/**",
       "**/.local/**",
-      "**/*.min.*"
+      "**/Dockerfile",
+      "**/*.html",
+      "**/*.md",
+      "**/*.min.*",
+      "**/*.sh",
+      "**/*.ttf",
+      "**/*.woff"
     ]
   },
   "formatter": {
@@ -41,17 +53,7 @@
     "bracketSpacing": true,
     "useEditorconfig": true,
     "include": [
-      "**",
-      "!**/dist",
-      "!dist/**",
-      "!**/build",
-      "!**/coverage",
-      "!**/node_modules",
-      "!**/*.html",
-      "!**/.github",
-      "!**/.next",
-      "!**/.swc",
-      "!**/*.min.*"
+      "**"
     ]
   },
   "javascript": {
@@ -163,26 +165,7 @@
       }
     },
     "include": [
-      "**",
-      "!**/dist/",
-      "!dist/**",
-      "!./public",
-      "!./docs",
-      "!./bin",
-      "!**/build",
-      "!**/coverage",
-      "!**/node_modules",
-      "!**/Dockerfile",
-      "!**/*.html",
-      "!**/.github",
-      "!**/.swc",
-      "!**/.vscode",
-      "!**/.idea",
-      "!**/.local",
-      "!**/*.sh",
-      "!**/*.md",
-      "!**/*.woff",
-      "!**/*.ttf"
+      "**"
     ]
   },
   "overrides": [
@@ -247,6 +230,24 @@
     },
     {
       "include": [
+        "*.d.ts"
+      ],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUndeclaredVariables": "off"
+          },
+          "style": {
+            "noNamespace": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    {
+      "include": [
         "tests/**",
         "*.test.ts",
         "*.test.tsx",
@@ -254,7 +255,11 @@
       ],
       "linter": {
         "rules": {
+          "correctness": {
+            "noUndeclaredVariables": "off"
+          },
           "suspicious": {
+            "noConsole": "off",
             "noExplicitAny": "off"
           }
         }
