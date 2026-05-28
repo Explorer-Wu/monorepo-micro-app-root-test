@@ -1,10 +1,13 @@
 {
-  "*.(j|t)s(x)？": [
-    "eslint --cache --fix --max-warnings=0",
-    "prettier --parser=typescript --write --cache --ignore-unknown",
+  "*.(j|t)s(x)?": [
+    "biome check --write --no-errors-on-unmatched",
     "git add"
   ],
-  "*.{less,sass,scss,json}": [
+  "*.{json,jsonc}": [
+    "biome format --write --no-errors-on-unmatched",
+    "git add"
+  ],
+  "*.{less,sass,scss}": [
     "prettier --write --cache --ignore-unknown",
     "git add"
   ]

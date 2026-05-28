@@ -28,7 +28,7 @@
 	},
 	"dependencies": {
 		"@ant-design/icons": "^5.3.0",
-		"@micro-zoe/micro-app": "1.0.0-rc.3",
+		"@micro-zoe/micro-app": "1.0.0-rc.30",
 		"antd": "^5.12.5",
 		"axios-ajax-ts": "workspace:^",
 		"classnames": "^2.5.1",
