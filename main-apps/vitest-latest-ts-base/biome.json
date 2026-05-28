@@ -205,31 +205,6 @@
     },
     {
       "include": [
-        "*.ts"
-      ]
-    },
-    {
-      "include": [
-        "*.tsx"
-      ],
-      "javascript": {
-        "formatter": {
-          "jsxQuoteStyle": "double"
-        }
-      }
-    },
-    {
-      "include": [
-        "*.scss"
-      ]
-    },
-    {
-      "include": [
-        "*.json"
-      ]
-    },
-    {
-      "include": [
         "*.d.ts"
       ],
       "linter": {
@@ -255,9 +230,6 @@
       ],
       "linter": {
         "rules": {
-          "correctness": {
-            "noUndeclaredVariables": "off"
-          },
           "suspicious": {
             "noConsole": "off",
             "noExplicitAny": "off"
