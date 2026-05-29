@@ -49,7 +49,7 @@ const NavMenu: React.FC<any> = (props: any, context?: any) => {
 	const { HistoryNav, Location, HrefTo } = HistoryRule();
 	const [selKeys, setSelKeys] = useState<string[]>([]);
 	// const [defaultOpenKeys, setDefaultOpenKeys] = useState<string[]>([]);
-	const [isInit, setIsInit] = useState<Boolean>(false);
+	const [isInit, setIsInit] = useState<boolean>(false);
 
 	// 控制主应用跳转
 	// const linkToNav = (link: any) => {

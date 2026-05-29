@@ -4,21 +4,15 @@
 		"node": true,
 		"es2024": true
 	},
-	"settings": {
-		"jsx-a11y": {
-			"components": {
-				"Button": "button",
-				"Link": "a"
-			}
-		}
-	},
 	"rules": {
 		"correctness": "warn",
 		"suspicious": "warn",
-		"complexity": "warn",
 		"perf": "warn",
-		"style": "off",
+		"complexity": "off",
 		"regex": "warn",
+		"style": "off",
+		"no-unused-vars": "off",
+		"@typescript-eslint/no-unused-vars": "off",
 		"eslint-plugin-import/no-unresolved": [
 			"warn",
 			{

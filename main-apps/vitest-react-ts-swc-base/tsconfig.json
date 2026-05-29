@@ -18,7 +18,6 @@
 		"typeRoots": ["node_modules/@types", "./src/typings"],
 		// types设置typeRoots目录下需要包括在编译之中的类型模块。默认情况下，该目录下的所有类型模块，都会自动包括在编译之中
 		"types": ["vite/client", "node", "lodash-es", "react", "react-dom", "react-router-dom"],
-		"baseUrl": ".",
 		// 路径映射，别名
 		"paths": {
 			"vite": ["node_modules/vite"],

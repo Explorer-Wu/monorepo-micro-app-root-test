@@ -1,5 +1,4 @@
-import type { Config, ConfigPlugin, ConfigContext } from 'postcss-load-config';
-import autoprefixer from 'autoprefixer';
+import type { Config, ConfigContext } from 'postcss-load-config';
 import postcssPresetEnv from 'postcss-preset-env';
 import postCssPxToRem from 'postcss-pxtorem';
 

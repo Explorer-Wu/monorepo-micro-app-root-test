@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'node:url';
-import { defineConfig, mergeConfig } from 'vite';
-import type { InlineConfig, UserConfig } from 'vitest';
+import { type UserConfig, defineConfig, mergeConfig } from 'vite';
 import { configDefaults } from 'vitest/config';
+import type { InlineConfig } from 'vitest/node';
 import viteConfig from './vite.config';
 
 interface VitestConfigExport extends UserConfig {

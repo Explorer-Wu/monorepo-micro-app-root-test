@@ -68,6 +68,6 @@ declare module '*.tiff';
 
 
 declare module 'postcss-pxtorem';
+declare module 'postcss-preset-env';
 
-
-export {}
+export { }

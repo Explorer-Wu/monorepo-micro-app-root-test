@@ -1,5 +1,5 @@
 {
-  "*.(j|t)s(x)?": [
+  "*.(?:[jt]sx?|mjs|cjs)": [
     "oxlint --fix",
     "biome lint --write .",
     "biome format --write --no-errors-on-unmatched",

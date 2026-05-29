@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 
 // 模拟API调用
-const mockRegisterApi = async (username: string, email: string, password: string) => {
+const mockRegisterApi = async (username: string, email: string, password?: string) => {
 	// 在实际应用中，这里应该是真实的API调用
 	return new Promise<{ token: string; user: { id: string; username: string; email: string } }>(
 		(resolve, reject) => {

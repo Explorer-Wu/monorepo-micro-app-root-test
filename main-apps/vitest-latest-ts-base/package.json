@@ -21,7 +21,7 @@
 		"lint:biome": "biome lint --write .",
 		"format": "biome format --write .",
 		"lint:oxc": "oxlint --deny-warnings .",
-		"lint:oxc:fix": "oxlint src tests vite.config.ts vitest.config.ts --tsconfig ./tsconfig.json --fix",
+		"lint:oxc:fix": "oxlint --fix .",
 		"check:fast": "pnpm lint:oxc && pnpm tsc-only",
 		"test": "vitest run",
 		"test:watch": "vitest",
