@@ -1,10 +1,7 @@
-/** @type {import('postcss-load-config').Config} */
-import type { Config, Result, ConfigPlugin, ConfigContext } from 'postcss-load-config';
+import type { Config, ConfigPlugin, ConfigContext } from 'postcss-load-config';
 import autoprefixer from 'autoprefixer';
 import postcssPresetEnv from 'postcss-preset-env';
 import postCssPxToRem from 'postcss-pxtorem';
-import cssnano from 'cssnano';
-import tailwindCss from '@tailwindcss/postcss';
 
 // postcss 为 CSS 规则添加特定厂商的前缀。 Autoprefixer 自动获取浏览器的流行度和能够支持的属性，并根据这些数据帮你自动为 CSS 规则添加前缀
 module.exports = (ctx: ConfigContext, path: string, options: any): Config => ({
@@ -13,11 +10,6 @@ module.exports = (ctx: ConfigContext, path: string, options: any): Config => ({
 	...options,
 	// 配置插件
 	plugins: [
-		// 自动添加 CSS3 前缀
-		autoprefixer({
-			overrideBrowserslist: ['> 1%', 'last 10 versions', 'Chrome > 31', 'ff > 31', 'not ie <= 10'],
-			grid: true,
-		}),
 		// 使用最新的 CSS 语法，自动添加前缀，为浏览器按需加载 polyfill
 		postcssPresetEnv({
 			// autoprefixer: {
@@ -51,13 +43,10 @@ module.exports = (ctx: ConfigContext, path: string, options: any): Config => ({
 				return file.indexOf('screen') === -1;
 			},
 		}),
-		tailwindCss({}),
 		// 允许使用 import
 		// 'postcss-import': {},
 		// // css 嵌套
 		// 'postcss-nested': {},
-		// 一个模块化的 CSS 压缩器
-		ctx.env === 'production' ? cssnano({}) : false,
 		{
 			postcssPlugin: 'internal:charset-removal',
 			AtRule: {

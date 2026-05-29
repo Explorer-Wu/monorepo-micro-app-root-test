@@ -1,49 +1,54 @@
-import {
-	defineConfig,
-	searchForWorkspaceRoot,
-	loadEnv,
-	type ConfigEnv,
-	type UserConfig,
-} from 'vite';
-import react from '@vitejs/plugin-react-swc';
-import legacy from 'vite-plugin-legacy-swc';
+import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv, searchForWorkspaceRoot, type ConfigEnv, type UserConfig } from 'vite';
+// 浏览器兼容插件
+import tailwindcss from '@tailwindcss/vite';
 import checker from 'vite-plugin-checker';
+
+import fs from 'node:fs';
 // 本地 Dev Server 上开启 HTTP2
-// import mkcert from 'vite-plugin-mkcert'; 不好用
 import basicSsl from '@vitejs/plugin-basic-ssl';
+// import importToCDN from "vite-plugin-cdn-import";
+
+// GZIP 压缩插件
+import { compression } from 'vite-plugin-compression2';
+// 打包后生成bundle分析报告文件 vite-bundle-analyzer
+import { statsPlugin } from 'vite-bundle-explorer/plugin';
+
 // html插入CDN加速
 // import { importToCDN, autoComplete } from 'vite-plugin-cdn-import';
-import { cdn as importToCDN } from 'vite-plugin-cdn2';
-import { cdnjs } from 'vite-plugin-cdn2/resolver/cdnjs';
-// GZIP 压缩插件
-import viteCompression from 'vite-plugin-compression';
-// 打包后生成bundle分析报告文件
-import { visualizer } from 'rollup-plugin-visualizer';
+// import { cdn as importToCDN } from 'vite-plugin-cdn2';
+// import { cdnjs } from 'vite-plugin-cdn2/resolver/cdnjs';
+
 // import Unocss from 'unocss/vite';
 
 // import VitePluginInjectPreload from 'vite-plugin-inject-preload';
 // import EnvironmentPlugin from 'vite-plugin-environment';
 // import ResizeImage from 'vite-plugin-resize-image/vite'; // 没有下载权限
 import webfontDownload from 'vite-plugin-webfont-dl';
-// import tailwindcss from '@tailwindcss/vite';
 
 import path from 'path';
-import { resolve, pathRelative } from './tools';
+import { pathRelative, resolve } from './tools';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
-	const viteEnv = loadEnv(mode, resolve('./env'), ['VITE_', 'APP_']);
+	const envDirPath = resolve('./env');
+	const envFrom = fs.existsSync(envDirPath) ? envDirPath : process.cwd();
+	const viteEnv = loadEnv(mode, envFrom, ['VITE_', 'APP_']);
+	const appBaseRouter = viteEnv.APP_BASE_ROUTER || '/';
+	const outputDir = viteEnv.VITE_OUTPUT_DIR || 'dist';
+	const port = Number(viteEnv.VITE_PORT || 5173);
 	const isProd = ['production', 'staging', 'testing'].includes(viteEnv.VITE_NODE_ENV);
 	// const isDev = mode !== 'production';
 	const isAnalyze = ['testing', 'staging'].includes(mode);
+	const shouldAnalyze = isAnalyze || process.env.npm_lifecycle_event === 'analyze';
 	console.log('main-react-APP_BASE_ROUTER', viteEnv);
 
 	return {
-		base: viteEnv.APP_BASE_ROUTER, //  './',
+		base: appBaseRouter, //  './',
 		//静态资源服务的文件夹
 		publicDir: 'public',
-		// 环境变量设置所在文件夹路径
-		envDir: './env',
+		// 环境变量设置所在文件夹路径（如果存在 ./env 才启用）
+		...(fs.existsSync(envDirPath) ? { envDir: './env' } : {}),
 		envPrefix: ['VITE_', 'APP_'],
 		//静态资源处理
 		assetsInclude: '',
@@ -54,79 +59,36 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 
 		plugins: [
 			react(),
+			tailwindcss(),
 			checker({
 				typescript: true,
 			}),
 			// preload(),
-			webfontDownload(),
-			// tailwindcss(),
-			// http2 开启
-			// mkcert({
-			// 	// 自定义域名，默认使用 localhost + 本地 ip 列表
-			// 	hosts: ['localhost'], // 'example.xxx.com'
-			// 	// days: 365,
-			// 	force: true, // 是否强制重新生成证书
-			// 	autoUpgrade: true, // 是否自动升级 mkcert
-			// 	// 指定 mkcert 的下载源，国内用户可以设置成 coding 从 coding.net 镜像下载，也可以提供一个自定义的 BaseSource
-			// 	// source: '',
-			// 	// 如果网络受限的话，指定一个本地的 mkcert 文件来代替网络下载
-			// 	mkcertPath: './certs/rootCA.pem',
-			// 	// 保存文件的路径，比如下载的 mkcert 程序以及生成的 CA 文件、私钥跟证书文件等等。默认值是 PLUGIN_DATA_DIR
-			// 	savePath: './certs',
-			// 	// 私钥的文件名
-			// 	keyFileName: 'localhost-key.pem',
-			// 	// 证书的文件名
-			// 	certFileName: 'localhost-cert.pem',
-			// }),
+			// 本地开发支持 HTTP/2
 			basicSsl(),
-			// { basicSsl配置项
-			// 	/** 命名证书 */
-			// 	name: 'test',
-			// 	/** 自定义真实域名 domains */
-			// 	domains: ['*.custom.com'],
-			// 	/** 自定义证书存放目录 */
-			// 	certDir: '/Users/.../.devServer/cert',
-			// }
-			importToCDN({
-				modules: [
-					{
-						name: 'lodash-es',
-						// spare: 'https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/lodash.min.js',
-						relativeModule: './lodash.min.js',
-						global: '_',
-					},
-				],
+			webfontDownload(),
+
+			/** Brotli 几乎可以满足 99% 的需求，但完全替代仍有风险，建议“Brotli 为主，Gzip 兜底”
+			 * 无法完全替代的原因：
+			 * 老旧环境：极少数过时的企业级浏览器或老旧移动端设备仍只识别 Gzip。
+			 * HTTPS 强制要求：Brotli 仅在 HTTPS 连接下生效。如果你的服务存在 HTTP 回退场景，浏览器将无法识别 .br 文件，此时仍需 Gzip。
+			 * 动态压缩性能：Brotli 在高压缩等级下的 CPU 开销远大于 Gzip。对于不需要预压缩、而是由服务器实时（On-the-fly）生成的动态内容，Gzip 的响应速度可能更快。
+			 * 最佳实践建议：利用插件同时生成 .br 和 .gz 文件。在 Nginx 等服务器配置中开启 brotli_static on; 和 gzip_static on;。服务器会根据客户端请求头中的 Accept-Encoding 优先返回 Brotli 格式，仅在不支持时才降级为 Gzip
+			 */
+			// 专门针对 Brotli 的配置
+			compression({
+				algorithms: ['brotliCompress'],
+				exclude: [/\.(br)$/, /\.(gz)$/], // 避免循环压缩
+				threshold: 1024, // 超过 1KB 才压缩
+				deleteOriginalAssets: false, // 建议保留原文件作为兜底
+				skipIfLargerOrEqual: true, // 如果压缩后反而变大则跳过
 			}),
-			viteCompression(), // gzip压缩
-			legacy({
-				// 需要兼容的目标列表
-				targets: [
-					'defaults',
-					'not IE 11',
-					'Chrome >= 52',
-					'Safari >= 10.1',
-					'Firefox >= 54',
-					'Edge >= 15',
-				],
-				// 面向IE11时需要此插件
-				additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
-			}),
-			// see unocss.config.ts for config
-			// Unocss({
-			// 	configFile: '../my-uno.config.ts'
-			// }),
-			//打包体积分析
-			visualizer({
-				// json: true,
-				sourcemap: true,
-				// "sunburst" | "treemap" | "network" | "flamegraph";
-				// template: 'flamegraph',
-				// emitFile: true, // 使分析文件出现在打包目录里， 否则在项目目录下
-				// 打包完成后自动打开浏览器，显示产物体积报告
-				open: true,
-				// gzipSize: true,
-				// brotliSize: true,
-				filename: 'analyse.html',
+
+			// 打包分析
+			statsPlugin({
+				// emitHtml: true,
+				emitJson: true,
+				failOnWarning: true,
 			}),
 		],
 		css: {
@@ -146,25 +108,9 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 				scss: {
 					charset: false,
 					/** 引入var.scss全局预定义变量 */
-					additionalData:
-						'@import "@/assets/styles/main/normalize.scss"; @import "@/assets/styles/main/function.scss";',
+					additionalData: '@import "@/assets/styles/main/normalize.scss"; @import "@/assets/styles/main/function.scss";',
 				},
 			},
-			// postcss:内联的 PostCSS 配置（格式同 postcss.config.js），或者一个（默认基于项目根目录的）自定义的 PostCSS 配置路径
-			// postcss: {
-			// 	plugins: [
-			// 		{
-			// 			postcssPlugin: 'internal:charset-removal',
-			// 			AtRule: {
-			// 				charset: atRule => {
-			// 					if (atRule.name === 'charset') {
-			// 						atRule.remove();
-			// 					}
-			// 				},
-			// 			},
-			// 		},
-			// 	],
-			// },
 			// modules: 配置 css modules 的行为, 选项将被传递给 postcss-modules
 			modules: {
 				localsConvention: 'camelCase',
@@ -186,13 +132,14 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			sourcemap: !isProd,
 		},
 		build: {
-			sourcemap: isAnalyze,
-			outDir: pathRelative('../../', viteEnv.VITE_OUTPUT_DIR),
+			cssMinify: 'lightningcss',
+			sourcemap: shouldAnalyze,
+			outDir: pathRelative('../../', outputDir),
 			commonjsOptions: {
 				include: [/node_modules/],
 			},
 			//自定义底层的 Rollup 打包配置
-			rollupOptions: {
+			rolldownOptions: {
 				// 一般用于库模式， 确保外部化处理那些不想打包进库的依赖
 				// external: ['react', 'react-dom', 'react-router-dom'],
 				treeshake: true,
@@ -203,14 +150,61 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 					// 	react: 'React',
 					// },
 					/** 分包策略 **/
-					manualChunks: {
-						// 将 React 相关库打包成单独的 chunk 中
-						'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-						// // 将 Lodash 库的代码单独打包
-						// lodash: ['lodash-es'],
-						// 将组件库的代码打包
-						library: ['antd'], // '@arco-design/web-react'
+					// 兼容写法：当前最稳
+					manualChunks(id) {
+						if (id.includes('node_modules')) {
+							// 框架层
+							// 将 React 全家桶强制合并，减少 HTTP 请求碎片
+							if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+								return 'react-core';
+							}
+							// 将 vue3 全家桶强制合并
+							if (id.includes('vue') || id.includes('vue-router') || id.includes('pinia')) {
+								return 'vue-core';
+							}
+
+							// 大型库拆包
+							if (id.includes('echarts')) return 'echarts';
+							if (id.includes('lodash')) return 'lodash';
+							if (id.includes('dayjs')) return 'dayjs';
+
+							// 常见的 UI 库（如 Ant Design 或 MUI）单独分包
+							if (id.includes('antd') || id.includes('@ant-design') || id.includes('element-plus')) {
+								return 'ui-lib';
+							}
+
+							// 其余三方
+							return 'vendor';
+						}
 					},
+
+					// 稳定命名，利于缓存
+					chunkFileNames: 'assets/js/[name]-[hash].js',
+					entryFileNames: 'assets/js/[name]-[hash].js',
+					assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+
+					// Rolldown 扩展（分组规则）
+					// advancedChunks: {
+					//   groups: [
+					//     {
+					//       name: "framework",
+					//       test: /\/react(?:-dom)?|vue/,
+					//       priority: 20,
+					//       // reuse: true,
+					//     },
+					//     {
+					//       name: "lib",
+					//       test: /node_modules/,
+					//       minSize: 50000,
+					//       priority: 10,
+					//     },
+					//     {
+					//       name: "common",
+					//       minModuleSize: 2, // 被至少2个入口复用
+					//       priority: 5,
+					//     },
+					//   ],
+					// },
 				},
 				// brotliSize: false, // 不统计
 				// target: 'esnext',
@@ -218,13 +212,15 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			},
 		},
 		server: {
+			https: {},
+			// https: true,
 			fs: {
 				strict: true,
 				allow: [searchForWorkspaceRoot(process.cwd()), '/mygit/micro-zoe/micro-app/'],
 			},
 			host: '0.0.0.0',
 			// host: true, // 监听所有地址，包括局域网和公网地址 "localhost",
-			port: +viteEnv.VITE_PORT, // 开发服务器端口
+			port, // 开发服务器端口
 			// https: true, //是否启用 http 2
 			// force: true, //是否强制依赖预构建
 			cors: true, // 为开发服务器配置 CORS , 默认启用并允许任何源
@@ -234,7 +230,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			hmr: {
 				// host: 'localhost'
 				// overlay: true, // 设为true会导致热更新速度慢
-				port: +viteEnv.VITE_PORT,
+				port,
 			},
 			// 传递给 chockidar 的文件系统监视器选项
 			watch: {
@@ -248,9 +244,9 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 					`/auth`,
 					// '/socket.io'
 				];
-				let proxyConfig = {};
-				for (let item of proxyPath) {
-					let regExp = new RegExp(`^` + item);
+				const proxyConfig = {};
+				for (const item of proxyPath) {
+					const regExp = new RegExp(`^` + item);
 					const envObj = {
 						[`/auth`]: viteEnv.APP_API_AURTH_URL,
 					};
@@ -258,9 +254,9 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 						target: envObj[item] ? envObj[item] : viteEnv.APP_API_BASE_URL,
 						// logLevel: 'debug', // 查看代理请求的真实地址
 						changeOrigin: true,
-						rewrite: path => {
+						rewrite: (requestPath: string) => {
 							// console.log('rewrite:', regExp);
-							return path.replace(regExp, '');
+							return requestPath.replace(regExp, '');
 						},
 						// cookieDomainRewrite: '',
 						// secure: false,

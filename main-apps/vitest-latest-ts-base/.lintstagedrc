@@ -1,6 +1,8 @@
 {
   "*.(j|t)s(x)?": [
-    "biome check --write --no-errors-on-unmatched",
+    "oxlint --fix",
+    "biome lint --write .",
+    "biome format --write --no-errors-on-unmatched",
     "git add"
   ],
   "*.{json,jsonc}": [

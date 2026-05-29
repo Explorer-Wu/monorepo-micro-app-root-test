@@ -1,7 +1,5 @@
 {
 	"sourceMaps": true,
-	"minify": true,
-	// Optional, configure minification options
 	"jsc": {
 		"minify": {
 			"compress": {
@@ -10,14 +8,18 @@
 				"drop_console": true,
 				"pure_funcs": ["console.error", "console.warn"]
 			},
-			// "compress": true,
 			"mangle": true
 		},
 		"parser": {
 			"syntax": "typescript",
 			"tsx": true
 		},
-		"externalHelpers": true
+		"externalHelpers": true,
+		"transform": {
+			"react": {
+				"runtime": "automatic"
+			}
+		}
 	},
 	"env": {
 		"targets": {
@@ -25,6 +27,5 @@
 		},
 		"mode": "entry",
 		"coreJs": "3.22"
-	},
-	"resolutions": { "terser": "npm:@swc/core" }
+	}
 }

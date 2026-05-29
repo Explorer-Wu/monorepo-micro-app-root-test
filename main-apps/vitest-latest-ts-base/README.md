@@ -1,13 +1,16 @@
-# React + TypeScript + Vite
+# React + TypeScript + Vite8
 
-该主应用使用Vite+React+TypeScript+Zustand 构建
+该主应用使用Vite8+React+TypeScript+Zustand 构建
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## vite8 的核心应用场景与优势
 
-Currently, two official plugins are available:
+vite8核心结构：构建工具（Vite）、打包工具（Rolldown）和编译器（Oxc）。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+在 Vite 8 + React 技术栈中，Oxc-parser 及相关工具链已被官方深度应用。
+
+- **取代 Babel 进行 React Refresh 转换：** 随着 Vite 8 的发布，官方推出了 @vitejs/plugin-react v6。该插件原生使用 Oxc 处理 React Refresh 转换，默认不再依赖 Babel。
+- **原生支持 JSX 与 TypeScript：** Oxc 作为底层编译器组件，能原生且极速地解析和转换 JSX 和 TypeScript，实现更轻量的安装体积。
+- **Rolldown 底层依赖：** Vite 8 默认采用 Rolldown 作为打包器，而 Rolldown 底层正是完全构建在 Oxc 生态（包括解析器、模块解析器等）之上的。
 
 ## 功能特点
 
@@ -26,34 +29,50 @@ Currently, two official plugins are available:
 - React Router v6
 - Tailwind CSS (样式)
 
-## Expanding the ESLint configuration
+## 代码检查和格式化工具选型
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1) **Biome（基于 CST）**
+  
+  - 优势：
+    格式化畸形代码：即使代码有语法错误，也能尝试格式化。
+    更精准的代码样式保留：不会丢失原始格式（如括号位置）。
+    错误恢复友好：适合 IDE 实时提示（如 VS Code 插件）。
+  - 代价：
+    解析和存储成本略高。
 
-- Configure the top-level `parserOptions` property like this:
+2) **OXC（基于 AST）**
+  - 优势：
+    更简单、更快：适合需要高性能的场景（如大规模代码分析）。
+    与编译器设计一致：OXC 的目标是成为类似 Rustc 的底层工具链。
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+  - 限制：
+    对畸形代码处理较弱（可能直接报错而非尝试修复）。
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### 技术选择小结
+
+**CST** 是“源代码的完整照片”，适合格式化、Lint 等需要保真的场景。
+**AST** 是“源代码的简笔画”，适合编译器、静态分析等需要性能的场景。
+
+Biome 的选择（CST）：
+  目标是成为“开发者体验优先”的工具，强调错误恢复和格式化保真度。
+  适合需要与 IDE 深度集成的场景（如实时 linting）。
+  优先一体化、最低心智负担、IDE 内稳定的增量反馈
+
+OXC 的选择（AST）：
+  追求极简主义和性能（极快 Lint 与批处理吞吐），类似 Rust 的工具链设计。
+  或需要 AST 变换/压缩/codegen 的可编程基础设施，更适合作为底层引擎（如构建工具、编译器前端）。
+
+**混用实践：**
+IDE 用 Biome（格式化 + 交互式 Lint），CI 用 Oxlint（全库快速扫描）。务必只保留一个 formatter，避免重复规则。
+
+Biome vs OXC 的选择本质上是 “开发者体验 vs 性能/简洁性” 的权衡。
 
 ## 开始使用
 
 ### 安装依赖
 
 ```bash
-cd main-apps/vitest-react-ts-swc-base
+cd main-apps/vitest-latest-ts-base
 pnpm install
 ```
 
@@ -98,7 +117,6 @@ src/
   ├── index.tsx         # 应用入口点
   └── index.css         # 全局样式
 ```
-
 
 ## 认证流程
 

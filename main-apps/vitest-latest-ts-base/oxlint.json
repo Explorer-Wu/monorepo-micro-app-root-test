@@ -1,0 +1,29 @@
+{
+	"env": {
+		"browser": true,
+		"node": true,
+		"es2024": true
+	},
+	"settings": {
+		"jsx-a11y": {
+			"components": {
+				"Button": "button",
+				"Link": "a"
+			}
+		}
+	},
+	"rules": {
+		"correctness": "warn",
+		"suspicious": "warn",
+		"complexity": "warn",
+		"perf": "warn",
+		"style": "off",
+		"regex": "warn",
+		"eslint-plugin-import/no-unresolved": [
+			"warn",
+			{
+				"ignore": ["@/*", "tests"]
+			}
+		]
+	}
+}
