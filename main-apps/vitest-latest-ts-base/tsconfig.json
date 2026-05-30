@@ -8,7 +8,8 @@
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"typeRoots": ["node_modules/@types", "./src/typings"],
 		// types设置typeRoots目录下需要包括在编译之中的类型模块。默认情况下，该目录下的所有类型模块，都会自动包括在编译之中
-		"types": ["vite/client", "node", "lodash-es", "react", "react-dom", "react-router-dom"],
+		"types": ["vite/client", "vite-plugin-svgr/client", "node", "lodash-es", "react", "react-dom", "react-router-dom"],
+		"jsxImportSource": "react",
 		// 路径映射，别名
 		"paths": {
 			"vite": ["./node_modules/vite"],
@@ -31,10 +32,11 @@
 		"noFallthroughCasesInSwitch": true,
 		"allowJs": false,
 		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
 		"declaration": true, // 生成 .d.ts
 		"declarationMap": true, // sourceMap for types
 		"incremental": true, // 增量编译
-		"forceConsistentCasingInFileNames": true
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo"
 	},
 	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"],
 	// “项目引用（Project References）” 功能，允许用户为项目的不同部分使用不同的 TypeScript 配置。

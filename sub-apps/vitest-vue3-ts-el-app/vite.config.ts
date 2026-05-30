@@ -1,18 +1,18 @@
-import { type ConfigEnv, type UserConfig, defineConfig, loadEnv } from 'vite';
+import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import AutoImport from 'unplugin-auto-import/vite';
-import Components from 'unplugin-vue-components/vite';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
-import Icons from 'unplugin-icons/vite';
-import IconsResolver from 'unplugin-icons/resolver';
-import Inspect from 'vite-plugin-inspect';
-import legacy from '@vitejs/plugin-legacy';
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import { fileURLToPath, URL } from 'node:url';
+import os from 'os';
 import path from 'path';
+import AutoImport from 'unplugin-auto-import/vite';
+import IconsResolver from 'unplugin-icons/resolver';
+import Icons from 'unplugin-icons/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import Components from 'unplugin-vue-components/vite';
+import { type ConfigEnv, type UserConfig, defineConfig, loadEnv } from 'vite';
+import Inspect from 'vite-plugin-inspect';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 
-import Unocss from 'unocss/vite';
 import {
 	presetAttributify,
 	presetIcons,
@@ -20,6 +20,7 @@ import {
 	transformerDirectives,
 	transformerVariantGroup,
 } from 'unocss';
+import Unocss from 'unocss/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
@@ -319,11 +320,23 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 			open: true, //服务启动时自动在浏览器中打开应用
 			strictPort: false, //端口严格模式， 为true时，当端口被占用则直接退出，不会尝试下一个可用端口
 			//HMR连接配置{}, false-禁用
-			hmr: {
-				host: 'localhost',
-				// overlay: true, // 设为true会导致热更新速度慢
-				port: +viteEnv.VITE_PORT,
-			},
+			hmr: (() => {
+				function getLocalIP() {
+					const nets = os.networkInterfaces();
+					for (const name of Object.keys(nets)) {
+						for (const net of nets[name] || []) {
+							if ((net as any).family === 'IPv4' && !(net as any).internal) return (net as any).address;
+						}
+					}
+					return 'localhost';
+				}
+
+				const hmrHost = viteEnv.APP_HMR_HOST || getLocalIP();
+				return {
+					host: hmrHost,
+					port: +viteEnv.VITE_PORT,
+				};
+			})(),
 			// 传递给 chockidar 的文件系统监视器选项
 			watch: {
 				// ignored:["!**/node_modules/your-package-name/**"],

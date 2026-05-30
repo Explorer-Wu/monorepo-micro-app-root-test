@@ -17,7 +17,7 @@ export default class Socket {
 	isDestroyed!: boolean;
 
 	constructor(params: any) {
-		window.WebSocket = window.WebSocket || window.MozWebSocket;
+		window.WebSocket = window.WebSocket || (window as any).MozWebSocket;
 		if (!window.WebSocket) {
 			// 检测浏览器支持
 			console.error('您的浏览器不支持webscoket');

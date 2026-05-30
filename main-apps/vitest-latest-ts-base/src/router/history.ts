@@ -1,5 +1,5 @@
-import { useRef, useEffect, type HTMLAttributeAnchorTarget } from 'react';
-import { useNavigate, useLocation, useHref, useLinkClickHandler, To } from 'react-router-dom';
+import { useEffect, useRef, type HTMLAttributeAnchorTarget } from 'react';
+import { To, useHref, useLinkClickHandler, useLocation, useNavigate } from 'react-router-dom';
 
 export default function HistoryRule() {
 	const HistoryNav = useNavigate();
@@ -30,8 +30,8 @@ export default function HistoryRule() {
 	// 组件外，全局使用
 	const globalNav = HistoryNav;
 	const globalLocation = Location;
-	if (!window.__globalRouter) {
-		window.__globalRouter = {
+	if (!(window as any).__globalRouter) {
+		(window as any).__globalRouter = {
 			globalNav,
 			globalLocation,
 		};
@@ -48,7 +48,7 @@ export default function HistoryRule() {
 }
 
 export function usePrevious(value: any) {
-	const ref = useRef();
+	const ref = useRef<any>(null);
 
 	useEffect(() => {
 		ref.current = value;

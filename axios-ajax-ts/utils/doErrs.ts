@@ -88,7 +88,14 @@ export const handleErrorFn = (error: any, status: number, fhttp: any, extra: Ext
 		// const ErrRes = error.response  data
 		!extra.isProd && console.log('interceptors.err:', error.response, error.config);
 		// error.response.msg = errMsg + '，请检查网络或联系管理员！';
-		doneErrStatusMap(fhttp, extra).get(status)!(error.response);
+		const handler = doneErrStatusMap(fhttp, extra).get(status);
+		if (typeof handler === 'function') {
+			try {
+				handler(error.response);
+			} catch (err) {
+				console.error('doneErrStatus handler error:', err);
+			}
+		}
 	}
 	error.message = errMsg + '，请检查网络或联系管理员！';
 };

@@ -20,12 +20,22 @@ declare global {
   //     NODE_ENV: string
   //   }
   // }
+
+    // Provide minimal intrinsic element typing for third-party custom elements used in JSX
   namespace JSX {
-    interface IntrinsicAttributes {
-      class?: any
-      style?: any
+      interface IntrinsicAttributes {
+        class?: any
+        style?: any
+      }
+      interface IntrinsicElements {
+        // micro-app is a custom element provided by @micro-zoe/micro-app
+        'micro-app': any;
+      }
+      // interface IntrinsicElements {
+      //   [elemName: string]: any;
+      // }
     }
-  }
+  
   // 全局变量设置
   // const _: typeof lodash;
 
@@ -41,7 +51,6 @@ declare global {
     __globalRouter: any,
   }
 }
-
 
 //  declare const REACT_APP_ENV: 'test' | 'dev' | 'uat' | 'prod' | false;
 
@@ -70,4 +79,3 @@ declare module '*.tiff';
 declare module 'postcss-pxtorem';
 declare module 'postcss-preset-env';
 
-export { }

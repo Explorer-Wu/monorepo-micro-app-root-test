@@ -11,7 +11,7 @@ message.config({
 	prefixCls: 'main',
 });
 
-const App: React.FC<any> = (): JSX.Element => {
+const App: React.FC<any> = (): React.ReactElement => {
 	return (
 		// <BrowserRouter forceRefresh={!supportsHistory}>
 		<Router basename={import.meta.env.APP_BASE_ROUTER}>

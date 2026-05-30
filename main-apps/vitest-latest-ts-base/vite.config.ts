@@ -108,7 +108,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 				scss: {
 					charset: false,
 					/** 引入var.scss全局预定义变量 */
-					additionalData: '@import "@/assets/styles/main/normalize.scss"; @import "@/assets/styles/main/function.scss";',
+					additionalData: '@use "@/assets/styles/main/normalize.scss" as *; @use "@/assets/styles/main/function.scss" as *;',
 				},
 			},
 			// modules: 配置 css modules 的行为, 选项将被传递给 postcss-modules

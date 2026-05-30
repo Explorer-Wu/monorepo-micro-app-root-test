@@ -10,7 +10,7 @@
 		"src/**/*.vue",
 		"src/**/*.md",
 		"mock/**/*.ts"
-	],
+, "src/utils/langchainOpenai.bak"	],
 	/*** 不进行类型检查的文件 ***/
 	// ts 排除的文件, "exclude"默认情况下会排除node_modules，bower_components，jspm_packages和<outDir>目录
 	"exclude": [
@@ -163,7 +163,7 @@
 		// 如不设置此项，默认会加载全部能找到的 node_modules/@types/xxx 包， 全局引入"element-plus/global"
 		"types": ["vite/client", "node", "vue", "lodash-es"],
 		// 根路径, 非绝对地址的模块会基于这个目录去解析，默认值是当前目录
-		"baseUrl": ".",
+		// "baseUrl": ".",
 		/* 配置具体如何解析 require/import 的导入，
 		 * 模块名到基于 baseUrl的路径映射的列表（指定特殊模块的路径）
 		 * 路径映射，与 baseUrl 关联

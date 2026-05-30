@@ -6,9 +6,9 @@
   "main": "index.js",
   "scripts": {
     "whole:start": "run-p start:base start:react start:nav start:vue3 ",
-    "start:base": "pnpm -C ./main-apps/vitest-react-ts-swc-base dev",
+    "start:base": "pnpm -C ./main-apps/vitest-latest-ts-base dev",
     "start:nav": "pnpm -C ./sub-apps/side-nav dev",
-    "start:vue3": "pnpm -C ./sub-apps/vitest-vue3-ts-el-app dev",
+    "start:vue3": "pnpm -C ./sub-apps/vitest-vue3-ts-el-app dev:local",
     "start:react": "pnpm -C ./sub-apps/vite-react-ts-jest-app dev",
     "build:all": "pnpm --parallel -r run build",
     "watch": "pnpm --parallel -r run watch",
@@ -69,5 +69,10 @@
   },
   "homepage": "https://github.com/Explorer-Wu/monorepo-micro-app-root-test#readme",
   "author": "Explorer-Wu",
-  "license": "MIT"
+  "license": "MIT",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.2.15"
+    }
+  }
 }
