@@ -1,8 +1,8 @@
-import { createApp, type App as AppInstance } from 'vue';
-import { createPinia } from 'pinia';
-import type { RouterHistory, Router } from 'vue-router';
+import { handleMicroData, useGlobalPlugins } from '@/plugins';
 import generateRouter from '@/router';
-import { useGlobalPlugins, handleMicroData, fixBugForVueRouter4 } from '@/plugins';
+import { createPinia } from 'pinia';
+import { createApp, type App as AppInstance } from 'vue';
+import type { Router, RouterHistory } from 'vue-router';
 import VApp from './App.vue';
 
 // ----------分割线---umd模式------两种模式任选其一-------------- //
@@ -48,4 +48,4 @@ if (!window.__MICRO_APP_ENVIRONMENT__) {
 }
 
 // window.mount注册不上，直接执行有效
-window.mount();
+// window.mount();

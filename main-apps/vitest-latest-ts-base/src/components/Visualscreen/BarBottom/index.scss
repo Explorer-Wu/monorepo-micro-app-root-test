@@ -1,0 +1,92 @@
+$bar-bottom-height: 2.3rem;
+
+.vs-bottom-bar {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   height: $bar-bottom-height;
+   cursor: pointer;
+
+   &__inner {
+      position: relative;
+      width: 13rem;
+      height: $bar-bottom-height;
+      margin: 0 auto;
+      text-align: center;
+      background: $bar-bg-color;
+      border-top: 1px solid #fff;
+      /* border-image: image-source image-height image-width image-repeat */
+      border-image: -webkit-linear-gradient(90deg, rgba(218, 250, 255, 0) 20%, rgba(218, 250, 255, 1), rgba(218, 250, 255, 0) 80%) 10 10;
+      /* Safari 5.1 - 6 */
+      border-image: -o-linear-gradient(90deg, rgba(218, 250, 255, 0) 20%, rgba(218, 250, 255, 1), rgba(218, 250, 255, 0) 80%) 10 10;
+      /* Opera 11.1 - 12*/
+      border-image: -moz-linear-gradient(90deg, rgba(218, 250, 255, 0) 20%, rgba(218, 250, 255, 1), rgba(218, 250, 255, 0) 80%) 10 10;
+      /* Firefox 3.6 - 15*/
+      border-image: linear-gradient(90deg, rgba(218, 250, 255, 0) 20%, rgba(218, 250, 255, 1), rgba(218, 250, 255, 0) 80%) 10 10;
+      /* 标准的语法 */
+      box-shadow: $bar-shadow-b-top;
+
+      &:before,
+      &:after {
+         content: " ";
+         width: $bar-bottom-height;
+         height: 100%;
+         background: $bar-bg-color;
+         position: absolute;
+      }
+
+      &:before {
+         left: 0;
+         margin-left: calc(-#{$bar-bottom-height} / 2);
+         ;
+         transform: skewX(150deg);
+         box-shadow: $bar-shadow-b-left;
+      }
+
+      &:after {
+         margin-right: calc(-#{$bar-bottom-height} / 2);
+         right: 0;
+         transform: skewX(30deg);
+         box-shadow: $bar-shadow-b-right;
+      }
+
+      h3 {
+         display: inline-block;
+         line-height: $bar-bottom-height;
+         color: $vs-primary-color;
+         font-weight: 700;
+         font-size: 1em;
+      }
+
+      .edges-left,
+      .edges-right {
+         position: absolute;
+         top: 0;
+         z-index: 2;
+         width: calc($bar-bottom-height / 2);
+         height: $bar-bottom-height;
+         border: 1px solid $vs-primary-color;
+         border-image: -webkit-linear-gradient(rgba(76, 218, 236, 1), rgba(76, 218, 236, 0)) 1 1;
+         /* Safari 5.1 - 6 */
+         border-image: -o-linear-gradient(rgba(76, 218, 236, 1), rgba(76, 218, 236, 0) 60%) 1 1;
+         /* Opera 11.1 - 12*/
+         border-image: -moz-linear-gradient(rgba(76, 218, 236, 1), rgba(76, 218, 236, 0) 60%) 1 1;
+         /* Firefox 3.6 - 15*/
+         border-image: linear-gradient(rgba(76, 218, 236, 1), rgba(76, 218, 236, 0) 60%) 1 1;
+         /* 标准的语法 */
+      }
+
+      .edges-left {
+         left: -0.5*$bar-bottom-height;
+         border-width: 2px 0 0 3px;
+         transform: skewX(-30deg);
+      }
+
+      .edges-right {
+         right: -0.5*$bar-bottom-height;
+         border-width: 2px 3px 0 0;
+         transform: skewX(30deg);
+      }
+   }
+}

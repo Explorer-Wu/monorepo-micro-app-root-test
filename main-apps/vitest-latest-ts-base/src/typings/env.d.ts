@@ -24,6 +24,8 @@ interface ImportMetaEnv extends Readonly<Record<string, unknown>> {
   readonly APP_API_WS_URL: string;
   // CDN请求包地址
   readonly APP_CDN_URL: string;
+  // 百度地图 GL AK
+  readonly APP_BMAP_AK: string;
 
   // 透传参数
   readonly VITE_POSITION: string;

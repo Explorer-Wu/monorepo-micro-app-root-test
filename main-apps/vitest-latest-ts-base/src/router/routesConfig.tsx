@@ -1,6 +1,6 @@
-import React, { createElement, lazy, ReactNode, Suspense } from 'react';
+import type { RouteItemTypes } from '@/typings/index';
+import { lazy, ReactNode, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
-import type { RouteItem, RouteItemTypes } from '@/typings/index';
 
 import Loading from '@/components/Loading';
 // import SideBar from '@/components/sidebar';
@@ -8,7 +8,9 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 
 // 用懒加载实现优化
 const RootLayout = lazy(() => import('@/layouts/LayoutMainTpl.tsx') as any);
-// const OverView = lazy(() => import("@/views/Overview/index"));
+const ScreenLayout = lazy(() => import('@/layouts/LayoutScreen') as any);
+const DashBoard = lazy(() => import("@/views/overview/index"));
+const MapBoard = lazy(() => import('@/views/overview/mapboard') as any);
 const Login = lazy(() => import('@/views/auths/Login') as any);
 const Register = lazy(() => import('@/views/auths/Register') as any);
 const Home = lazy(() => import('@/views/home/index') as any);
@@ -61,6 +63,23 @@ export const routes: RouteItemTypes[] = [
 			{
 				path: '/403',
 				errorElement: lazyLoad(<NoAccess />),
+				isAuth: false,
+			},
+		],
+	},
+	{
+		path: '/fullscreen',
+		element: lazyLoad(<ScreenLayout />),
+		isAuth: false,
+		children: [
+			{
+				index: true,
+				element: lazyLoad(<DashBoard />),
+				isAuth: false,
+			},
+			{
+				path: '/fullscreen/mapview',
+				element: lazyLoad(<MapBoard />),
 				isAuth: false,
 			},
 		],

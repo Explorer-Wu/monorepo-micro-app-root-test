@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import microApp from '@micro-zoe/micro-app';
 
 import App from './App.tsx';
-import './utils/flexibleRem.ts';
+import { startScreenAdapterService } from './utils/flexibleRem.ts';
 
 // import '@/mock/index.ts';
 
@@ -24,6 +24,8 @@ microApp.start({
 	// 'disable-patch-request': true, // 关闭对子应用请求的拦截，默认值false
 	// iframeSrc: location.origin, // 设置iframe沙箱中iframe的src地址，默认为子应用所在页面地址
 });
+
+startScreenAdapterService();
 
 const rootElement = document.getElementById('root')! as HTMLElement;
 if (rootElement) {

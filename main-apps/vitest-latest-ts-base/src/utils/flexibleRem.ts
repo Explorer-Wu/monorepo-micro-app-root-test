@@ -1,105 +1,270 @@
 import { debounce } from 'lodash-es';
+import { resolveScreenMode, roundScreenValue, screenAdapterConfig, type ScreenFitStrategy, type ScreenMode } from '../../screen-config/screenAdapter';
 
-const docEl: HTMLElement = (document as Document).documentElement;
-const docBody: HTMLElement = (document as Document).body;
-// 定义可视窗口宽高
-let vW = (window as Window & typeof globalThis).innerWidth || docBody.clientWidth || docEl.clientWidth;
-let vH = (window as Window & typeof globalThis).innerHeight || docBody.clientHeight || docEl.clientHeight;
-
-let dpr = (window as Window & typeof globalThis).devicePixelRatio || 1;
-
-// 定义基准单位
-const baseSize: number = 10; // 19.2;
-
-export function winScale(): any {
-	// if (!vW) return;
-	try {
-		if (!vW) throw new Error(`没有获取到可视窗口的宽度!`);
-
-		if (vW < 1024) vW = 1024;
-		if (vH < 600) vH = 600;
-
-		// if (vW / dpr > 1920) {
-		//   vW = 1920 * dpr;
-		// }
-
-		// 当前页面宽度相对于基准大屏分辨率 1920宽的缩放比例
-		let scale = vW / 1920;
-		// 基准大屏分辨率1920/1680 标准比例 16 / 9
-		const radio = vW / vH;
-		// 设置页面根节点字体大小, 字体大小最小值为10
-		if (radio > 16 / 9) {
-			scale = ((16 / 9) * vH) / 1920;
-		}
-
-		return scale;
-	} catch (error: any) {
-		console.error(error);
-		return undefined;
-	}
+export interface ScreenAdapterState {
+        dpr: number;
+        viewportWidth: number;
+        viewportHeight: number;
+        layoutWidth: number;
+        layoutHeight: number;
+        scale: number;
+        overscanScale: number;
+        rem: number;
+        bodyFontSize: number;
+        screenMode: ScreenMode;
+        minFallbackTriggered: boolean;
+        safeAreaSize: {
+                width: number;
+                height: number;
+                offsetX: number;
+                offsetY: number;
+        };
+        overscanAreaSize: {
+                width: number;
+                height: number;
+        };
+        strategy: {
+                content: ScreenFitStrategy;
+                decoration: ScreenFitStrategy;
+        };
 }
 
-// 计算不同分辨率下像素
-export function winFontSize(px: number): unknown {
-	const scale = winScale();
-	if (scale) return px * scale.toFixed(3);
-	return undefined;
+type ScreenAdapterListener = (state: ScreenAdapterState) => void;
+
+const SCREEN_ADAPTER_CHANGE_EVENT = 'screen-adapter:change';
+const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
+
+function createInitialState(): ScreenAdapterState {
+        const layoutWidth = screenAdapterConfig.designWidth;
+        const layoutHeight = screenAdapterConfig.designHeight;
+
+        return {
+                dpr: 1,
+                viewportWidth: layoutWidth,
+                viewportHeight: layoutHeight,
+                layoutWidth,
+                layoutHeight,
+                scale: 1,
+                overscanScale: 1,
+                rem: screenAdapterConfig.baseRemSize,
+                bodyFontSize: screenAdapterConfig.baseRemSize,
+                screenMode: 'exact-16-9',
+                minFallbackTriggered: false,
+                safeAreaSize: {
+                        width: layoutWidth,
+                        height: layoutHeight,
+                        offsetX: 0,
+                        offsetY: 0,
+                },
+                overscanAreaSize: {
+                        width: layoutWidth,
+                        height: layoutHeight,
+                },
+                strategy: {
+                        content: screenAdapterConfig.contentFitStrategy,
+                        decoration: screenAdapterConfig.overscanStrategy,
+                },
+        };
 }
 
-// 设置rem单位函数
-function setRemUnit(): unknown {
-	const scale = winScale();
-	if (scale) return baseSize * scale.toFixed(3);
-	return undefined;
+function getViewportSize() {
+        const docEl = document.documentElement;
+        const docBody = document.body;
+
+        return {
+                width: window.innerWidth || docBody?.clientWidth || docEl.clientWidth || screenAdapterConfig.designWidth,
+                height: window.innerHeight || docBody?.clientHeight || docEl.clientHeight || screenAdapterConfig.designHeight,
+        };
 }
 
-// 设置 1rem = viewWidth / 10
-let rem = setRemUnit();
+function buildScreenAdapterState(): ScreenAdapterState {
+        const { width: viewportWidth, height: viewportHeight } = getViewportSize();
+        const layoutWidth = Math.max(viewportWidth, screenAdapterConfig.minWidth);
+        const layoutHeight = Math.max(viewportHeight, screenAdapterConfig.minHeight);
+        const scale = roundScreenValue(Math.min(layoutWidth / screenAdapterConfig.designWidth, layoutHeight / screenAdapterConfig.designHeight));
+        const overscanScale = roundScreenValue(Math.max(layoutWidth / screenAdapterConfig.designWidth, layoutHeight / screenAdapterConfig.designHeight));
+        const safeAreaWidth = roundScreenValue(screenAdapterConfig.designWidth * scale);
+        const safeAreaHeight = roundScreenValue(screenAdapterConfig.designHeight * scale);
+
+        return {
+                dpr: window.devicePixelRatio || 1,
+                viewportWidth,
+                viewportHeight,
+                layoutWidth,
+                layoutHeight,
+                scale,
+                overscanScale,
+                rem: roundScreenValue(screenAdapterConfig.baseRemSize * scale),
+                bodyFontSize: roundScreenValue(screenAdapterConfig.baseRemSize * scale),
+                screenMode: resolveScreenMode(layoutWidth, layoutHeight),
+                minFallbackTriggered: viewportWidth < screenAdapterConfig.minWidth || viewportHeight < screenAdapterConfig.minHeight,
+                safeAreaSize: {
+                        width: safeAreaWidth,
+                        height: safeAreaHeight,
+                        offsetX: roundScreenValue((layoutWidth - safeAreaWidth) / 2),
+                        offsetY: roundScreenValue((layoutHeight - safeAreaHeight) / 2),
+                },
+                overscanAreaSize: {
+                        width: roundScreenValue(screenAdapterConfig.designWidth * overscanScale),
+                        height: roundScreenValue(screenAdapterConfig.designHeight * overscanScale),
+                },
+                strategy: {
+                        content: screenAdapterConfig.contentFitStrategy,
+                        decoration: screenAdapterConfig.overscanStrategy,
+                },
+        };
+}
+
+class ScreenAdapterService {
+        private listeners = new Set<ScreenAdapterListener>();
+        private state = createInitialState();
+        private started = false;
+
+        private readonly handleResize = debounce(
+                () => {
+                        this.refresh();
+                },
+                screenAdapterConfig.resizeDebounceMs,
+                {
+                        maxWait: screenAdapterConfig.resizeMaxWaitMs,
+                        leading: false,
+                        trailing: true,
+                },
+        );
+
+        private readonly handlePageShow = (event: PageTransitionEvent) => {
+                if (event.persisted) {
+                        this.refresh();
+                }
+        };
+
+        start(): ScreenAdapterState {
+                if (!isBrowser) {
+                        return this.state;
+                }
+
+                if (!this.started) {
+                        window.addEventListener('resize', this.handleResize);
+                        window.addEventListener('pageshow', this.handlePageShow);
+                        this.started = true;
+                }
+
+                return this.refresh();
+        }
+
+        stop() {
+                if (!isBrowser || !this.started) {
+                        return;
+                }
+
+                window.removeEventListener('resize', this.handleResize);
+                window.removeEventListener('pageshow', this.handlePageShow);
+                this.handleResize.cancel();
+                this.started = false;
+        }
+
+        subscribe = (listener: ScreenAdapterListener) => {
+                this.listeners.add(listener);
+
+                if (!this.started && isBrowser) {
+                        this.start();
+                }
+
+                return () => {
+                        this.listeners.delete(listener);
+                };
+        };
+
+        getState = () => this.state;
+
+        refresh = () => {
+                if (!isBrowser) {
+                        return this.state;
+                }
+
+                const nextState = buildScreenAdapterState();
+                this.state = nextState;
+                this.applyToDocument(nextState);
+                this.emit(nextState);
+                return nextState;
+        };
+
+        private emit(state: ScreenAdapterState) {
+                this.listeners.forEach(listener => listener(state));
+                window.dispatchEvent(
+                        new CustomEvent<ScreenAdapterState>(SCREEN_ADAPTER_CHANGE_EVENT, {
+                                detail: state,
+                        }),
+                );
+        }
+
+        private applyToDocument(state: ScreenAdapterState) {
+                const docEl = document.documentElement;
+                const docBody = document.body;
+
+                docEl.style.fontSize = `${state.rem}px`;
+                docEl.style.setProperty('--screen-design-width', `${screenAdapterConfig.designWidth}px`);
+                docEl.style.setProperty('--screen-design-height', `${screenAdapterConfig.designHeight}px`);
+                docEl.style.setProperty('--screen-min-width', `${screenAdapterConfig.minWidth}px`);
+                docEl.style.setProperty('--screen-min-height', `${screenAdapterConfig.minHeight}px`);
+                docEl.style.setProperty('--screen-scale', `${state.scale}`);
+                docEl.style.setProperty('--screen-overscan-scale', `${state.overscanScale}`);
+                docEl.style.setProperty('--screen-rem', `${state.rem}px`);
+                docEl.style.setProperty('--screen-safe-area-width', `${state.safeAreaSize.width}px`);
+                docEl.style.setProperty('--screen-safe-area-height', `${state.safeAreaSize.height}px`);
+                docEl.style.setProperty('--screen-safe-area-offset-x', `${state.safeAreaSize.offsetX}px`);
+                docEl.style.setProperty('--screen-safe-area-offset-y', `${state.safeAreaSize.offsetY}px`);
+                docEl.style.setProperty('--screen-overscan-width', `${state.overscanAreaSize.width}px`);
+                docEl.style.setProperty('--screen-overscan-height', `${state.overscanAreaSize.height}px`);
+                docEl.style.setProperty('--screen-layout-width', `${state.layoutWidth}px`);
+                docEl.style.setProperty('--screen-layout-height', `${state.layoutHeight}px`);
+                docEl.dataset.screenMode = state.screenMode;
+                docEl.dataset.screenMinFallback = String(state.minFallbackTriggered);
+                docEl.dataset.screenContentFit = state.strategy.content;
+                docEl.dataset.screenDecorationFit = state.strategy.decoration;
+
+                if (docBody) {
+                        docBody.style.fontSize = `${state.bodyFontSize}px`;
+                }
+        }
+}
+
+export const screenAdapterService = new ScreenAdapterService();
+
+export function getScreenAdapterState() {
+        return screenAdapterService.getState();
+}
+
+export function subscribeScreenAdapter(listener: ScreenAdapterListener) {
+        return screenAdapterService.subscribe(listener);
+}
+
+export function startScreenAdapterService() {
+        return screenAdapterService.start();
+}
+
+export function stopScreenAdapterService() {
+        screenAdapterService.stop();
+}
+
+export function refreshScreenAdapter() {
+        return screenAdapterService.refresh();
+}
+
+export function winScale(): number {
+        return screenAdapterService.getState().scale;
+}
+
+export function winFontSize(px: number): number {
+        return roundScreenValue(px * winScale());
+}
 
 export function setDocElFontSize() {
-	docEl.style.fontSize = `${rem}px`;
+        return screenAdapterService.refresh().rem;
 }
 
-// adjust body font size
 export function setBodyFontSize() {
-	if (docBody) {
-		docBody.style.fontSize = `${rem}px`; // ${12 * dpr}
-	} else {
-		document.addEventListener('DOMContentLoaded', setBodyFontSize);
-	}
+        return screenAdapterService.refresh().bodyFontSize;
 }
 
-setBodyFontSize();
-setDocElFontSize();
-
-// 防抖配置
-const debounceConfig = {
-	maxWait: 600, // 允许被延迟的最大值
-	leading: false, // 指定在延迟开始前调用
-	trailing: true, // 指定在延迟结束后调用
-};
-
-// reset rem unit on page resize
-window.addEventListener(
-	'resize',
-	debounce(
-		() => {
-			setDocElFontSize();
-		},
-		300,
-		debounceConfig,
-	),
-);
-
-window.addEventListener(
-	'pageshow',
-	debounce(
-		e => {
-			if (e.persisted) {
-				setDocElFontSize();
-			}
-		},
-		300,
-		debounceConfig,
-	),
-);
+export { SCREEN_ADAPTER_CHANGE_EVENT };

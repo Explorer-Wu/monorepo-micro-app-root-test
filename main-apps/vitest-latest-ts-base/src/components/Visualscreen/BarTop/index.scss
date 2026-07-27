@@ -1,0 +1,190 @@
+$top-margin-height: 1.5rem;
+$border-margin: 1rem;
+$top-center-height: 2rem;
+$font-size: 1.4rem;
+
+.vs-bar-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3rem;
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    background: -webkit-linear-gradient(left, rgb(16, 56, 180), rgb(2, 9, 32) 35%, rgb(2, 9, 32), rgb(2, 9, 32) 65%, rgb(16, 56, 180));
+    /* Safari 5.1 - 6 */
+    background: -o-linear-gradient(right, rgb(16, 56, 180), rgb(2, 9, 32) 35%, rgb(2, 9, 32), rgb(2, 9, 32) 65%, rgb(16, 56, 180));
+    /* Opera 11.1 - 12*/
+    background: -moz-linear-gradient(right, rgb(16, 56, 180), rgb(2, 9, 32) 35%, rgb(2, 9, 32), rgb(2, 9, 32) 65%, rgb(16, 56, 180));
+    /* Firefox 3.6 - 15*/
+    background: linear-gradient(to right, rgb(16, 56, 180), rgb(2, 9, 32) 35%, rgb(2, 9, 32), rgb(2, 9, 32) 65%, rgb(16, 56, 180));
+    /* 标准的语法 */
+    box-shadow: $bar-shadow-t-bottom;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    /* border-image: image-source image-height image-width image-repeat */
+    border-image: -webkit-linear-gradient(90deg, #0db2e6, rgba(13, 178, 230, 0) 32%, rgba(13, 178, 230, 0), rgba(13, 178, 230, 0) 68%, #0db2e6) 1 1;
+    /* Safari 5.1 - 6 */
+    border-image: -o-linear-gradient(90deg, #0db2e6, rgba(13, 178, 230, 0) 32%, rgba(13, 178, 230, 0), rgba(13, 178, 230, 0) 68%, #0db2e6) 1 1;
+    /* Opera 11.1 - 12*/
+    border-image: -moz-linear-gradient(90deg, #0db2e6, rgba(13, 178, 230, 0) 32%, rgba(13, 178, 230, 0), rgba(13, 178, 230, 0) 68%, #0db2e6) 1 1;
+    /* Firefox 3.6 - 15*/
+    border-image: linear-gradient(90deg, #0db2e6, rgba(13, 178, 230, 0) 32%, rgba(13, 178, 230, 0), rgba(13, 178, 230, 0) 68%, #0db2e6) 1 1;
+    /* 标准的语法 */
+  }
+
+  &__inner {
+    position: relative;
+    height: 3rem;
+  }
+
+  & .bar-center {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 32%;
+    height: 1.8 * $top-center-height;
+    margin: auto;
+    padding: .3rem 2rem 1rem;
+    // position:relative;
+    @extend %display_flex;
+    @include justify-content(center);
+    @include align-items(center);
+    // line-height: 0.5rem;
+
+    &:before,
+    &:after {
+      content: '';
+      /*用伪元素来生成一个矩形*/
+      position: absolute;
+      background: $bar-bg-color;
+      // background-image:linear-gradient( rgba(255,255,255,.8), rgba(255,255,255,0));  /*添加一层白色的渐变*/
+
+      transform: scaleY(1.2) perspective(8rem) rotateX(-10deg);
+      transform-origin: top;
+      border: 2px solid #0db2e6;
+      border-width: 0px 2px 2px 2px;
+    }
+
+    &:before {
+      z-index: -1;
+      top: 0;
+      right: 10px;
+      bottom: 10px;
+      left: 10px;
+      box-shadow: 0 0 3rem 0rem rgba(255, 255, 255, 0.1) inset;
+    }
+
+    &:after {
+      z-index: -2;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border-width: 0px 1px 1px 1px;
+      /* border-image: image-source image-height image-width image-repeat */
+      border-image: -webkit-linear-gradient(90deg, rgba(13, 178, 230, 0), #0db2e6 5%, rgba(13, 178, 230, 0) 32%, #0db2e6, rgba(13, 178, 230, 0) 68%, #0db2e6 95%, rgba(13, 178, 230, 0)) 5 5;
+      /* Safari 5.1 - 6 */
+      border-image: -o-linear-gradient(90deg, rgba(13, 178, 230, 0), #0db2e6 5%, rgba(13, 178, 230, 0) 32%, #0db2e6, rgba(13, 178, 230, 0) 68%, #0db2e6 95%, rgba(13, 178, 230, 0)) 5 5;
+      /* Opera 11.1 - 12*/
+      border-image: -moz-linear-gradient(90deg, rgba(13, 178, 230, 0), #0db2e6 5%, rgba(13, 178, 230, 0) 32%, #0db2e6, rgba(13, 178, 230, 0) 68%, #0db2e6 95%, rgba(13, 178, 230, 0)) 5 5;
+      /* Firefox 3.6 - 15*/
+      border-image: linear-gradient(90deg, rgba(13, 178, 230, 0), #0db2e6 5%, rgba(13, 178, 230, 0) 32%, #0db2e6, rgba(13, 178, 230, 0) 68%, #0db2e6 95%, rgba(13, 178, 230, 0)) 5 5;
+      /* 标准的语法 */
+    }
+
+    .vs-logo {
+      // border-right: 2px solid white;
+      height: 1.6 * $font-size;
+      width: 2 * $font-size;
+      margin-right: 0.6 * $font-size;
+      background-image: url("@/assets/images/svg/logo.svg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    & h1 {
+      // color: $vs-primary-color;
+      font-weight: 700;
+      font-size: $font-size;
+      text-transform: uppercase;
+      color: rgb(239, 251, 253);
+      text-shadow: 0 3px 6px #072b53, 0px -1px 1px #fff;
+    }
+  }
+
+  .bar-left,
+  .bar-right {
+    position: absolute;
+    top: 0;
+    width: 32%;
+    height: 3rem;
+    line-height: 3rem;
+    padding: 0 10px;
+    color: $color-blue-gray;
+  }
+
+  .bar-left {
+    left: 0;
+
+    .time {
+      float: left;
+      color: #fff;
+      font: bold 1.3rem/3rem $font-mono;
+    }
+
+    .date-week {
+      float: left;
+      font-size: 1rem;
+      padding: 0 5px;
+    }
+
+    .location {
+      display: inline-block;
+      font-size: 1.1rem;
+
+      .loc-icon {
+        padding: 0 3px 0 8px;
+        color: $color-blue-light;
+      }
+    }
+  }
+
+  .bar-right {
+    right: 0;
+
+    .region,
+    .message {
+      float: right;
+      font-size: 1rem;
+      line-height: 3rem;
+      color: #fff !important;
+    }
+
+    .region {
+      margin: 15px 5px;
+
+      span {
+        color: #fff !important;
+      }
+    }
+
+    .message {
+
+      .warn-icon,
+      strong {
+        color: $color-yellow-dark;
+      }
+
+      .warn-icon {
+        padding: 0 3px 0 8px;
+      }
+
+      strong {
+        font-size: 1.3rem;
+      }
+    }
+  }
+}

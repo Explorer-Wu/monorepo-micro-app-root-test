@@ -1,4 +1,7 @@
-const ApiCommon = [
+import type { ApiFnMap } from '@/typings/axios';
+import { asyncModuleApi } from '../index';
+
+const ApiCommonOpts = [
 	{
 		name: 'getGlobals',
 		url: '/api/global',
@@ -55,4 +58,4 @@ const ApiCommon = [
 	},
 ];
 
-export default ApiCommon;
+export const ApiCommon: ApiFnMap = asyncModuleApi(ApiCommonOpts);

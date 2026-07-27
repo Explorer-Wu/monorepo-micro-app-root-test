@@ -1,11 +1,12 @@
 import type { Config, ConfigContext } from 'postcss-load-config';
-import postcssPresetEnv from 'postcss-preset-env';
 import postCssPxToRem from 'postcss-pxtorem';
+import postcssPresetEnv from 'postcss-preset-env';
+import screenAdapterConfig from './screen-config/screenAdapter.config.json';
 
 // postcss 为 CSS 规则添加特定厂商的前缀。 Autoprefixer 自动获取浏览器的流行度和能够支持的属性，并根据这些数据帮你自动为 CSS 规则添加前缀
-module.exports = (ctx: ConfigContext, path: string, options: any): Config => ({
-	// parser: ctx.parser ? 'sugarss' : false, // 解析器
-	// map: ctx.env === 'development' ? ctx.map : false, // map文件
+export default (_ctx: ConfigContext, _path: string, options: any): Config => ({
+	// parser: _ctx.parser ? 'sugarss' : false, // 解析器
+	// map: _ctx.env === 'development' ? _ctx.map : false, // map文件
 	...options,
 	// 配置插件
 	plugins: [
@@ -23,7 +24,7 @@ module.exports = (ctx: ConfigContext, path: string, options: any): Config => ({
 			// 基准分辨率宽度/100
 			//   return file.indexOf('visualscreen') !== -1 ? 12.8 : 19.2;
 			// },
-			rootValue: 19.2,
+			rootValue: screenAdapterConfig.postcssRootValue,
 			// 保留rem小数点位数
 			unitPrecision: 6,
 			// 这里设置为['*']全部，需要被转换的属性 ['!border*', 'font', 'font-size', 'line-height', 'letter-spacing', 'word-spacing']

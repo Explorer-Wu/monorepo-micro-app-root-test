@@ -1,0 +1,74 @@
+
+.vs-rs-status {
+  font-size: 0.8em;
+  color: white;
+  //height: calc(100% - 1.6em);
+  .db-box-content {
+    display: flex;
+  }
+
+  h3 {
+    color: white;
+  }
+
+  h3.rs-title {
+    margin-top: 0.5em;
+  }
+  .status-title, .status-bar, .status-value {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    & > p, & > div {
+      height: 2em;
+      position: relative;
+    }
+  }
+  .status-title {
+    text-align: right;
+  }
+  .status-bar {
+    flex-grow: 1;
+    .status-bar-bg {
+      background: #183031;
+      position: absolute;
+      top: 0.7em;
+      left: 10px;
+      right: 10px;
+      bottom: 0.5em;
+      border-radius: 3em;
+      padding: 3px;
+
+      .status-bar-column {
+        height: 100%;
+        border-radius: 3em;
+        background: linear-gradient(to right, #0F4D64, #00A9FE);
+        position: relative;
+      }
+
+      .pos-angle {
+        position: absolute;
+        font-size: 0.7em;
+        top: -1.5em;
+        margin-top: -3px;
+        left: 100%;
+        display: inline-block;
+        overflow: visible;
+        white-space: nowrap;
+        &:before {
+          content: " ";
+          display: inline-block;
+          width: 0;
+          height: 0;
+          margin-left: -3px;
+          margin-right: 2px;
+          border-top: 0.6em solid #00A9FE;
+          border-left: 3px solid transparent;
+          border-right: 3px solid transparent;
+        }
+      }
+    }
+  }
+  .status-bar h3, .status-value h3 {
+    visibility: hidden;
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "designWidth": 1920,
+  "designHeight": 1080,
+  "minWidth": 1024,
+  "minHeight": 600,
+  "aspectRatio": 1.7777777778,
+  "contentFitStrategy": "contain",
+  "overscanStrategy": "cover-safe",
+  "baseRemSize": 10,
+  "postcssRootValue": 19.2,
+  "precision": 4,
+  "modeTolerance": 0.001,
+  "resizeDebounceMs": 300,
+  "resizeMaxWaitMs": 600
+}

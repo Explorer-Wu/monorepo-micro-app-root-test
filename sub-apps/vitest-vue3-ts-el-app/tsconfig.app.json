@@ -10,7 +10,7 @@
 		"src/**/*.vue",
 		"src/**/*.md",
 		"mock/**/*.ts"
-, "src/utils/langchainOpenai.bak"	],
+	],
 	/*** 不进行类型检查的文件 ***/
 	// ts 排除的文件, "exclude"默认情况下会排除node_modules，bower_components，jspm_packages和<outDir>目录
 	"exclude": [

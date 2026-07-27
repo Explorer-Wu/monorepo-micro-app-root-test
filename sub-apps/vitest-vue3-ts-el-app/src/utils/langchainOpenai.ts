@@ -1,5 +1,5 @@
-import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
 import { StringOutputParser } from '@langchain/core/output_parsers';
+import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
 
 // 解析器需要对输入流进行操作，并尝试将部分 json“自动完成”为有效状态
 import { JsonOutputParser } from '@langchain/core/output_parsers';
@@ -10,8 +10,8 @@ import { JsonOutputParser } from '@langchain/core/output_parsers';
  * 这将生成一个包含两个消息的数组，第一个是系统消息，第二个是我们传入的 HumanMessage。
  * 如果我们传入了 5 条消息，那么总共将生成 6 条消息（系统消息加上传入的 5 条消息）。这对于将消息数组插入特定位置非常有用。
  */
-import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
 import { HumanMessage } from '@langchain/core/messages';
+import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
 
 const promptTemplate = ChatPromptTemplate.fromMessages([
 	['system', 'You are a helpful assistant'],
@@ -33,20 +33,19 @@ const llmGpt = new ChatOpenAI({
 });
 
 /** 非流式输出 */
-import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 const embeddings = new OpenAIEmbeddings({
 	apiKey: import.meta.env.APP_AI_OPENAI_API_KEY, // In Node.js defaults to process.env.OPENAI_API_KEY
 	batchSize: 512, // Default value if omitted is 512. Max is 2048
 	model: 'text-embedding-3-large',
 });
 
-const vectorstore = await MemoryVectorStore.fromTexts(
-	['mitochondria is the powerhouse of the cell', 'buildings are made of brick'],
-	[{}, {}], // 设置metadata的数据
-	embeddings,
-);
+// const vectorstore = await MemoryVectorStore.fromTexts(
+// 	['mitochondria is the powerhouse of the cell', 'buildings are made of brick'],
+// 	[{}, {}], // 设置metadata的数据
+// 	embeddings,
+// );
 
-const retriever = vectorstore.asRetriever();
+// const retriever = vectorstore.asRetriever();
 
 // const chunks = [];
 
@@ -56,7 +55,6 @@ const retriever = vectorstore.asRetriever();
 
 // console.log('MemoryVectorStore:', chunks);
 
-import { RunnablePassthrough, RunnableSequence } from '@langchain/core/runnables';
 import type { Document } from '@langchain/core/documents';
 
 const formatDocs = (docs: Document[]) => {
@@ -71,21 +69,21 @@ Question: {question}
 
 const prompt = ChatPromptTemplate.fromTemplate(template);
 
-const retrievalChain: any = RunnableSequence.from([
-	{
-		context: retriever.pipe(formatDocs),
-		question: new RunnablePassthrough(),
-	},
-	prompt,
-	llmGpt,
-	new StringOutputParser(),
-]);
+// const retrievalChain: any = RunnableSequence.from([
+// 	{
+// 		context: retriever.pipe(formatDocs),
+// 		question: new RunnablePassthrough(),
+// 	},
+// 	prompt,
+// 	llmGpt,
+// 	new StringOutputParser(),
+// ]);
 
-const retrievalStream = await retrievalChain.stream('What is the powerhouse of the cell?');
+// const retrievalStream = await retrievalChain.stream('What is the powerhouse of the cell?');
 
-for await (const chunk of retrievalStream) {
-	console.log('retrievalStream:', `${chunk}|`);
-}
+// for await (const chunk of retrievalStream) {
+// 	console.log('retrievalStream:', `${chunk}|`);
+// }
 
 // 虽然非流式组件可能破坏最终输出的流式传输 stream，但streamEvents仍会从支持流式传输的中间步骤中产生流式传输事件！
 const extractCountryNames = (inputs: Record<string, any>) => {
@@ -106,7 +104,7 @@ const streamCountries = async (askmsg: string) => {
 
 let testCountries = `output a list of the countries france, spain and japan and their populations in JSON format. Use a dict with an outer key of "countries" which contains a list of countries. Each country should have the key "name" and "population"`;
 
-streamCountries(testCountries);
+// streamCountries(testCountries);
 
 /** 流式输出 */
 const stringParser = new StringOutputParser();
@@ -140,42 +138,42 @@ const evStreamHandler = async (askmsg: string) => {
 };
 
 let testAskmsg = `output a list of the countries france, spain and japan and their populations in JSON format. Use a dict with an outer key of "countries" which contains a list of countries. Each country should have the key "name" and "population"`;
-const eventStreams: any = await evStreamHandler(testAskmsg);
-const textDecoder = new TextDecoder('utf-8');
+// const eventStreams: any = await evStreamHandler(testAskmsg);
+// const textDecoder = new TextDecoder('utf-8');
 
-eventStreams.arrayBuffer().then(function (buffer: any) {
-	const buffer_unit8 = new Uint8Array(buffer);
-	const buffer_Json = textDecoder.decode(buffer_unit8);
-	// console.log('evStreamHandler0:', buffer_Json);
+// eventStreams.arrayBuffer().then(function (buffer: any) {
+// 	const buffer_unit8 = new Uint8Array(buffer);
+// 	const buffer_Json = textDecoder.decode(buffer_unit8);
+// 	// console.log('evStreamHandler0:', buffer_Json);
 
-	let eventCount = 0;
-	for (const event of buffer_Json) {
-		// const ev_unit8 = new Uint8Array(event);
-		// const evJson = textDecoder.decode(ev_unit8);
-		// console.log('evStreamJson:', event);
-		// Truncate the output
-		if (eventCount > 3) {
-			continue;
-		}
+// 	let eventCount = 0;
+// 	for (const event of buffer_Json) {
+// 		// const ev_unit8 = new Uint8Array(event);
+// 		// const evJson = textDecoder.decode(ev_unit8);
+// 		// console.log('evStreamJson:', event);
+// 		// Truncate the output
+// 		if (eventCount > 3) {
+// 			continue;
+// 		}
 
-		const eventType = (event as any).event;
-		if (eventType === 'on_chat_model_stream') {
-			console.log(`Chat model chunk: ${event.data.chunk.message.content}`);
-		} else if (eventType === 'on_parser_stream') {
-			console.log(`Parser chunk: ${JSON.stringify(event.data.chunk)}`);
-		} else {
-			console.log('stream type:', eventType);
-		}
+// 		const eventType = (event as any).event;
+// 		if (eventType === 'on_chat_model_stream') {
+// 			console.log(`Chat model chunk: ${event.data.chunk.message.content}`);
+// 		} else if (eventType === 'on_parser_stream') {
+// 			console.log(`Parser chunk: ${JSON.stringify(event.data.chunk)}`);
+// 		} else {
+// 			console.log('stream type:', eventType);
+// 		}
 
-		// if (eventType === 'on_llm_stream') {
-		// 	console.log(`Chat model chunk: ${event.data.chunk.message.content}`);
-		// } else if (eventType === 'on_parser_stream') {
-		// 	console.log(`Parser chunk: ${JSON.stringify(event.data.chunk)}`);
-		// }
+// 		// if (eventType === 'on_llm_stream') {
+// 		// 	console.log(`Chat model chunk: ${event.data.chunk.message.content}`);
+// 		// } else if (eventType === 'on_parser_stream') {
+// 		// 	console.log(`Parser chunk: ${JSON.stringify(event.data.chunk)}`);
+// 		// }
 
-		eventCount += 1;
-	}
-});
+// 		eventCount += 1;
+// 	}
+// });
 
 // 流媒体
 import type { AIMessageChunk } from '@langchain/core/messages';
@@ -224,7 +222,6 @@ export const handleMsgChain: any = async (askmsg: string) => {
 
 // 多模式消息（图文）后端开发
 import * as fs from 'node:fs/promises';
-import image_url from '@/assets/images/3danangaoyin.jpeg';
 
 const llmGptPreview = new ChatOpenAI({
 	model: 'gpt-4o', // 'gpt-4-vision-preview',
@@ -287,9 +284,9 @@ const llmGptWeather = new ChatOpenAI({
 });
 
 // Ask initial question that requires multiple tool calls
-const resWeather = await llmGptWeather.invoke([
-	['human', "What's the weather like in Beijing, Shanghai and Hangzhou?"],
-]);
+// const resWeather = await llmGptWeather.invoke([
+// 	['human', "What's the weather like in Beijing, Shanghai and Hangzhou?"],
+// ]);
 // console.log('Weather.tool_calls:', resWeather.tool_calls);
 
 // 强制 ChatOpenAI返回结构化输出
@@ -362,7 +359,7 @@ export const handlToolsParallel: any = async (askmsg: string[], isparall: boolea
 
 	return resToolsParallel;
 };
-handlToolsParallel(['What is the weather in Hangzhou and what is 23716 - 27342?'], false);
+// handlToolsParallel(['What is the weather in Hangzhou and what is 23716 - 27342?'], false);
 
 /** 调用微调模型
  *  通过传入相应的 modelName参数来调用经过微调的 OpenAI 模型
